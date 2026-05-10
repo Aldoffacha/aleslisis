@@ -3,18 +3,21 @@
 import { useState, useEffect } from 'react'
 import dynamic from 'next/dynamic'
 import Link from 'next/link'
-import HeroCarousel from '@/components/HeroCarousel'
-import Navbar from '@/components/Navbar'
-import SocialSection from '@/components/SocialSection'
-import { api, User } from '@/lib/api'
+import Navbar from './navbar'
+import HeroCarousel from './hero-carousel'
+import SocialSection from './social-section'
+import { createAuthUseCases } from '@/domain/use-cases/auth'
+import { djangoAuthAdapter } from '@/adapters/api/auth-adapter'
 
 const INTRO_SEEN_KEY = 'alesli_intro_seen'
 
-const IntroAnimation = dynamic(() => import('@/components/IntroAnimation'), { ssr: false })
+const IntroAnimation = dynamic(() => import('./intro-animation'), { ssr: false })
 
-export default function Home() {
+const auth = createAuthUseCases(djangoAuthAdapter)
+
+export default function HomePage() {
   const [showDashboard, setShowDashboard] = useState(false)
-  const [user, setUser] = useState<User | null>(null)
+  const [isLoggedIn, setIsLoggedIn] = useState(false)
 
   useEffect(() => {
     if (sessionStorage.getItem(INTRO_SEEN_KEY) === 'true') {
@@ -23,9 +26,9 @@ export default function Home() {
   }, [])
 
   useEffect(() => {
-    api.me()
-      .then(setUser)
-      .catch(() => setUser(null))
+    auth.getCurrentUser()
+      .then(() => setIsLoggedIn(true))
+      .catch(() => setIsLoggedIn(false))
   }, [])
 
   const handleIntroComplete = () => {
@@ -41,7 +44,7 @@ export default function Home() {
 
       {showDashboard && (
         <div className="main-content">
-          <Navbar cartCount={0} isLoggedIn={!!user} />
+          <Navbar cartCount={0} isLoggedIn={isLoggedIn} />
 
           <main className="pt-0">
             <HeroCarousel />

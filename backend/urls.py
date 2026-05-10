@@ -17,5 +17,5 @@ def root_view(request):
 urlpatterns = [
     path('', root_view),
     path('admin/', admin.site.urls),
-    path('api/auth/', include('accounts.urls')),
+    path('api/auth/', include('backend.infrastructure.django_app.urls')),
 ]

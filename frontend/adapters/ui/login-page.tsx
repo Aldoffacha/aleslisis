@@ -3,7 +3,10 @@
 import { useState, FormEvent } from 'react'
 import Link from 'next/link'
 import { useRouter } from 'next/navigation'
-import { api } from '@/lib/api'
+import { createAuthUseCases } from '@/domain/use-cases/auth'
+import { djangoAuthAdapter } from '@/adapters/api/auth-adapter'
+
+const auth = createAuthUseCases(djangoAuthAdapter)
 
 export default function LoginPage() {
   const router = useRouter()
@@ -17,7 +20,7 @@ export default function LoginPage() {
     setIsLoading(true)
     setError(null)
     try {
-      await api.login(username, password)
+      await auth.login(username, password)
       router.push('/')
     } catch (err) {
       setError(err instanceof Error ? err.message : 'Error al iniciar sesión')

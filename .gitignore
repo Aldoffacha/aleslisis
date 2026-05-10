@@ -3,12 +3,9 @@
 /.pnp
 .pnp.js
 
-# testing
-/coverage
-
 # next.js
-/.next/
-/out/
+/frontend/.next/
+/frontend/out/
 
 # production
 /build
@@ -18,6 +15,7 @@
 __pycache__/
 db.sqlite3
 backend/media/
+*.egg-info/
 
 # misc
 .DS_Store
@@ -36,4 +34,4 @@ yarn-error.log*
 
 # typescript
 *.tsbuildinfo
-next-env.d.ts
+frontend/next-env.d.ts

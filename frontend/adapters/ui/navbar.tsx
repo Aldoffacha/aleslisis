@@ -29,21 +29,17 @@ export default function Navbar({ cartCount = 0, isLoggedIn = false }: NavbarProp
 
   return (
     <nav className="navbar">
-      {/* Logo */}
       <Link href="/" className="nav-logo">
         Alesli
       </Link>
 
-      {/* Nav Links */}
       <ul className="nav-links">
         <li><Link href="/">Inicio</Link></li>
         <li><Link href="/tienda">Tienda</Link></li>
         <li><Link href="/contacto">Contacto</Link></li>
       </ul>
 
-      {/* Actions */}
       <div className="nav-actions">
-        {/* User */}
         <button className="nav-icon-btn" onClick={handleUser} aria-label="Mi cuenta">
           <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.4" strokeLinecap="round" strokeLinejoin="round">
             <circle cx="12" cy="8" r="4" />
@@ -51,7 +47,6 @@ export default function Navbar({ cartCount = 0, isLoggedIn = false }: NavbarProp
           </svg>
         </button>
 
-        {/* Cart */}
         <button className="nav-icon-btn cart-badge" onClick={handleCart} aria-label="Carrito">
           <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.4" strokeLinecap="round" strokeLinejoin="round">
             <path d="M6 2L3 6v14a2 2 0 002 2h14a2 2 0 002-2V6l-3-4z" />
