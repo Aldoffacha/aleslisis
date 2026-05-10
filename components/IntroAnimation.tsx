@@ -225,19 +225,18 @@ export default function IntroAnimation({ onComplete }: IntroProps) {
     add(() => setFlapOpen(true),  700)
     add(() => setLetterUp(true), 1300)
 
-    // Sobre desaparece a los 2800ms
-    add(() => setPhase('flowers'), 2800)
-
-    // 1 segundo despues del sobre → flores empiezan a brotar
+    // A los 1800ms las flores empiezan a brotar (sobre todavía visible)
     add(() => {
       items.forEach((item, idx) =>
         add(() => setBloomed(prev => { const n = new Set(prev); n.add(idx); return n }), item.delay)
       )
-    }, 3800)
+    }, 1800)
 
-    add(() => setShowText(true),                  3800 + last + 200)
-    add(() => setSlideOut(true),                  3800 + last + 3400)
-    add(() => { setPhase('done'); onComplete() }, 3800 + last + 4800)
+    // 1 segundo después de que empieza el brote → primera flor ya visible → sin hueco blanco
+    add(() => setPhase('flowers'),                2800)
+    add(() => setShowText(true),                  1800 + last + 200)
+    add(() => setSlideOut(true),                  1800 + last + 3400)
+    add(() => { setPhase('done'); onComplete() }, 1800 + last + 4800)
 
     return () => timers.current.forEach(clearTimeout)
   }, [onComplete])
@@ -295,7 +294,7 @@ export default function IntroAnimation({ onComplete }: IntroProps) {
           position: 'relative', zIndex: 50,
           filter: 'drop-shadow(0 12px 40px rgba(160,100,80,0.22)) drop-shadow(0 3px 10px rgba(180,120,100,0.18))',
         }}>
-          <svg width="288" height="202" viewBox="0 0 288 202" xmlns="http://www.w3.org/2000/svg">
+          <svg width="400" height="320" viewBox="0 -28 288 230" xmlns="http://www.w3.org/2000/svg">
             <defs>
               <linearGradient id="envF" x1="0" y1="0" x2="1" y2="1">
                 <stop offset="0%" stopColor="#F8E8E8"/>
