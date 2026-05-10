@@ -192,27 +192,90 @@ function generateFlowers(W: number, H: number): FlowerItem[] {
 }
 
 // ============================================================================
+// KEYFRAMES — inyectados una sola vez en <head>
+// ============================================================================
+const KEYFRAMES = `
+@keyframes envelopeWiggle {
+  0%   { transform: rotate(0deg)   translateY(0px)   scale(1);    }
+  8%   { transform: rotate(-3deg)  translateY(-4px)  scale(1.02); }
+  16%  { transform: rotate(3deg)   translateY(-7px)  scale(1.03); }
+  24%  { transform: rotate(-2.5deg) translateY(-4px) scale(1.02); }
+  32%  { transform: rotate(2.5deg) translateY(-8px)  scale(1.03); }
+  40%  { transform: rotate(-1.5deg) translateY(-3px) scale(1.01); }
+  48%  { transform: rotate(1.5deg) translateY(-6px)  scale(1.02); }
+  56%  { transform: rotate(-1deg)  translateY(-2px)  scale(1.01); }
+  64%  { transform: rotate(1deg)   translateY(-5px)  scale(1.015);}
+  72%  { transform: rotate(-0.5deg) translateY(-1px) scale(1.005);}
+  80%  { transform: rotate(0.5deg) translateY(-3px)  scale(1.01); }
+  90%  { transform: rotate(0deg)   translateY(-1px)  scale(1.005);}
+  100% { transform: rotate(0deg)   translateY(0px)   scale(1);    }
+}
+
+@keyframes envelopeFloat {
+  0%   { transform: translateY(0px);  }
+  50%  { transform: translateY(-6px); }
+  100% { transform: translateY(0px);  }
+}
+
+@keyframes sealPulse {
+  0%   { transform: scale(1);    opacity: 1;    }
+  50%  { transform: scale(1.12); opacity: 0.85; }
+  100% { transform: scale(1);    opacity: 1;    }
+}
+
+@keyframes glowPulse {
+  0%   { opacity: 0.0; }
+  50%  { opacity: 0.55; }
+  100% { opacity: 0.0; }
+}
+`
+
+function injectKeyframes() {
+  if (typeof document === 'undefined') return
+  if (document.getElementById('intro-keyframes')) return
+  const style = document.createElement('style')
+  style.id = 'intro-keyframes'
+  style.textContent = KEYFRAMES
+  document.head.appendChild(style)
+}
+
+// ============================================================================
 // COMPONENTE PRINCIPAL
 // ============================================================================
 export default function IntroAnimation({ onComplete }: IntroProps) {
-  const [phase,    setPhase]    = useState<'envelope' | 'flowers' | 'done'>('envelope')
-  const [flapOpen, setFlapOpen] = useState(false)
-  const [letterUp, setLetterUp] = useState(false)
-  const [slideOut, setSlideOut] = useState(false)
-  const [flowers,  setFlowers]  = useState<FlowerItem[]>([])
-  const [bloomed,  setBloomed]  = useState<Set<number>>(new Set())
-  const [showText, setShowText] = useState(false)
-  const [started,  setStarted]  = useState(false)
+  const [phase,      setPhase]      = useState<'envelope' | 'flowers' | 'done'>('envelope')
+  const [flapOpen,   setFlapOpen]   = useState(false)
+  const [letterUp,   setLetterUp]   = useState(false)
+  const [slideOut,   setSlideOut]   = useState(false)
+  const [flowers,    setFlowers]    = useState<FlowerItem[]>([])
+  const [bloomed,    setBloomed]    = useState<Set<number>>(new Set())
+  const [showText,   setShowText]   = useState(false)
+  const [started,    setStarted]    = useState(false)
+  const [sealFallen, setSealFallen] = useState(false)
 
-  const audioRef   = useRef<HTMLAudioElement>(null)
-  const timers     = useRef<ReturnType<typeof setTimeout>[]>([])
-  const flowersRef = useRef<FlowerItem[]>([])
+  // Fase del wiggle: 'idle' → espera, 'wiggle' → tiembla, 'rest' → pausa
+  const [wigglePhase, setWigglePhase] = useState<'idle' | 'wiggle' | 'rest'>('idle')
+
+  const audioRef      = useRef<HTMLAudioElement>(null)
+  const audioFlores   = useRef<HTMLAudioElement>(null)
+  const timers      = useRef<ReturnType<typeof setTimeout>[]>([])
+  const wiggleTimers = useRef<ReturnType<typeof setTimeout>[]>([])
+  const flowersRef  = useRef<FlowerItem[]>([])
 
   const add = (fn: () => void, ms: number) => {
     const t = setTimeout(fn, ms)
     timers.current.push(t)
     return t
   }
+
+  const addWiggle = (fn: () => void, ms: number) => {
+    const t = setTimeout(fn, ms)
+    wiggleTimers.current.push(t)
+    return t
+  }
+
+  // Inyectar keyframes al montar
+  useEffect(() => { injectKeyframes() }, [])
 
   // Precalcular flores una sola vez al montar
   useEffect(() => {
@@ -223,22 +286,42 @@ export default function IntroAnimation({ onComplete }: IntroProps) {
     flowersRef.current = items
   }, [])
 
+  // ── Loop de wiggle mientras no se ha tocado ──
+  useEffect(() => {
+    if (started) return
+
+    const startLoop = () => {
+      setWigglePhase('wiggle')
+      addWiggle(() => {
+        setWigglePhase('rest')
+        addWiggle(() => startLoop(), 2200)
+      }, 1400)
+    }
+
+    addWiggle(startLoop, 1200)
+
+    return () => {
+      wiggleTimers.current.forEach(clearTimeout)
+      wiggleTimers.current = []
+    }
+  }, [started])
+
   // ── Arranca toda la animación + audio en el primer toque ──
   const handleStart = useCallback(() => {
     if (started) return
     setStarted(true)
+    setWigglePhase('idle')
+    setSealFallen(true)
 
     const items = flowersRef.current
     const last  = Math.max(...items.map(i => i.delay))
 
-    // 700ms → abre el flap + suena el audio desde el segundo 1.5
     add(() => {
       setFlapOpen(true)
       const audio = audioRef.current
       if (audio) {
-        audio.currentTime = 1.3          // el crujido empieza aquí en tu archivo
+        audio.currentTime = 1.3
         audio.play().catch(() => {})
-        // Para el audio a los 1500ms → cubre exactamente del 1.5s al 3.0s
         add(() => { audio.pause() }, 2000)
       }
     }, 700)
@@ -246,10 +329,24 @@ export default function IntroAnimation({ onComplete }: IntroProps) {
     add(() => setLetterUp(true), 1300)
 
     add(() => {
-      items.forEach((item, idx) =>
-        add(() => setBloomed(prev => { const n = new Set(prev); n.add(idx); return n }), item.delay)
-      )
-    }, 1800)
+  const audio = audioFlores.current
+  if (audio) {
+    audio.play().catch(() => {})
+
+    // pausa después de 3 segundos
+    add(() => {
+      audio.pause()
+    }, 5000)
+  }
+
+  items.forEach((item, idx) =>
+    add(() => setBloomed(prev => {
+      const n = new Set(prev)
+      n.add(idx)
+      return n
+    }), item.delay)
+  )
+}, 1800)
 
     add(() => setPhase('flowers'),                2800)
     add(() => setShowText(true),                  1800 + last + 200)
@@ -262,6 +359,25 @@ export default function IntroAnimation({ onComplete }: IntroProps) {
   }, [])
 
   if (phase === 'done') return null
+
+  // Calcular el estilo de animación del sobre según la fase
+  const envelopeAnimation = (): React.CSSProperties => {
+    if (started) return {}
+    if (wigglePhase === 'wiggle') {
+      return {
+        animation: 'envelopeWiggle 1.4s cubic-bezier(0.36,0.07,0.19,0.97) both',
+      }
+    }
+    if (wigglePhase === 'rest') {
+      return {
+        animation: 'envelopeFloat 2.2s ease-in-out infinite',
+      }
+    }
+    // idle: flotación suave inicial
+    return {
+      animation: 'envelopeFloat 3s ease-in-out infinite',
+    }
+  }
 
   return (
     <div
@@ -311,7 +427,22 @@ export default function IntroAnimation({ onComplete }: IntroProps) {
         <div style={{
           position: 'relative', zIndex: 50,
           filter: 'drop-shadow(0 12px 40px rgba(160,100,80,0.22)) drop-shadow(0 3px 10px rgba(180,120,100,0.18))',
+          // Aplicar la animación del wiggle al contenedor del sobre
+          ...envelopeAnimation(),
         }}>
+          {/* Halo pulsante detrás del sobre — llama la atención sin texto */}
+          {!started && (
+            <div style={{
+              position: 'absolute',
+              inset: '-32px',
+              borderRadius: '50%',
+              background: 'radial-gradient(ellipse at 50% 50%, rgba(200,100,80,0.22) 0%, transparent 70%)',
+              animation: 'glowPulse 2s ease-in-out infinite',
+              pointerEvents: 'none',
+              zIndex: -1,
+            }}/>
+          )}
+
           <svg width="400" height="320" viewBox="0 -28 288 230" xmlns="http://www.w3.org/2000/svg">
             <defs>
               <linearGradient id="envF" x1="0" y1="0" x2="1" y2="1">
@@ -331,9 +462,7 @@ export default function IntroAnimation({ onComplete }: IntroProps) {
             <path d="M4 192 L116 124"   stroke="#C8A0A0" strokeWidth="0.5" opacity="0.3"/>
             <path d="M284 192 L172 124" stroke="#C8A0A0" strokeWidth="0.5" opacity="0.3"/>
             <path d="M4 56 L144 132 L284 56" fill="none" stroke="#C8A0A0" strokeWidth="0.5" opacity="0.3"/>
-            <circle cx="144" cy="154" r="17" fill="url(#sealG)"/>
-            <circle cx="144" cy="154" r="12" fill="none" stroke="#F8D0D8" strokeWidth="0.7" opacity="0.6"/>
-            <text x="144" y="158" textAnchor="middle" fontFamily="serif" fontSize="10" fill="#F8D0D8" opacity="0.9">✦</text>
+
             <g style={{
               transformOrigin: '144px 56px',
               transform: flapOpen ? 'rotateX(-178deg)' : 'rotateX(0deg)',
@@ -341,6 +470,7 @@ export default function IntroAnimation({ onComplete }: IntroProps) {
             }}>
               <path d="M4 56 L144 56 L284 56 L144 136 Z" fill="url(#flapC)" stroke="#C8A0A0" strokeWidth="0.8"/>
             </g>
+
             <g style={{
               transform: letterUp ? 'translateY(-28px)' : 'translateY(56px)',
               opacity: letterUp ? 1 : 0,
@@ -361,6 +491,21 @@ export default function IntroAnimation({ onComplete }: IntroProps) {
               <text x="144" y="148" textAnchor="middle"
                 fontFamily="Cormorant Garamond, Georgia, serif"
                 fontSize="7" fill="#C4A0A0" letterSpacing="2" fontStyle="italic">para ti ♡</text>
+            </g>
+
+            {/* ── SELLO — pulsa para llamar la atención, luego cae al tocar ── */}
+            <g style={{
+              transformOrigin: '144px 134px',
+              transform: sealFallen
+                ? 'translateY(60px) rotate(25deg) scale(0.6)'
+                : 'translateY(0px) rotate(0deg) scale(1)',
+              opacity: sealFallen ? 0 : 1,
+              transition: 'transform 0.7s cubic-bezier(0.4,0,0.8,1), opacity 0.55s ease 0.15s',
+              animation: (!started && wigglePhase === 'rest') ? 'sealPulse 1.1s ease-in-out infinite' : undefined,
+            }}>
+              <circle cx="144" cy="134" r="17" fill="url(#sealG)"/>
+              <circle cx="144" cy="134" r="12" fill="none" stroke="#F8D0D8" strokeWidth="0.7" opacity="0.6"/>
+              <text x="144" y="138" textAnchor="middle" fontFamily="serif" fontSize="10" fill="#F8D0D8" opacity="0.9">✦</text>
             </g>
           </svg>
         </div>
@@ -411,9 +556,7 @@ export default function IntroAnimation({ onComplete }: IntroProps) {
         </div>
       )}
 
-      {/* ── Botón invisible que cubre toda la pantalla.
-           El PRIMER toque desbloquea el audio del navegador Y arranca la animación.
-           Desaparece tras el primer toque (started = true). ── */}
+      {/* ── Botón invisible que cubre toda la pantalla ── */}
       {!started && (
         <button
           onClick={handleStart}
@@ -430,10 +573,13 @@ export default function IntroAnimation({ onComplete }: IntroProps) {
         />
       )}
 
-      {/* Audio precargado — se reproduce desde currentTime=1.5 cuando el sobre se abre */}
+      {/* Audio precargado */}
       <audio ref={audioRef} preload="auto">
         <source src="/audio/sobre_abierto.mp3" type="audio/mpeg" />
         <source src="/audio/sobre_abierto.ogg" type="audio/ogg" />
+      </audio>
+      <audio ref={audioFlores} preload="auto">
+        <source src="/audio/rosas.ogg" type="audio/ogg" />
       </audio>
     </div>
   )
