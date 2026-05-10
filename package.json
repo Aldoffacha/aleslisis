@@ -4,6 +4,7 @@
   "private": true,
   "scripts": {
     "dev": "next dev",
+    "dev:backend": "python manage.py runserver",
     "build": "next build",
     "start": "next start"
   },

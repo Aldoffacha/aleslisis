@@ -31,165 +31,6 @@ body {
   color: #2C1A1A;
 }
 
-/* ===== ENVELOPE ANIMATION ===== */
-@keyframes envelope-flap-open {
-  0%   { transform: rotateX(0deg); }
-  100% { transform: rotateX(-180deg); }
-}
-
-@keyframes letter-rise {
-  0%   { transform: translateY(60px); opacity: 0; }
-  100% { transform: translateY(0); opacity: 1; }
-}
-
-@keyframes rose-bloom {
-  0%   { transform: scale(0) rotate(-20deg); opacity: 0; }
-  70%  { transform: scale(1.15) rotate(5deg); opacity: 0.95; }
-  100% { transform: scale(1) rotate(0deg); opacity: 1; }
-}
-
-@keyframes rose-spread-radial {
-  0%   { transform: scale(0); opacity: 0; }
-  100% { transform: scale(1); opacity: 1; }
-}
-
-@keyframes screen-slide-up {
-  0%   { transform: translateY(0); opacity: 1; }
-  80%  { transform: translateY(-105vh); opacity: 0; }
-  100% { transform: translateY(-105vh); opacity: 0; }
-}
-
-@keyframes dashboard-appear {
-  0%   { transform: translateY(60px); opacity: 0; }
-  100% { transform: translateY(0); opacity: 1; }
-}
-
-@keyframes name-fade {
-  0%   { opacity: 0; letter-spacing: 0.5em; }
-  100% { opacity: 1; letter-spacing: 0.15em; }
-}
-
-@keyframes carousel-auto {
-  0%, 20%   { transform: translateX(0%); }
-  25%, 45%  { transform: translateX(-25%); }
-  50%, 70%  { transform: translateX(-50%); }
-  75%, 95%  { transform: translateX(-75%); }
-  100%      { transform: translateX(0%); }
-}
-
-@keyframes float {
-  0%, 100% { transform: translateY(0px) rotate(0deg); }
-  50%      { transform: translateY(-12px) rotate(3deg); }
-}
-
-@keyframes spin-slow {
-  0%   { transform: rotate(0deg); }
-  100% { transform: rotate(360deg); }
-}
-
-@keyframes fade-slide-up {
-  0%   { opacity: 0; transform: translateY(30px); }
-  100% { opacity: 1; transform: translateY(0); }
-}
-
-/* ===== INTRO SCREEN ===== */
-.intro-screen {
-  position: fixed;
-  inset: 0;
-  background: var(--cream);
-  z-index: 100;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  overflow: hidden;
-}
-
-.intro-screen.slide-out {
-  animation: screen-slide-up 1.2s ease-in-out 0.4s forwards;
-}
-
-/* Envelope */
-.envelope-wrap {
-  position: relative;
-  width: 260px;
-  height: 180px;
-  perspective: 800px;
-}
-
-.envelope-body {
-  width: 100%;
-  height: 100%;
-  background: linear-gradient(145deg, #F5DCDC, #EEC8C8);
-  border-radius: 4px;
-  position: absolute;
-  bottom: 0;
-  box-shadow: 0 8px 32px rgba(180, 80, 80, 0.15);
-}
-
-.envelope-flap {
-  width: 0;
-  height: 0;
-  border-left: 130px solid transparent;
-  border-right: 130px solid transparent;
-  border-top: 90px solid #D4A0A0;
-  position: absolute;
-  top: 0;
-  transform-origin: top center;
-  transform-style: preserve-3d;
-}
-
-.envelope-flap.opening {
-  animation: envelope-flap-open 0.7s ease-in-out forwards;
-}
-
-.envelope-letter {
-  position: absolute;
-  width: 80%;
-  left: 10%;
-  bottom: 10px;
-  background: white;
-  border-radius: 2px;
-  padding: 16px 12px 10px;
-  text-align: center;
-  transform: translateY(60px);
-  opacity: 0;
-}
-
-.envelope-letter.rising {
-  animation: letter-rise 0.7s ease-out 0.5s forwards;
-}
-
-.alesli-name {
-  font-family: 'Cormorant Garamond', serif;
-  font-size: 22px;
-  font-weight: 300;
-  color: var(--rose-dark);
-  letter-spacing: 0.5em;
-  animation: name-fade 1s ease-out forwards;
-}
-
-/* Rose petals covering screen */
-.rose-container {
-  position: absolute;
-  inset: 0;
-  pointer-events: none;
-  display: none;
-}
-
-.rose-container.active {
-  display: block;
-}
-
-.rose-petal-svg {
-  position: absolute;
-  transform: scale(0);
-  opacity: 0;
-}
-
-.rose-petal-svg.bloom {
-  animation: rose-bloom 0.5s ease-out forwards;
-}
-
 /* ===== NAVBAR ===== */
 .navbar {
   position: fixed;
@@ -379,26 +220,6 @@ body {
   transform: translateY(-1px);
 }
 
-.btn-outline {
-  display: inline-block;
-  padding: 14px 36px;
-  border: 1px solid var(--rose-dark);
-  color: var(--rose-dark);
-  font-size: 12px;
-  letter-spacing: 0.2em;
-  text-transform: uppercase;
-  text-decoration: none;
-  font-weight: 400;
-  transition: all 0.3s;
-  cursor: pointer;
-  background: transparent;
-}
-
-.btn-outline:hover {
-  background: var(--rose-dark);
-  color: white;
-}
-
 /* Carousel dots */
 .carousel-dots {
   position: absolute;
@@ -425,7 +246,6 @@ body {
   border-radius: 3px;
 }
 
-/* Carousel arrows */
 .carousel-arrow {
   position: absolute;
   top: 50%;
@@ -454,14 +274,6 @@ body {
 /* ===== PANEL ILLUSTRATIONS ===== */
 .float-rose {
   animation: float 4s ease-in-out infinite;
-}
-
-.float-rose-2 {
-  animation: float 5s ease-in-out 1s infinite;
-}
-
-.float-rose-3 {
-  animation: float 3.5s ease-in-out 0.5s infinite;
 }
 
 /* ===== SOCIAL SECTION ===== */
@@ -543,44 +355,27 @@ body {
   color: var(--rose-deep);
 }
 
-/* ===== FOOTER ===== */
-footer {
-  background: #2C1A1A;
-  color: rgba(255,255,255,0.7);
-  padding: 48px;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  font-size: 12px;
-  letter-spacing: 0.08em;
-}
-
-footer .logo {
-  font-family: 'Cormorant Garamond', serif;
-  font-size: 20px;
-  font-weight: 300;
-  color: rgba(255,255,255,0.9);
-  letter-spacing: 0.2em;
-}
-
 /* ===== DASHBOARD WRAPPER ===== */
 .main-content {
   opacity: 0;
   animation: dashboard-appear 1s ease-out 0.2s forwards;
 }
 
-/* ===== PANEL DECORATIVE ELEMENTS ===== */
-.panel-bg-circle {
-  position: absolute;
-  border-radius: 50%;
-  opacity: 0.06;
+/* ===== ANIMATIONS ===== */
+@keyframes float {
+  0%, 100% { transform: translateY(0px) rotate(0deg); }
+  50%      { transform: translateY(-12px) rotate(3deg); }
 }
 
-.panel-line {
-  position: absolute;
-  width: 0.5px;
-  background: var(--rose-medium);
-  opacity: 0.15;
+@keyframes dashboard-appear {
+  0%   { transform: translateY(60px); opacity: 0; }
+  100% { transform: translateY(0); opacity: 1; }
+}
+
+@keyframes screen-slide-up {
+  0%   { transform: translateY(0); opacity: 1; }
+  80%  { transform: translateY(-105vh); opacity: 0; }
+  100% { transform: translateY(-105vh); opacity: 0; }
 }
 
 /* ===== RESPONSIVE ===== */
@@ -595,11 +390,5 @@ footer .logo {
 
   .social-grid {
     grid-template-columns: repeat(2, 1fr);
-  }
-
-  footer {
-    flex-direction: column;
-    gap: 16px;
-    text-align: center;
   }
 }
