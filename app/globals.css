@@ -361,6 +361,132 @@ body {
   animation: dashboard-appear 1s ease-out 0.2s forwards;
 }
 
+/* ===== INTRO ANIMATION ===== */
+.intro-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 9999;
+  overflow: hidden;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: transform 1.5s cubic-bezier(0.77,0,0.175,1), opacity 1.2s ease;
+}
+
+.intro-vignette {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  z-index: 2;
+  background: radial-gradient(ellipse at 50% 50%, transparent 55%, rgba(120,80,60,0.18) 100%);
+}
+
+.intro-flowers {
+  position: absolute;
+  inset: 0;
+}
+
+.intro-envelope-wrap {
+  position: relative;
+  z-index: 50;
+}
+
+.intro-glow {
+  position: absolute;
+  inset: -32px;
+  border-radius: 50%;
+  background: radial-gradient(ellipse at 50% 50%, rgba(200,100,80,0.22) 0%, transparent 70%);
+  pointer-events: none;
+  z-index: -1;
+}
+
+.intro-text {
+  position: absolute;
+  z-index: 150;
+  text-align: center;
+  font-family: 'Cormorant Garamond', Georgia, serif;
+  pointer-events: none;
+  transition: opacity 1.6s ease, transform 1.4s ease;
+}
+
+.intro-text-visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.intro-text-hidden {
+  opacity: 0;
+  transform: translateY(14px);
+}
+
+.intro-text-halo {
+  position: absolute;
+  inset: -40px -60px;
+  background: radial-gradient(ellipse at 50% 50%, rgba(255,245,235,0.92) 30%, rgba(255,240,225,0.6) 60%, transparent 100%);
+  border-radius: 50%;
+  z-index: -1;
+  filter: blur(18px);
+}
+
+.intro-text-line {
+  width: 140px;
+  height: 1px;
+  margin: 0 auto 16px;
+  background: linear-gradient(90deg, transparent, rgba(80,40,30,0.35), transparent);
+}
+
+.intro-text-title {
+  font-size: 46px;
+  font-weight: 400;
+  letter-spacing: 16px;
+  color: #1A0D08;
+  text-transform: uppercase;
+  text-shadow: 0 1px 0 rgba(255,220,200,0.7), 0 -1px 0 rgba(0,0,0,0.08);
+}
+
+.intro-text-subtitle {
+  font-size: 13px;
+  letter-spacing: 6px;
+  color: #3D1A10;
+  margin-top: 8px;
+  font-weight: 300;
+  font-style: italic;
+  text-shadow: 0 1px 0 rgba(255,220,200,0.5);
+}
+
+.intro-text-line-bottom {
+  width: 140px;
+  height: 1px;
+  margin: 16px auto 0;
+  background: linear-gradient(90deg, transparent, rgba(80,40,30,0.35), transparent);
+}
+
+.intro-click-area {
+  position: absolute;
+  inset: 0;
+  background: transparent;
+  border: none;
+  cursor: default;
+  z-index: 1000;
+}
+
+.intro-slide-out {
+  transform: translateY(-105vh);
+  opacity: 0;
+}
+
+.intro-anim-wiggle {
+  animation: envelopeWiggle 1.4s cubic-bezier(0.36,0.07,0.19,0.97) both;
+}
+
+.intro-anim-float-fast {
+  animation: envelopeFloat 2.2s ease-in-out infinite;
+}
+
+.intro-anim-float {
+  animation: envelopeFloat 3s ease-in-out infinite;
+}
+
 /* ===== ANIMATIONS ===== */
 @keyframes float {
   0%, 100% { transform: translateY(0px) rotate(0deg); }
@@ -378,6 +504,39 @@ body {
   100% { transform: translateY(-105vh); opacity: 0; }
 }
 
+@keyframes envelopeWiggle {
+  0%   { transform: rotate(0deg)   translateY(0px)   scale(1);    }
+  8%   { transform: rotate(-3deg)  translateY(-4px)  scale(1.02); }
+  16%  { transform: rotate(3deg)   translateY(-7px)  scale(1.03); }
+  24%  { transform: rotate(-2.5deg) translateY(-4px) scale(1.02); }
+  32%  { transform: rotate(2.5deg) translateY(-8px)  scale(1.03); }
+  40%  { transform: rotate(-1.5deg) translateY(-3px) scale(1.01); }
+  48%  { transform: rotate(1.5deg) translateY(-6px)  scale(1.02); }
+  56%  { transform: rotate(-1deg)  translateY(-2px)  scale(1.01); }
+  64%  { transform: rotate(1deg)   translateY(-5px)  scale(1.015);}
+  72%  { transform: rotate(-0.5deg) translateY(-1px) scale(1.005);}
+  80%  { transform: rotate(0.5deg) translateY(-3px)  scale(1.01); }
+  90%  { transform: rotate(0deg)   translateY(-1px)  scale(1.005);}
+  100% { transform: rotate(0deg)   translateY(0px)   scale(1);    }
+}
+
+@keyframes envelopeFloat {
+  0%   { transform: translateY(0px);  }
+  50%  { transform: translateY(-6px); }
+  100% { transform: translateY(0px);  }
+}
+
+@keyframes sealPulse {
+  0%   { transform: scale(1);    opacity: 1;    }
+  50%  { transform: scale(1.12); opacity: 0.85; }
+  100% { transform: scale(1);    opacity: 1;    }
+}
+
+@keyframes glowPulse {
+  0%   { opacity: 0.0; }
+  50%  { opacity: 0.55; }
+  100% { opacity: 0.0; }
+}
 /* ===== RESPONSIVE ===== */
 @media (max-width: 768px) {
   .navbar {

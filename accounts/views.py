@@ -12,15 +12,25 @@ from .serializers import RegisterSerializer, UserSerializer
 @permission_classes([AllowAny])
 def login_view(request):
     username = request.data.get('username')
+    email = request.data.get('email')
     password = request.data.get('password')
 
-    if not username or not password:
+    if not password:
         return Response(
-            {'error': 'Usuario y contraseña son requeridos'},
+            {'error': 'Contraseña requerida'},
             status=status.HTTP_400_BAD_REQUEST,
         )
 
-    user = authenticate(request, username=username, password=password)
+    user = None
+    if username:
+        user = authenticate(request, username=username, password=password)
+    elif email:
+        try:
+            u = User.objects.get(email=email)
+            user = authenticate(request, username=u.username, password=password)
+        except User.DoesNotExist:
+            pass
+
     if user is not None:
         login(request, user)
         return Response(UserSerializer(user).data)

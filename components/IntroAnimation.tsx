@@ -6,10 +6,6 @@ interface IntroProps {
   onComplete: () => void
 }
 
-// ============================================================================
-// FLORES SVG ESTILO PINTURA
-// ============================================================================
-
 function roseSvg(size: number, base: string, dark: string, light: string, hasLeaf: boolean, rot: number): string {
   const cx = size / 2, cy = size / 2
   const totalH = size + (hasLeaf ? size * 0.35 : 0)
@@ -140,9 +136,6 @@ function tulipSvg(size: number, color: string, dark: string): string {
   return svg
 }
 
-// ============================================================================
-// VARIANTES
-// ============================================================================
 type FlowerKind = 'rose' | 'daisy' | 'peony' | 'tulip'
 interface Variant { kind: FlowerKind; main: string; dark: string; light?: string }
 
@@ -191,57 +184,6 @@ function generateFlowers(W: number, H: number): FlowerItem[] {
   return items
 }
 
-// ============================================================================
-// KEYFRAMES — inyectados una sola vez en <head>
-// ============================================================================
-const KEYFRAMES = `
-@keyframes envelopeWiggle {
-  0%   { transform: rotate(0deg)   translateY(0px)   scale(1);    }
-  8%   { transform: rotate(-3deg)  translateY(-4px)  scale(1.02); }
-  16%  { transform: rotate(3deg)   translateY(-7px)  scale(1.03); }
-  24%  { transform: rotate(-2.5deg) translateY(-4px) scale(1.02); }
-  32%  { transform: rotate(2.5deg) translateY(-8px)  scale(1.03); }
-  40%  { transform: rotate(-1.5deg) translateY(-3px) scale(1.01); }
-  48%  { transform: rotate(1.5deg) translateY(-6px)  scale(1.02); }
-  56%  { transform: rotate(-1deg)  translateY(-2px)  scale(1.01); }
-  64%  { transform: rotate(1deg)   translateY(-5px)  scale(1.015);}
-  72%  { transform: rotate(-0.5deg) translateY(-1px) scale(1.005);}
-  80%  { transform: rotate(0.5deg) translateY(-3px)  scale(1.01); }
-  90%  { transform: rotate(0deg)   translateY(-1px)  scale(1.005);}
-  100% { transform: rotate(0deg)   translateY(0px)   scale(1);    }
-}
-
-@keyframes envelopeFloat {
-  0%   { transform: translateY(0px);  }
-  50%  { transform: translateY(-6px); }
-  100% { transform: translateY(0px);  }
-}
-
-@keyframes sealPulse {
-  0%   { transform: scale(1);    opacity: 1;    }
-  50%  { transform: scale(1.12); opacity: 0.85; }
-  100% { transform: scale(1);    opacity: 1;    }
-}
-
-@keyframes glowPulse {
-  0%   { opacity: 0.0; }
-  50%  { opacity: 0.55; }
-  100% { opacity: 0.0; }
-}
-`
-
-function injectKeyframes() {
-  if (typeof document === 'undefined') return
-  if (document.getElementById('intro-keyframes')) return
-  const style = document.createElement('style')
-  style.id = 'intro-keyframes'
-  style.textContent = KEYFRAMES
-  document.head.appendChild(style)
-}
-
-// ============================================================================
-// COMPONENTE PRINCIPAL
-// ============================================================================
 export default function IntroAnimation({ onComplete }: IntroProps) {
   const [phase,      setPhase]      = useState<'envelope' | 'flowers' | 'done'>('envelope')
   const [flapOpen,   setFlapOpen]   = useState(false)
@@ -252,8 +194,6 @@ export default function IntroAnimation({ onComplete }: IntroProps) {
   const [showText,   setShowText]   = useState(false)
   const [started,    setStarted]    = useState(false)
   const [sealFallen, setSealFallen] = useState(false)
-
-  // Fase del wiggle: 'idle' → espera, 'wiggle' → tiembla, 'rest' → pausa
   const [wigglePhase, setWigglePhase] = useState<'idle' | 'wiggle' | 'rest'>('idle')
 
   const audioRef      = useRef<HTMLAudioElement>(null)
@@ -274,10 +214,6 @@ export default function IntroAnimation({ onComplete }: IntroProps) {
     return t
   }
 
-  // Inyectar keyframes al montar
-  useEffect(() => { injectKeyframes() }, [])
-
-  // Precalcular flores una sola vez al montar
   useEffect(() => {
     const W = window.innerWidth
     const H = window.innerHeight
@@ -286,7 +222,6 @@ export default function IntroAnimation({ onComplete }: IntroProps) {
     flowersRef.current = items
   }, [])
 
-  // ── Loop de wiggle mientras no se ha tocado ──
   useEffect(() => {
     if (started) return
 
@@ -306,7 +241,6 @@ export default function IntroAnimation({ onComplete }: IntroProps) {
     }
   }, [started])
 
-  // ── Arranca toda la animación + audio en el primer toque ──
   const handleStart = useCallback(() => {
     if (started) return
     setStarted(true)
@@ -329,24 +263,20 @@ export default function IntroAnimation({ onComplete }: IntroProps) {
     add(() => setLetterUp(true), 1300)
 
     add(() => {
-  const audio = audioFlores.current
-  if (audio) {
-    audio.play().catch(() => {})
+      const audio = audioFlores.current
+      if (audio) {
+        audio.play().catch(() => {})
+        add(() => { audio.pause() }, 5000)
+      }
 
-    // pausa después de 3 segundos
-    add(() => {
-      audio.pause()
-    }, 5000)
-  }
-
-  items.forEach((item, idx) =>
-    add(() => setBloomed(prev => {
-      const n = new Set(prev)
-      n.add(idx)
-      return n
-    }), item.delay)
-  )
-}, 1800)
+      items.forEach((item, idx) =>
+        add(() => setBloomed(prev => {
+          const n = new Set(prev)
+          n.add(idx)
+          return n
+        }), item.delay)
+      )
+    }, 1800)
 
     add(() => setPhase('flowers'),                2800)
     add(() => setShowText(true),                  1800 + last + 200)
@@ -360,46 +290,20 @@ export default function IntroAnimation({ onComplete }: IntroProps) {
 
   if (phase === 'done') return null
 
-  // Calcular el estilo de animación del sobre según la fase
-  const envelopeAnimation = (): React.CSSProperties => {
-    if (started) return {}
-    if (wigglePhase === 'wiggle') {
-      return {
-        animation: 'envelopeWiggle 1.4s cubic-bezier(0.36,0.07,0.19,0.97) both',
-      }
-    }
-    if (wigglePhase === 'rest') {
-      return {
-        animation: 'envelopeFloat 2.2s ease-in-out infinite',
-      }
-    }
-    // idle: flotación suave inicial
-    return {
-      animation: 'envelopeFloat 3s ease-in-out infinite',
-    }
-  }
+  const envelopeAnimClass = started ? '' :
+    wigglePhase === 'wiggle' ? 'intro-anim-wiggle' :
+    wigglePhase === 'rest' ? 'intro-anim-float-fast' : 'intro-anim-float'
 
   return (
     <div
+      className={`intro-overlay ${slideOut ? 'intro-slide-out' : ''}`}
       style={{
-        position: 'fixed', inset: 0,
         background: 'radial-gradient(ellipse at 40% 50%, #FDF6EF 0%, #F6EDE4 55%, #EFE0D4 100%)',
-        zIndex: 9999,
-        overflow: 'hidden',
-        display: 'flex', alignItems: 'center', justifyContent: 'center',
-        transition: 'transform 1.5s cubic-bezier(0.77,0,0.175,1), opacity 1.2s ease',
-        transform: slideOut ? 'translateY(-105vh)' : 'translateY(0)',
-        opacity:   slideOut ? 0 : 1,
       }}
     >
-      {/* Viñeta cinemática */}
-      <div style={{
-        position: 'absolute', inset: 0, pointerEvents: 'none', zIndex: 2,
-        background: 'radial-gradient(ellipse at 50% 50%, transparent 55%, rgba(120,80,60,0.18) 100%)',
-      }}/>
+      <div className="intro-vignette" />
 
-      {/* ── FLORES ── */}
-      <div style={{ position: 'absolute', inset: 0, zIndex: phase === 'flowers' ? 10 : 5 }}>
+      <div className="intro-flowers" style={{ zIndex: phase === 'flowers' ? 10 : 5 }}>
         {flowers.map((f, idx) => (
           <div
             key={idx}
@@ -422,26 +326,13 @@ export default function IntroAnimation({ onComplete }: IntroProps) {
         ))}
       </div>
 
-      {/* ── SOBRE ── */}
       {phase === 'envelope' && (
-        <div style={{
-          position: 'relative', zIndex: 50,
-          filter: 'drop-shadow(0 12px 40px rgba(160,100,80,0.22)) drop-shadow(0 3px 10px rgba(180,120,100,0.18))',
-          // Aplicar la animación del wiggle al contenedor del sobre
-          ...envelopeAnimation(),
-        }}>
-          {/* Halo pulsante detrás del sobre — llama la atención sin texto */}
-          {!started && (
-            <div style={{
-              position: 'absolute',
-              inset: '-32px',
-              borderRadius: '50%',
-              background: 'radial-gradient(ellipse at 50% 50%, rgba(200,100,80,0.22) 0%, transparent 70%)',
-              animation: 'glowPulse 2s ease-in-out infinite',
-              pointerEvents: 'none',
-              zIndex: -1,
-            }}/>
-          )}
+        <div className={`intro-envelope-wrap ${envelopeAnimClass}`}
+          style={{
+            filter: 'drop-shadow(0 12px 40px rgba(160,100,80,0.22)) drop-shadow(0 3px 10px rgba(180,120,100,0.18))',
+          }}
+        >
+          {!started && <div className="intro-glow" style={{ animation: 'glowPulse 2s ease-in-out infinite' }} />}
 
           <svg width="400" height="320" viewBox="0 -28 288 230" xmlns="http://www.w3.org/2000/svg">
             <defs>
@@ -493,7 +384,6 @@ export default function IntroAnimation({ onComplete }: IntroProps) {
                 fontSize="7" fill="#C4A0A0" letterSpacing="2" fontStyle="italic">para ti ♡</text>
             </g>
 
-            {/* ── SELLO — pulsa para llamar la atención, luego cae al tocar ── */}
             <g style={{
               transformOrigin: '144px 134px',
               transform: sealFallen
@@ -511,69 +401,25 @@ export default function IntroAnimation({ onComplete }: IntroProps) {
         </div>
       )}
 
-      {/* ── TEXTO FINAL ── */}
       {phase === 'flowers' && (
-        <div style={{
-          position: 'absolute',
-          zIndex: 150,
-          textAlign: 'center',
-          fontFamily: 'Cormorant Garamond, Georgia, serif',
-          opacity:   showText ? 1 : 0,
-          transform: showText ? 'translateY(0)' : 'translateY(14px)',
-          transition: 'opacity 1.6s ease, transform 1.4s ease',
-          pointerEvents: 'none',
-        }}>
-          <div style={{
-            position: 'absolute',
-            inset: '-40px -60px',
-            background: 'radial-gradient(ellipse at 50% 50%, rgba(255,245,235,0.92) 30%, rgba(255,240,225,0.6) 60%, transparent 100%)',
-            borderRadius: '50%',
-            zIndex: -1,
-            filter: 'blur(18px)',
-          }}/>
-          <div style={{
-            width: 140, height: 1, margin: '0 auto 16px',
-            background: 'linear-gradient(90deg, transparent, rgba(80,40,30,0.35), transparent)',
-          }}/>
-          <div style={{
-            fontSize: 46, fontWeight: 400, letterSpacing: 16,
-            color: '#1A0D08', textTransform: 'uppercase',
-            textShadow: '0 1px 0 rgba(255,220,200,0.7), 0 -1px 0 rgba(0,0,0,0.08)',
-          }}>
-            ALESLI
-          </div>
-          <div style={{
-            fontSize: 13, letterSpacing: 6, color: '#3D1A10',
-            marginTop: 8, fontWeight: 300, fontStyle: 'italic',
-            textShadow: '0 1px 0 rgba(255,220,200,0.5)',
-          }}>
-            con todo el amor del mundo
-          </div>
-          <div style={{
-            width: 140, height: 1, margin: '16px auto 0',
-            background: 'linear-gradient(90deg, transparent, rgba(80,40,30,0.35), transparent)',
-          }}/>
+        <div className={`intro-text ${showText ? 'intro-text-visible' : 'intro-text-hidden'}`}>
+          <div className="intro-text-halo" />
+          <div className="intro-text-line" />
+          <div className="intro-text-title">ALESLI</div>
+          <div className="intro-text-subtitle">con todo el amor del mundo</div>
+          <div className="intro-text-line-bottom" />
         </div>
       )}
 
-      {/* ── Botón invisible que cubre toda la pantalla ── */}
       {!started && (
         <button
           onClick={handleStart}
           onTouchStart={handleStart}
-          style={{
-            position: 'absolute',
-            inset: 0,
-            background: 'transparent',
-            border: 'none',
-            cursor: 'default',
-            zIndex: 1000,
-          }}
+          className="intro-click-area"
           aria-label="Abrir"
         />
       )}
 
-      {/* Audio precargado */}
       <audio ref={audioRef} preload="auto">
         <source src="/audio/sobre_abierto.mp3" type="audio/mpeg" />
         <source src="/audio/sobre_abierto.ogg" type="audio/ogg" />

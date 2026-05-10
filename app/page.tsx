@@ -8,6 +8,8 @@ import Navbar from '@/components/Navbar'
 import SocialSection from '@/components/SocialSection'
 import { api, User } from '@/lib/api'
 
+const INTRO_SEEN_KEY = 'alesli_intro_seen'
+
 const IntroAnimation = dynamic(() => import('@/components/IntroAnimation'), { ssr: false })
 
 export default function Home() {
@@ -15,15 +17,26 @@ export default function Home() {
   const [user, setUser] = useState<User | null>(null)
 
   useEffect(() => {
+    if (sessionStorage.getItem(INTRO_SEEN_KEY) === 'true') {
+      setShowDashboard(true)
+    }
+  }, [])
+
+  useEffect(() => {
     api.me()
       .then(setUser)
       .catch(() => setUser(null))
   }, [])
 
+  const handleIntroComplete = () => {
+    sessionStorage.setItem(INTRO_SEEN_KEY, 'true')
+    setShowDashboard(true)
+  }
+
   return (
     <>
       {!showDashboard && (
-        <IntroAnimation onComplete={() => setShowDashboard(true)} />
+        <IntroAnimation onComplete={handleIntroComplete} />
       )}
 
       {showDashboard && (

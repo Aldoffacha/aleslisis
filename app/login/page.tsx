@@ -7,7 +7,7 @@ import { api } from '@/lib/api'
 
 export default function LoginPage() {
   const router = useRouter()
-  const [email, setEmail] = useState('')
+  const [username, setUsername] = useState('')
   const [password, setPassword] = useState('')
   const [isLoading, setIsLoading] = useState(false)
   const [error, setError] = useState<string | null>(null)
@@ -17,7 +17,7 @@ export default function LoginPage() {
     setIsLoading(true)
     setError(null)
     try {
-      await api.login(email, password)
+      await api.login(username, password)
       router.push('/')
     } catch (err) {
       setError(err instanceof Error ? err.message : 'Error al iniciar sesión')
@@ -57,14 +57,14 @@ export default function LoginPage() {
         <form onSubmit={handleSubmit}>
           <div className="mb-5">
             <label className="block text-xs tracking-[0.15em] uppercase text-[#6A4040] mb-2">
-              Correo electrónico
+              Usuario
             </label>
             <input
               type="text"
-              value={email}
-              onChange={e => setEmail(e.target.value)}
+              value={username}
+              onChange={e => setUsername(e.target.value)}
               required
-              placeholder="tu@correo.com"
+              placeholder="tu_usuario"
               className="w-full px-4 py-[14px] border-[0.5px] border-[rgba(180,80,80,0.25)] rounded-sm text-sm bg-white text-[#2C1A1A] outline-none transition-[border-color] duration-200 font-[DM_Sans,sans-serif]"
             />
           </div>
