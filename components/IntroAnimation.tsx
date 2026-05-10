@@ -1,6 +1,6 @@
 'use client'
 
-import { useEffect, useRef, useState } from 'react'
+import { useEffect, useRef, useState, useCallback } from 'react'
 
 interface IntroProps {
   onComplete: () => void
@@ -18,14 +18,12 @@ function roseSvg(size: number, base: string, dark: string, light: string, hasLea
   svg += `<radialGradient id="rg1_${size}" cx="35%" cy="30%"><stop offset="0%" stop-color="${light}"/><stop offset="100%" stop-color="${base}"/></radialGradient>`
   svg += `<radialGradient id="rg2_${size}" cx="45%" cy="45%"><stop offset="0%" stop-color="${base}"/><stop offset="100%" stop-color="${dark}"/></radialGradient>`
   svg += `</defs>`
-
   if (hasLeaf) {
     const stemY = cy + size * 0.4
     svg += `<path d="M${cx} ${stemY} Q${cx - 2} ${stemY + size * 0.2} ${cx} ${totalH - 6}" stroke="#426B3A" stroke-width="${size * 0.025}" fill="none" stroke-linecap="round"/>`
     svg += `<ellipse cx="${cx - 14}" cy="${stemY - 6}" rx="${size * 0.09}" ry="${size * 0.05}" fill="#4E7A44" transform="rotate(-30 ${cx - 14} ${stemY - 6})"/>`
     svg += `<ellipse cx="${cx + 14}" cy="${stemY + 2}" rx="${size * 0.09}" ry="${size * 0.05}" fill="#3D6636" transform="rotate(25 ${cx + 14} ${stemY + 2})"/>`
   }
-
   const layers = [
     { count: 8, rx: size * 0.31, ry: size * 0.22, off: 0,  color: `url(#rg1_${size})`, op: 0.7 },
     { count: 8, rx: size * 0.26, ry: size * 0.19, off: 22, color: `url(#rg2_${size})`, op: 0.8 },
@@ -33,7 +31,6 @@ function roseSvg(size: number, base: string, dark: string, light: string, hasLea
     { count: 6, rx: size * 0.16, ry: size * 0.11, off: 67, color: '#6A2020',           op: 0.96 },
     { count: 5, rx: size * 0.11, ry: size * 0.08, off: 80, color: '#4A1515',           op: 1.0 },
   ]
-
   layers.forEach((layer, li) => {
     const step = 360 / layer.count
     for (let i = 0; i < layer.count; i++) {
@@ -46,7 +43,6 @@ function roseSvg(size: number, base: string, dark: string, light: string, hasLea
       svg += `</g>`
     }
   })
-
   svg += `<circle cx="${cx}" cy="${cy}" r="${size * 0.055}" fill="#2A0808" opacity="0.85"/>`
   for (let i = 0; i < 12; i++) {
     const r = size * 0.04 * (i / 12)
@@ -206,46 +202,69 @@ export default function IntroAnimation({ onComplete }: IntroProps) {
   const [flowers,  setFlowers]  = useState<FlowerItem[]>([])
   const [bloomed,  setBloomed]  = useState<Set<number>>(new Set())
   const [showText, setShowText] = useState(false)
-  const stageRef = useRef<HTMLDivElement>(null)
-  const timers   = useRef<ReturnType<typeof setTimeout>[]>([])
+  const [started,  setStarted]  = useState(false)
+
+  const audioRef   = useRef<HTMLAudioElement>(null)
+  const timers     = useRef<ReturnType<typeof setTimeout>[]>([])
+  const flowersRef = useRef<FlowerItem[]>([])
 
   const add = (fn: () => void, ms: number) => {
     const t = setTimeout(fn, ms)
     timers.current.push(t)
+    return t
   }
 
+  // Precalcular flores una sola vez al montar
   useEffect(() => {
-    // ── Precalcular flores YA → SVGs listos en memoria, sin lag ──
     const W = window.innerWidth
     const H = window.innerHeight
     const items = generateFlowers(W, H)
     setFlowers(items)
-    const last = Math.max(...items.map(i => i.delay))
+    flowersRef.current = items
+  }, [])
 
-    add(() => setFlapOpen(true),  700)
+  // ── Arranca toda la animación + audio en el primer toque ──
+  const handleStart = useCallback(() => {
+    if (started) return
+    setStarted(true)
+
+    const items = flowersRef.current
+    const last  = Math.max(...items.map(i => i.delay))
+
+    // 700ms → abre el flap + suena el audio desde el segundo 1.5
+    add(() => {
+      setFlapOpen(true)
+      const audio = audioRef.current
+      if (audio) {
+        audio.currentTime = 1.3          // el crujido empieza aquí en tu archivo
+        audio.play().catch(() => {})
+        // Para el audio a los 1500ms → cubre exactamente del 1.5s al 3.0s
+        add(() => { audio.pause() }, 2000)
+      }
+    }, 700)
+
     add(() => setLetterUp(true), 1300)
 
-    // A los 1800ms las flores empiezan a brotar (sobre todavía visible)
     add(() => {
       items.forEach((item, idx) =>
         add(() => setBloomed(prev => { const n = new Set(prev); n.add(idx); return n }), item.delay)
       )
     }, 1800)
 
-    // 1 segundo después de que empieza el brote → primera flor ya visible → sin hueco blanco
     add(() => setPhase('flowers'),                2800)
     add(() => setShowText(true),                  1800 + last + 200)
     add(() => setSlideOut(true),                  1800 + last + 3400)
     add(() => { setPhase('done'); onComplete() }, 1800 + last + 4800)
+  }, [started, onComplete])
 
+  useEffect(() => {
     return () => timers.current.forEach(clearTimeout)
-  }, [onComplete])
+  }, [])
 
   if (phase === 'done') return null
 
   return (
     <div
-      ref={stageRef}
       style={{
         position: 'fixed', inset: 0,
         background: 'radial-gradient(ellipse at 40% 50%, #FDF6EF 0%, #F6EDE4 55%, #EFE0D4 100%)',
@@ -263,8 +282,7 @@ export default function IntroAnimation({ onComplete }: IntroProps) {
         background: 'radial-gradient(ellipse at 50% 50%, transparent 55%, rgba(120,80,60,0.18) 100%)',
       }}/>
 
-      {/* ── FLORES: siempre montadas en el DOM, invisibles hasta brotar ──
-          Así cuando el sobre desaparece ya hay flores visibles debajo */}
+      {/* ── FLORES ── */}
       <div style={{ position: 'absolute', inset: 0, zIndex: phase === 'flowers' ? 10 : 5 }}>
         {flowers.map((f, idx) => (
           <div
@@ -288,7 +306,7 @@ export default function IntroAnimation({ onComplete }: IntroProps) {
         ))}
       </div>
 
-      {/* ── SOBRE: encima hasta que phase cambia a 'flowers' ── */}
+      {/* ── SOBRE ── */}
       {phase === 'envelope' && (
         <div style={{
           position: 'relative', zIndex: 50,
@@ -348,7 +366,7 @@ export default function IntroAnimation({ onComplete }: IntroProps) {
         </div>
       )}
 
-      {/* ── TEXTO FINAL – negro con halo cinemático ── */}
+      {/* ── TEXTO FINAL ── */}
       {phase === 'flowers' && (
         <div style={{
           position: 'absolute',
@@ -392,6 +410,31 @@ export default function IntroAnimation({ onComplete }: IntroProps) {
           }}/>
         </div>
       )}
+
+      {/* ── Botón invisible que cubre toda la pantalla.
+           El PRIMER toque desbloquea el audio del navegador Y arranca la animación.
+           Desaparece tras el primer toque (started = true). ── */}
+      {!started && (
+        <button
+          onClick={handleStart}
+          onTouchStart={handleStart}
+          style={{
+            position: 'absolute',
+            inset: 0,
+            background: 'transparent',
+            border: 'none',
+            cursor: 'default',
+            zIndex: 1000,
+          }}
+          aria-label="Abrir"
+        />
+      )}
+
+      {/* Audio precargado — se reproduce desde currentTime=1.5 cuando el sobre se abre */}
+      <audio ref={audioRef} preload="auto">
+        <source src="/audio/sobre_abierto.mp3" type="audio/mpeg" />
+        <source src="/audio/sobre_abierto.ogg" type="audio/ogg" />
+      </audio>
     </div>
   )
 }
