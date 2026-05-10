@@ -225,19 +225,18 @@ export default function IntroAnimation({ onComplete }: IntroProps) {
     add(() => setFlapOpen(true),  700)
     add(() => setLetterUp(true), 1300)
 
-    // Sobre desaparece a los 2800ms
-    add(() => setPhase('flowers'), 2800)
-
-    // 1 segundo despues del sobre → flores empiezan a brotar
+    // A los 1800ms las flores empiezan a brotar (sobre todavía visible)
     add(() => {
       items.forEach((item, idx) =>
         add(() => setBloomed(prev => { const n = new Set(prev); n.add(idx); return n }), item.delay)
       )
-    }, 3800)
+    }, 1800)
 
-    add(() => setShowText(true),                  3800 + last + 200)
-    add(() => setSlideOut(true),                  3800 + last + 3400)
-    add(() => { setPhase('done'); onComplete() }, 3800 + last + 4800)
+    // 1 segundo después de que empieza el brote → primera flor ya visible → sin hueco blanco
+    add(() => setPhase('flowers'),                2800)
+    add(() => setShowText(true),                  1800 + last + 200)
+    add(() => setSlideOut(true),                  1800 + last + 3400)
+    add(() => { setPhase('done'); onComplete() }, 1800 + last + 4800)
 
     return () => timers.current.forEach(clearTimeout)
   }, [onComplete])

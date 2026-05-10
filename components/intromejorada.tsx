@@ -179,17 +179,18 @@ function generateFlowers(W: number, H: number): FlowerItem[] {
   const golden = 2.399963229
   const total  = 90
   const items: FlowerItem[] = []
+
   for (let i = 0; i < total; i++) {
-    const angle      = i * golden
-    const radius     = Math.sqrt(i / total) * Math.min(W, H) * 0.56
-    const x          = W / 2 + Math.cos(angle) * radius * (W / Math.min(W, H))
-    const y          = H / 2 + Math.sin(angle) * radius * (H / Math.min(W, H))
+    const angle  = i * golden
+    const radius = Math.sqrt(i / total) * Math.min(W, H) * 0.56
+    const x      = W / 2 + Math.cos(angle) * radius * (W / Math.min(W, H))
+    const y      = H / 2 + Math.sin(angle) * radius * (H / Math.min(W, H))
     const sizeFactor = 1 - (radius / (Math.min(W, H) * 0.58)) * 0.44
-    const sz         = Math.round(38 + sizeFactor * 108)
-    const rot        = Math.random() * 54 - 27
-    const delay      = i === 0 ? 40 : 100 + Math.sqrt(i) * 145 + Math.random() * 55
-    const v          = variants[Math.floor(Math.random() * variants.length)]
-    const leaf       = i === 0 || (radius < Math.min(W, H) * 0.25 && v.kind === 'rose')
+    const sz     = Math.round(38 + sizeFactor * 108)
+    const rot    = Math.random() * 54 - 27
+    const delay  = i === 0 ? 40 : 100 + Math.sqrt(i) * 145 + Math.random() * 55
+    const v      = variants[Math.floor(Math.random() * variants.length)]
+    const leaf   = i === 0 || (radius < Math.min(W, H) * 0.25 && v.kind === 'rose')
     items.push({ x, y, size: sz, rot, delay, html: buildFlower(v, sz, leaf, rot) })
   }
   return items
@@ -215,30 +216,22 @@ export default function IntroAnimation({ onComplete }: IntroProps) {
   }
 
   useEffect(() => {
-    // ── Precalcular flores YA → SVGs listos en memoria, sin lag ──
-    const W = window.innerWidth
-    const H = window.innerHeight
-    const items = generateFlowers(W, H)
-    setFlowers(items)
-    const last = Math.max(...items.map(i => i.delay))
-
     add(() => setFlapOpen(true),  700)
     add(() => setLetterUp(true), 1300)
-
-    // Sobre desaparece a los 2800ms
-    add(() => setPhase('flowers'), 2800)
-
-    // 1 segundo despues del sobre → flores empiezan a brotar
     add(() => {
+      setPhase('flowers')
+      const W = stageRef.current?.offsetWidth  ?? window.innerWidth
+      const H = stageRef.current?.offsetHeight ?? window.innerHeight
+      const items = generateFlowers(W, H)
+      setFlowers(items)
       items.forEach((item, idx) =>
-        add(() => setBloomed(prev => { const n = new Set(prev); n.add(idx); return n }), item.delay)
+        add(() => setBloomed(prev => { const n = new Set(prev); n.add(idx); return n }), 2400 + item.delay)
       )
-    }, 3800)
-
-    add(() => setShowText(true),                  3800 + last + 200)
-    add(() => setSlideOut(true),                  3800 + last + 3400)
-    add(() => { setPhase('done'); onComplete() }, 3800 + last + 4800)
-
+      const last = Math.max(...items.map(i => i.delay))
+      add(() => setShowText(true),               2400 + last + 200)
+      add(() => setSlideOut(true),               2400 + last + 3400)
+      add(() => { setPhase('done'); onComplete() }, 2400 + last + 4800)
+    }, 2400)
     return () => timers.current.forEach(clearTimeout)
   }, [onComplete])
 
@@ -249,6 +242,7 @@ export default function IntroAnimation({ onComplete }: IntroProps) {
       ref={stageRef}
       style={{
         position: 'fixed', inset: 0,
+        // ── Fondo crema claro (doc 5) ──
         background: 'radial-gradient(ellipse at 40% 50%, #FDF6EF 0%, #F6EDE4 55%, #EFE0D4 100%)',
         zIndex: 9999,
         overflow: 'hidden',
@@ -258,38 +252,13 @@ export default function IntroAnimation({ onComplete }: IntroProps) {
         opacity:   slideOut ? 0 : 1,
       }}
     >
-      {/* Viñeta cinemática */}
+      {/* Viñeta sutil para el efecto cinemático */}
       <div style={{
         position: 'absolute', inset: 0, pointerEvents: 'none', zIndex: 2,
         background: 'radial-gradient(ellipse at 50% 50%, transparent 55%, rgba(120,80,60,0.18) 100%)',
       }}/>
 
-      {/* ── FLORES: siempre montadas en el DOM, invisibles hasta brotar ──
-          Así cuando el sobre desaparece ya hay flores visibles debajo */}
-      <div style={{ position: 'absolute', inset: 0, zIndex: phase === 'flowers' ? 10 : 5 }}>
-        {flowers.map((f, idx) => (
-          <div
-            key={idx}
-            style={{
-              position: 'absolute',
-              left: f.x, top: f.y,
-              marginLeft: -f.size / 2,
-              marginTop:  -f.size * 0.55,
-              transformOrigin: 'center center',
-              transform: bloomed.has(idx)
-                ? `scale(1) rotate(${f.rot}deg)`
-                : `scale(0) rotate(${f.rot + (f.rot > 0 ? 18 : -18)}deg)`,
-              opacity: bloomed.has(idx) ? 1 : 0,
-              transition: 'transform 0.95s cubic-bezier(0.34,1.52,0.64,1), opacity 0.55s ease',
-              willChange: 'transform, opacity',
-              filter: 'drop-shadow(0 2px 8px rgba(120,60,60,0.18))',
-            }}
-            dangerouslySetInnerHTML={{ __html: f.html }}
-          />
-        ))}
-      </div>
-
-      {/* ── SOBRE: encima hasta que phase cambia a 'flowers' ── */}
+      {/* ── SOBRE (colores crema/rosa doc 5) ── */}
       {phase === 'envelope' && (
         <div style={{
           position: 'relative', zIndex: 50,
@@ -310,13 +279,19 @@ export default function IntroAnimation({ onComplete }: IntroProps) {
                 <stop offset="100%" stopColor="#7A1830"/>
               </linearGradient>
             </defs>
+
+            {/* Cuerpo */}
             <rect x="4" y="56" width="280" height="140" rx="5" fill="url(#envF)" stroke="#C8A0A0" strokeWidth="0.8"/>
-            <path d="M4 192 L116 124"   stroke="#C8A0A0" strokeWidth="0.5" opacity="0.3"/>
+            <path d="M4 192 L116 124"  stroke="#C8A0A0" strokeWidth="0.5" opacity="0.3"/>
             <path d="M284 192 L172 124" stroke="#C8A0A0" strokeWidth="0.5" opacity="0.3"/>
             <path d="M4 56 L144 132 L284 56" fill="none" stroke="#C8A0A0" strokeWidth="0.5" opacity="0.3"/>
+
+            {/* Sello de cera */}
             <circle cx="144" cy="154" r="17" fill="url(#sealG)"/>
             <circle cx="144" cy="154" r="12" fill="none" stroke="#F8D0D8" strokeWidth="0.7" opacity="0.6"/>
             <text x="144" y="158" textAnchor="middle" fontFamily="serif" fontSize="10" fill="#F8D0D8" opacity="0.9">✦</text>
+
+            {/* Solapa */}
             <g style={{
               transformOrigin: '144px 56px',
               transform: flapOpen ? 'rotateX(-178deg)' : 'rotateX(0deg)',
@@ -324,13 +299,15 @@ export default function IntroAnimation({ onComplete }: IntroProps) {
             }}>
               <path d="M4 56 L144 56 L284 56 L144 136 Z" fill="url(#flapC)" stroke="#C8A0A0" strokeWidth="0.8"/>
             </g>
+
+            {/* Carta */}
             <g style={{
               transform: letterUp ? 'translateY(-28px)' : 'translateY(56px)',
               opacity: letterUp ? 1 : 0,
               transition: 'transform 0.92s cubic-bezier(0.34,1.45,0.64,1), opacity 0.80s ease',
             }}>
               <rect x="82" y="70" width="124" height="90" rx="3" fill="white" stroke="#E0C0C0" strokeWidth="0.6"/>
-              <rect x="82" y="70" width="124" height="9"  rx="3" fill="#FAF0F0" opacity="0.9"/>
+              <rect x="82" y="70" width="124" height="9" rx="3" fill="#FAF0F0" opacity="0.9"/>
               <circle cx="144" cy="93" r="10" fill="#C84058" opacity="0.10"/>
               <circle cx="144" cy="93" r="6"  fill="#C84058" opacity="0.18"/>
               <circle cx="144" cy="93" r="3"  fill="#A82840" opacity="0.30"/>
@@ -349,6 +326,32 @@ export default function IntroAnimation({ onComplete }: IntroProps) {
         </div>
       )}
 
+      {/* ── FLORES SVG PINTURA ── */}
+      {phase === 'flowers' && (
+        <div style={{ position: 'absolute', inset: 0, zIndex: 10 }}>
+          {flowers.map((f, idx) => (
+            <div
+              key={idx}
+              style={{
+                position: 'absolute',
+                left: f.x, top: f.y,
+                marginLeft: -f.size / 2,
+                marginTop:  -f.size * 0.55,
+                transformOrigin: 'center center',
+                transform: bloomed.has(idx)
+                  ? `scale(1) rotate(${f.rot}deg)`
+                  : `scale(0) rotate(${f.rot + (f.rot > 0 ? 18 : -18)}deg)`,
+                opacity: bloomed.has(idx) ? 1 : 0,
+                transition: 'transform 0.95s cubic-bezier(0.34,1.52,0.64,1), opacity 0.55s ease',
+                willChange: 'transform, opacity',
+                filter: 'drop-shadow(0 2px 8px rgba(120,60,60,0.18))',
+              }}
+              dangerouslySetInnerHTML={{ __html: f.html }}
+            />
+          ))}
+        </div>
+      )}
+
       {/* ── TEXTO FINAL – negro con halo cinemático ── */}
       {phase === 'flowers' && (
         <div style={{
@@ -361,6 +364,7 @@ export default function IntroAnimation({ onComplete }: IntroProps) {
           transition: 'opacity 1.6s ease, transform 1.4s ease',
           pointerEvents: 'none',
         }}>
+          {/* Halo de luz detrás del texto, estilo cinemático */}
           <div style={{
             position: 'absolute',
             inset: '-40px -60px',
@@ -369,24 +373,31 @@ export default function IntroAnimation({ onComplete }: IntroProps) {
             zIndex: -1,
             filter: 'blur(18px)',
           }}/>
+
           <div style={{
             width: 140, height: 1, margin: '0 auto 16px',
             background: 'linear-gradient(90deg, transparent, rgba(80,40,30,0.35), transparent)',
           }}/>
+
           <div style={{
             fontSize: 46, fontWeight: 400, letterSpacing: 16,
-            color: '#1A0D08', textTransform: 'uppercase',
+            color: '#1A0D08',
+            textTransform: 'uppercase',
+            // Sombra doble: una sutil clara abajo y una muy tenue oscura encima, efecto grabado
             textShadow: '0 1px 0 rgba(255,220,200,0.7), 0 -1px 0 rgba(0,0,0,0.08)',
           }}>
             ALESLI
           </div>
+
           <div style={{
-            fontSize: 13, letterSpacing: 6, color: '#3D1A10',
+            fontSize: 13, letterSpacing: 6,
+            color: '#3D1A10',
             marginTop: 8, fontWeight: 300, fontStyle: 'italic',
             textShadow: '0 1px 0 rgba(255,220,200,0.5)',
           }}>
             con todo el amor del mundo
           </div>
+
           <div style={{
             width: 140, height: 1, margin: '16px auto 0',
             background: 'linear-gradient(90deg, transparent, rgba(80,40,30,0.35), transparent)',

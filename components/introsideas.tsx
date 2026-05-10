@@ -292,3 +292,4 @@ export default function IntroAnimation({ onComplete }: IntroProps) {
     </div>
   )
 }
+//intro ideas
