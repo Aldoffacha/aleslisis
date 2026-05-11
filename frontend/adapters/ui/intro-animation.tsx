@@ -198,9 +198,10 @@ export default function IntroAnimation({ onComplete }: IntroProps) {
 
   const audioRef      = useRef<HTMLAudioElement>(null)
   const audioFlores   = useRef<HTMLAudioElement>(null)
-  const timers      = useRef<ReturnType<typeof setTimeout>[]>([])
-  const wiggleTimers = useRef<ReturnType<typeof setTimeout>[]>([])
-  const flowersRef  = useRef<FlowerItem[]>([])
+  const audioAlesli   = useRef<HTMLAudioElement>(null)
+  const timers        = useRef<ReturnType<typeof setTimeout>[]>([])
+  const wiggleTimers  = useRef<ReturnType<typeof setTimeout>[]>([])
+  const flowersRef    = useRef<FlowerItem[]>([])
 
   const add = (fn: () => void, ms: number) => {
     const t = setTimeout(fn, ms)
@@ -278,8 +279,17 @@ export default function IntroAnimation({ onComplete }: IntroProps) {
       )
     }, 1800)
 
-    add(() => setPhase('flowers'),                2800)
-    add(() => setShowText(true),                  1800 + last + 200)
+    add(() => setPhase('flowers'),   2800)
+
+    add(() => {
+      setShowText(true)
+      const audio = audioAlesli.current
+      if (audio) {
+        audio.currentTime = 0
+        audio.play().catch(() => {})
+      }
+    }, 1800 + last + 200)
+
     add(() => setSlideOut(true),                  1800 + last + 3400)
     add(() => { setPhase('done'); onComplete() }, 1800 + last + 4800)
   }, [started, onComplete])
@@ -426,6 +436,9 @@ export default function IntroAnimation({ onComplete }: IntroProps) {
       </audio>
       <audio ref={audioFlores} preload="auto">
         <source src="/audio/rosas.ogg" type="audio/ogg" />
+      </audio>
+      <audio ref={audioAlesli} preload="auto">
+        <source src="/audio/alesli.ogg" type="audio/ogg" />
       </audio>
     </div>
   )
