@@ -21,6 +21,7 @@ Typescript
 python
 css 
 Frameworks
+javascript
 Next.js // Frontend
 Django  // Backend 
 FLutter // Frontend Movil 
