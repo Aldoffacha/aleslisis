@@ -17,9 +17,11 @@ const auth = createAuthUseCases(djangoAuthAdapter)
 
 export default function HomePage() {
   const [showDashboard, setShowDashboard] = useState(false)
+  const [isClient, setIsClient] = useState(false)
   const [isLoggedIn, setIsLoggedIn] = useState(false)
 
   useEffect(() => {
+    setIsClient(true)
     if (sessionStorage.getItem(INTRO_SEEN_KEY) === 'true') {
       setShowDashboard(true)
     }
@@ -31,9 +33,18 @@ export default function HomePage() {
       .catch(() => setIsLoggedIn(false))
   }, [])
 
+  useEffect(() => {
+    if (!isClient || !showDashboard) return
+    window.dispatchEvent(new Event('alesli-rose-background-start'))
+  }, [isClient, showDashboard])
+
   const handleIntroComplete = () => {
     sessionStorage.setItem(INTRO_SEEN_KEY, 'true')
     setShowDashboard(true)
+  }
+
+  if (!isClient) {
+    return null
   }
 
   return (

@@ -77,9 +77,18 @@ export default function RoseBackground() {
   const stateRef  = useRef<{ y: number; rot: number }[]>([])
   const rafRef    = useRef<number>(0)
   const lastRef   = useRef<number>(0)
+  const [started, setStarted] = useState(false)
   const [, forceRender] = useState(0)
 
   useEffect(() => {
+    const handleStart = () => setStarted(true)
+    window.addEventListener('alesli-rose-background-start', handleStart)
+    return () => window.removeEventListener('alesli-rose-background-start', handleStart)
+  }, [])
+
+  useEffect(() => {
+    if (!started) return
+
     const W = window.innerWidth
     const count = Math.round(W / 120) + 6   // densidad moderada
 
@@ -123,7 +132,7 @@ export default function RoseBackground() {
 
     rafRef.current = requestAnimationFrame(loop)
     return () => cancelAnimationFrame(rafRef.current)
-  }, [])
+  }, [started])
 
   const petals = petalsRef.current
   const states = stateRef.current
@@ -138,6 +147,8 @@ export default function RoseBackground() {
         pointerEvents: 'none',
         overflow: 'hidden',
         background: 'radial-gradient(ellipse at 40% 50%, #FDF6EF 0%, #F6EDE4 55%, #EFE0D4 100%)',
+        opacity: started ? 1 : 0,
+        transition: 'opacity 1s ease',
       }}
     >
       {petals.map((p, i) => {

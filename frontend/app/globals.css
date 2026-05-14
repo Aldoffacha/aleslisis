@@ -455,7 +455,8 @@ body {
   inset: 0;
   background: transparent;
   border: none;
-  cursor: default;
+  cursor: pointer;
+  touch-action: manipulation;
   z-index: 1000;
 }
 
