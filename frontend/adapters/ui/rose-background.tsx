@@ -72,13 +72,28 @@ function makePetal(id: number, W: number): Petal {
 }
 
 export default function RoseBackground() {
-  const canvasRef = useRef<HTMLDivElement>(null)
+  const petalNodesRef = useRef<Array<HTMLDivElement | null>>([])
   const petalsRef = useRef<Petal[]>([])
   const stateRef  = useRef<{ y: number; rot: number }[]>([])
   const rafRef    = useRef<number>(0)
   const lastRef   = useRef<number>(0)
   const [started, setStarted] = useState(false)
-  const [, forceRender] = useState(0)
+  const [petalCount, setPetalCount] = useState(0)
+
+  const applyPetalNode = (node: HTMLDivElement, petal: Petal, y: number, rot: number) => {
+    const signature = `${petal.id}:${petal.size}:${Math.round(petal.rot)}`
+    node.style.left = `${petal.x}px`
+    node.style.width = `${petal.size}px`
+    node.style.height = `${petal.size}px`
+    node.style.marginLeft = `${-petal.size / 2}px`
+    node.style.marginTop = `${-petal.size / 2}px`
+    node.style.opacity = `${petal.opacity}`
+    node.style.transform = `translate3d(0, ${y}px, 0) rotate(${rot}deg)`
+    if (node.dataset.signature !== signature) {
+      node.dataset.signature = signature
+      node.innerHTML = petal.html
+    }
+  }
 
   useEffect(() => {
     const handleStart = () => setStarted(true)
@@ -90,27 +105,56 @@ export default function RoseBackground() {
     if (!started) return
 
     const W = window.innerWidth
-    const count = Math.round(W / 120) + 6   // densidad moderada
+    const H = window.innerHeight
+    const count = Math.min(Math.round(W / 180) + 4, 14)
 
     const petals: Petal[] = []
     for (let i = 0; i < count; i++) {
       const p = makePetal(i, W)
-      // distribuir verticalmente al inicio para que no arranquen todos de arriba
-      const H = window.innerHeight
       petals.push({ ...p, startY: -p.size + Math.random() * (H + p.size) })
     }
-    petalsRef.current = petals
-    stateRef.current  = petals.map(p => ({ y: p.startY, rot: p.rot }))
-    forceRender(n => n + 1)
 
-    const W2 = W
+    petalsRef.current = petals
+    stateRef.current = petals.map(p => ({ y: p.startY, rot: p.rot }))
+    petalNodesRef.current = Array(petals.length).fill(null)
+    setPetalCount(petals.length)
+  }, [started])
+
+  useEffect(() => {
+    if (!started || petalCount === 0) return
+
+    const W = window.innerWidth
+    const count = Math.round(W / 120) + 6   // densidad moderada
+
     let nextId = count
+
+    const stopLoop = () => {
+      if (rafRef.current) {
+        cancelAnimationFrame(rafRef.current)
+        rafRef.current = 0
+      }
+    }
+
+    const syncAllNodes = () => {
+      const nodes = petalNodesRef.current
+      const petals = petalsRef.current
+      const states = stateRef.current
+      for (let i = 0; i < petals.length; i++) {
+        const node = nodes[i]
+        const petal = petals[i]
+        const state = states[i]
+        if (node && petal && state) {
+          applyPetalNode(node, petal, state.y, state.rot)
+        }
+      }
+    }
 
     function loop(ts: number) {
       const dt = lastRef.current ? Math.min((ts - lastRef.current) / 1000, 0.1) : 0
       lastRef.current = ts
 
       const H = window.innerHeight
+      const nodes = petalNodesRef.current
       const states = stateRef.current
       const ps     = petalsRef.current
 
@@ -119,27 +163,46 @@ export default function RoseBackground() {
         states[i].rot += ps[i].rotSpeed * dt
 
         if (states[i].y > H + ps[i].size + 40) {
-          // reciclar: volver arriba con nueva x
-          const fresh = makePetal(nextId++, W2)
+          const fresh = makePetal(nextId++, W)
           ps[i]       = { ...fresh, startY: -fresh.size - 20 }
           states[i]   = { y: -fresh.size - 20, rot: fresh.rot }
         }
+
+        const node = nodes[i]
+        if (node) {
+          applyPetalNode(node, ps[i], states[i].y, states[i].rot)
+        }
       }
 
-      forceRender(n => n + 1)
       rafRef.current = requestAnimationFrame(loop)
     }
 
-    rafRef.current = requestAnimationFrame(loop)
-    return () => cancelAnimationFrame(rafRef.current)
-  }, [started])
+    const handleVisibilityChange = () => {
+      if (document.hidden) {
+        stopLoop()
+        lastRef.current = 0
+        return
+      }
 
-  const petals = petalsRef.current
-  const states = stateRef.current
+      if (!rafRef.current) {
+        syncAllNodes()
+        rafRef.current = requestAnimationFrame(loop)
+      }
+    }
+
+    syncAllNodes()
+    rafRef.current = requestAnimationFrame(loop)
+    document.addEventListener('visibilitychange', handleVisibilityChange)
+
+    return () => {
+      document.removeEventListener('visibilitychange', handleVisibilityChange)
+      stopLoop()
+      lastRef.current = 0
+    }
+  }, [started, petalCount])
 
   return (
     <div
-      ref={canvasRef}
       style={{
         position: 'fixed',
         inset: 0,
@@ -151,29 +214,23 @@ export default function RoseBackground() {
         transition: 'opacity 1s ease',
       }}
     >
-      {petals.map((p, i) => {
-        const st = states[i]
-        if (!st) return null
-        return (
-          <div
-            key={p.id}
-            style={{
-              position: 'absolute',
-              left: p.x,
-              top: st.y,
-              width: p.size,
-              height: p.size,
-              marginLeft: -p.size / 2,
-              marginTop:  -p.size / 2,
-              opacity: p.opacity,
-              transform: `rotate(${st.rot}deg)`,
-              willChange: 'transform, top',
-              filter: 'drop-shadow(0 2px 6px rgba(120,60,60,0.15))',
-            }}
-            dangerouslySetInnerHTML={{ __html: p.html }}
-          />
-        )
-      })}
+      {Array.from({ length: petalCount }, (_, idx) => (
+        <div
+          key={idx}
+          ref={node => {
+            petalNodesRef.current[idx] = node
+          }}
+          style={{
+            position: 'absolute',
+            top: 0,
+            left: 0,
+            transformOrigin: 'center center',
+            willChange: 'transform',
+            filter: 'drop-shadow(0 2px 6px rgba(120,60,60,0.15))',
+            pointerEvents: 'none',
+          }}
+        />
+      ))}
     </div>
   )
 }
