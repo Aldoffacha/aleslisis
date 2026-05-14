@@ -30,7 +30,7 @@ export default function LoginPage() {
   }
 
   return (
-    <div className="min-h-screen bg-[var(--cream)] flex items-center justify-center font-[DM_Sans,sans-serif]">
+    <div className="min-h-screen ] flex items-center justify-center font-[DM_Sans,sans-serif]">
       <Link
         href="/"
         className="absolute top-8 left-8 text-xs tracking-[0.15em] uppercase text-[#5A3333] no-underline flex items-center gap-2"
