@@ -1,0 +1,1 @@
+self.__REACT_LOADABLE_MANIFEST="{\"app\\\\page.tsx -> @/components/IntroAnimation\":{\"id\":\"app\\\\page.tsx -> @/components/IntroAnimation\",\"files\":[\"static/chunks/_app-pages-browser_components_IntroAnimation_tsx.js\"]}}"

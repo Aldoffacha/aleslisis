@@ -1,6 +1,6 @@
 'use client'
 
-import { useState, FormEvent } from 'react'
+import { useEffect, useState, FormEvent } from 'react'
 import Link from 'next/link'
 import { useRouter } from 'next/navigation'
 import { createAuthUseCases } from '@/domain/use-cases/auth'
@@ -14,6 +14,10 @@ export default function LoginPage() {
   const [password, setPassword] = useState('')
   const [isLoading, setIsLoading] = useState(false)
   const [error, setError] = useState<string | null>(null)
+
+  useEffect(() => {
+    window.dispatchEvent(new Event('alesli-rose-background-start'))
+  }, [])
 
   const handleSubmit = async (e: FormEvent) => {
     e.preventDefault()
@@ -31,7 +35,7 @@ export default function LoginPage() {
 
   return (
     <div className="min-h-screen flex items-center justify-center font-[DM_Sans,sans-serif]">
-      <Link
+      <a
         href="/"
         className="absolute top-8 left-8 text-xs tracking-[0.15em] uppercase text-[#5A3333] no-underline flex items-center gap-2"
       >
@@ -39,7 +43,7 @@ export default function LoginPage() {
           <polyline points="15 18 9 12 15 6" />
         </svg>
         Alesli
-      </Link>
+      </a>
 
       <div className="w-full max-w-[400px] px-6">
         <div className="text-center mb-12">
