@@ -1,0 +1,199 @@
+.editorStage {
+  width: min(100%, 520px);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 18px;
+}
+
+.canvas {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 1 / 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: visible;
+}
+
+.flowersLayer {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  z-index: 3;
+  overflow: visible;
+}
+
+.flowerSlot {
+  position: absolute;
+  transform: translateX(-50%);
+  transform-origin: center bottom;
+  filter: drop-shadow(0 16px 22px rgba(44, 26, 26, 0.15));
+  pointer-events: auto;
+  cursor: grab;
+  touch-action: none;
+}
+
+.flowerSlotSelected {
+  filter: drop-shadow(0 18px 28px rgba(122, 53, 53, 0.22));
+}
+
+.flowerSlot:active {
+  cursor: grabbing;
+}
+
+.flowerTransform {
+  position: relative;
+  transform-origin: center bottom;
+}
+
+.flowerTransform::after {
+  content: '';
+  position: absolute;
+  inset: 8% 10% 4%;
+  border-radius: 30px;
+  border: 1px dashed transparent;
+  transition: border-color 0.2s ease;
+}
+
+.flowerSlotSelected .flowerTransform::after {
+  border-color: rgba(122, 53, 53, 0.24);
+}
+
+.flowerImage {
+  width: 100%;
+  height: auto;
+  object-fit: contain;
+  user-select: none;
+  pointer-events: none;
+}
+
+.bouquetImage {
+  position: relative;
+  width: 100%;
+  height: auto;
+  object-fit: contain;
+  user-select: none;
+  pointer-events: none;
+}
+
+.bouquetImage {
+  z-index: 2;
+  filter: drop-shadow(0 18px 32px rgba(44, 26, 26, 0.1));
+}
+
+.depthShade {
+  position: absolute;
+  inset: 0;
+  z-index: 4;
+  pointer-events: none;
+  background:
+    radial-gradient(circle at 50% 24%, rgba(255, 255, 255, 0.16), rgba(255, 255, 255, 0) 28%),
+    linear-gradient(to top, rgba(30, 17, 17, 0.34) 0%, rgba(30, 17, 17, 0.18) 16%, rgba(30, 17, 17, 0.08) 28%, rgba(30, 17, 17, 0) 44%);
+  mix-blend-mode: multiply;
+}
+
+.editorToolbar {
+  width: 100%;
+  max-width: 520px;
+  padding: 14px;
+  border-radius: 22px;
+  background: rgba(255, 255, 255, 0.8);
+  border: 1px solid rgba(176, 92, 92, 0.14);
+  backdrop-filter: blur(10px);
+  box-shadow: 0 20px 32px rgba(122, 53, 53, 0.12);
+}
+
+.editorCopy {
+  margin-bottom: 12px;
+}
+
+.editorEyebrow {
+  display: block;
+  margin-bottom: 4px;
+  font-size: 10px;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: #9a6f6f;
+}
+
+.editorTitle {
+  display: block;
+  margin-bottom: 6px;
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 1.4rem;
+  color: #532a2a;
+}
+
+.editorDescription {
+  font-size: 12px;
+  line-height: 1.6;
+  color: #785757;
+}
+
+.editorActions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.editorButton {
+  padding: 9px 12px;
+  border: 1px solid rgba(176, 92, 92, 0.14);
+  border-radius: 999px;
+  background: rgba(250, 246, 240, 0.92);
+  color: #613838;
+  font-size: 10px;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  cursor: pointer;
+}
+
+.emptyOverlay {
+  position: absolute;
+  left: 50%;
+  bottom: 16%;
+  z-index: 4;
+  width: min(72%, 320px);
+  padding: 14px 16px;
+  border-radius: 20px;
+  transform: translateX(-50%);
+  background: rgba(255, 255, 255, 0.72);
+  border: 1px solid rgba(176, 92, 92, 0.12);
+  backdrop-filter: blur(8px);
+  text-align: center;
+}
+
+.emptyTitle {
+  display: block;
+  margin-bottom: 6px;
+  font-size: 13px;
+  font-weight: 600;
+  color: #5c3535;
+}
+
+.emptyDescription {
+  font-size: 12px;
+  line-height: 1.6;
+  color: #775656;
+}
+
+.hiddenBadge {
+  position: absolute;
+  right: 14px;
+  bottom: 14px;
+  z-index: 4;
+  max-width: 220px;
+  padding: 10px 12px;
+  border-radius: 16px;
+  background: rgba(122, 53, 53, 0.08);
+  color: #5d3434;
+  font-size: 11px;
+  line-height: 1.6;
+}
+
+@media (max-width: 640px) {
+  .editorToolbar {
+    max-width: none;
+  }
+}

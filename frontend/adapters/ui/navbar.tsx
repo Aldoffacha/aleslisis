@@ -31,12 +31,14 @@ export default function Navbar({ cartCount = 0, isLoggedIn = false }: NavbarProp
             </svg>
           </span>
           {tiendaOpen && (
-            <div className="absolute top-full left-0 mt-2 bg-white border-[0.5px] border-[rgba(180,80,80,0.2)] shadow-sm min-w-[180px] z-50">
-              <Link href="/tienda/flores" className="block px-5 py-3 text-xs tracking-[0.08em] text-[#5A3333] hover:bg-[#FAF0EE] transition-colors">Flores</Link>
-              <Link href="/tienda/arreglos" className="block px-5 py-3 text-xs tracking-[0.08em] text-[#5A3333] hover:bg-[#FAF0EE] transition-colors">Arreglos</Link>
-              <Link href="/tienda/regalos" className="block px-5 py-3 text-xs tracking-[0.08em] text-[#5A3333] hover:bg-[#FAF0EE] transition-colors">Regalos</Link>
-              <div className="border-t border-[rgba(180,80,80,0.1)] mx-3" />
-              <Link href="/tienda/hazlo-tu-mismo" className="block px-5 py-3 text-xs tracking-[0.08em] text-[#7A2020] hover:bg-[#FAF0EE] transition-colors font-medium">Hazlo tú mismo</Link>
+            <div className="absolute top-full left-0 pt-2 z-50">
+              <div className="bg-white border-[0.5px] border-[rgba(180,80,80,0.2)] shadow-sm min-w-[180px]">
+                <Link href="/tienda/flores" className="block px-5 py-3 text-xs tracking-[0.08em] text-[#5A3333] hover:bg-[#FAF0EE] transition-colors">Flores</Link>
+                <Link href="/tienda/arreglos" className="block px-5 py-3 text-xs tracking-[0.08em] text-[#5A3333] hover:bg-[#FAF0EE] transition-colors">Arreglos</Link>
+                <Link href="/tienda/regalos" className="block px-5 py-3 text-xs tracking-[0.08em] text-[#5A3333] hover:bg-[#FAF0EE] transition-colors">Regalos</Link>
+                <div className="border-t border-[rgba(180,80,80,0.1)] mx-3" />
+                <Link href="/tienda/hazlo-tu-mismo" className="block px-5 py-3 text-xs tracking-[0.08em] text-[#7A2020] hover:bg-[#FAF0EE] transition-colors font-medium">Hazlo tú mismo</Link>
+              </div>
             </div>
           )}
         </li>

@@ -67,7 +67,7 @@ def logout_view(request):
 @api_view(['GET'])
 def me_view(request):
     user_id = request.session.get('user_id')
-    if not user_id:
+    if user_id is None:
         return Response({'error': 'No autenticado'}, status=status.HTTP_401_UNAUTHORIZED)
     user = DjangoUserRepository().get_by_id(user_id)
     if not user:

@@ -8,6 +8,18 @@ import { djangoAuthAdapter } from '@/adapters/api/auth-adapter'
 
 const auth = createAuthUseCases(djangoAuthAdapter)
 
+function resolveDashboardPath(role: string) {
+  if (role === 'administrador') {
+    return '/administrador/dashboard'
+  }
+
+  if (role === 'empleado') {
+    return '/empleado/dashboard'
+  }
+
+  return '/cliente/dashboard'
+}
+
 export default function LoginPage() {
   const router = useRouter()
 
@@ -18,6 +30,22 @@ export default function LoginPage() {
 
   useEffect(() => {
     window.dispatchEvent(new Event('alesli-rose-background-start'))
+
+    let isMounted = true
+
+    auth.getCurrentUser()
+      .then((user) => {
+        if (isMounted) {
+          router.replace(resolveDashboardPath(user.rol))
+        }
+      })
+      .catch(() => {
+        return
+      })
+
+    return () => {
+      isMounted = false
+    }
   }, [])
 
   const handleSubmit = async (e: FormEvent) => {
@@ -27,8 +55,8 @@ export default function LoginPage() {
     setError(null)
 
     try {
-      await auth.login(correo, password)
-      router.push('/')
+      const user = await auth.login(correo, password)
+      router.push(resolveDashboardPath(user.rol))
     } catch (err) {
       setError(
         err instanceof Error

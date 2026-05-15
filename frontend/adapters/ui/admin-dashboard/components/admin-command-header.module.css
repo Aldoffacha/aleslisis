@@ -1,0 +1,144 @@
+.root {
+  display: grid;
+  grid-template-columns: minmax(0, 1.15fr) minmax(320px, 0.85fr);
+  gap: 22px;
+  padding: 30px;
+  border-radius: 34px;
+  background:
+    radial-gradient(circle at top right, rgba(201, 169, 110, 0.16), rgba(201, 169, 110, 0) 28%),
+    linear-gradient(145deg, rgba(33, 24, 29, 0.95), rgba(53, 34, 43, 0.88));
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  box-shadow: 0 30px 70px rgba(16, 9, 12, 0.28);
+  animation: riseIn 0.55s ease both;
+}
+
+.copyColumn {
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+}
+
+.eyebrow {
+  font-size: 11px;
+  letter-spacing: 0.24em;
+  text-transform: uppercase;
+  color: rgba(247, 239, 232, 0.58);
+}
+
+.title {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: clamp(3rem, 5vw, 4.8rem);
+  font-weight: 500;
+  line-height: 0.92;
+  color: #f8f0ea;
+}
+
+.description {
+  max-width: 760px;
+  font-size: 15px;
+  line-height: 1.85;
+  color: rgba(247, 239, 232, 0.78);
+}
+
+.actionRow {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+}
+
+.primaryAction,
+.secondaryAction,
+.ghostAction {
+  padding: 14px 18px;
+  border-radius: 999px;
+  font-size: 11px;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  text-decoration: none;
+  border: 1px solid rgba(255, 255, 255, 0.12);
+}
+
+.primaryAction {
+  background: linear-gradient(145deg, rgba(122, 53, 53, 0.96), rgba(156, 110, 32, 0.58));
+  color: #fff7f4;
+}
+
+.secondaryAction {
+  background: rgba(255, 255, 255, 0.08);
+  color: #f5ece6;
+}
+
+.ghostAction {
+  background: rgba(255, 255, 255, 0.04);
+  color: rgba(247, 239, 232, 0.82);
+}
+
+.signalColumn {
+  display: grid;
+  gap: 14px;
+  align-content: stretch;
+}
+
+.signalCard {
+  padding: 18px;
+  border-radius: 24px;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  background: rgba(255, 255, 255, 0.06);
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.08);
+}
+
+.signalLabel {
+  display: block;
+  margin-bottom: 8px;
+  font-size: 10px;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: rgba(247, 239, 232, 0.58);
+}
+
+.signalValue {
+  display: block;
+  margin-bottom: 8px;
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 2rem;
+  font-weight: 600;
+}
+
+.signalNote {
+  font-size: 12px;
+  line-height: 1.7;
+  color: rgba(247, 239, 232, 0.74);
+}
+
+.toneVino .signalValue {
+  color: #7a2e3d;
+}
+
+.toneOro .signalValue {
+  color: #9c6e20;
+}
+
+.toneHoja .signalValue {
+  color: #46654f;
+}
+
+.toneGrafito .signalValue {
+  color: #3d3838;
+}
+
+@keyframes riseIn {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@media (max-width: 1080px) {
+  .root {
+    grid-template-columns: 1fr;
+  }
+}

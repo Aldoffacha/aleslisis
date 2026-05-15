@@ -10,16 +10,14 @@ DEBUG = True
 ALLOWED_HOSTS = ['*']
 SESSION_ENGINE = 'django.contrib.sessions.backends.db'
 SESSION_COOKIE_AGE = 86400
-SESSION_COOKIE_SAMESITE = 'None'
-SESSION_COOKIE_SECURE = False
 SESSION_COOKIE_HTTPONLY = True
 SESSION_SAVE_EVERY_REQUEST = True
+SESSION_COOKIE_SAMESITE = 'Lax'
+SESSION_COOKIE_SECURE = False
 
 CSRF_COOKIE_SAMESITE = 'Lax'
-CSRF_COOKIE_SAMESITE = 'None'
 CSRF_COOKIE_SECURE = False
-CSRF_COOKIE_HTTPONLY = False  # necesario para que JS lo pueda leer
-SESSION_COOKIE_SAMESITE = 'Lax'
+CSRF_COOKIE_HTTPONLY = False
 
 INSTALLED_APPS = [
     'django.contrib.admin',
@@ -79,7 +77,7 @@ DATABASES = {
         'ENGINE': 'django.db.backends.postgresql',
         'NAME': 'DBAlesli',
         'USER': 'postgres',
-        'PASSWORD': 'A12345',
+        'PASSWORD': 'abejar78',
         'HOST': 'localhost',
         'PORT': '5433',
     }

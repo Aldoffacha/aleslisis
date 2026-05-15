@@ -1,0 +1,198 @@
+.panel {
+  padding: 24px;
+  border-radius: 30px;
+  background: rgba(250, 246, 240, 0.9);
+  border: 1px solid rgba(176, 92, 92, 0.14);
+  box-shadow: 0 24px 60px rgba(122, 53, 53, 0.08);
+  backdrop-filter: blur(16px);
+}
+
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-end;
+  gap: 16px;
+  margin-bottom: 20px;
+}
+
+.eyebrow {
+  display: inline-block;
+  margin-bottom: 8px;
+  font-size: 10px;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  color: #9a6f6f;
+}
+
+.title {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 2rem;
+  font-weight: 500;
+  color: var(--rose-dark);
+}
+
+.counterBox {
+  min-width: 88px;
+  padding: 12px;
+  border-radius: 20px;
+  background: rgba(122, 53, 53, 0.07);
+  text-align: center;
+}
+
+.counterLabel {
+  display: block;
+  margin-bottom: 4px;
+  font-size: 10px;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: #896868;
+}
+
+.counterValue {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 2rem;
+  color: var(--rose-dark);
+}
+
+.searchField {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.searchLabel {
+  font-size: 10px;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: #8f6969;
+}
+
+.searchInput {
+  width: 100%;
+  padding: 14px 16px;
+  border-radius: 18px;
+  border: 1px solid rgba(176, 92, 92, 0.16);
+  background: rgba(255, 255, 255, 0.76);
+  color: #543030;
+  font-size: 14px;
+  outline: none;
+}
+
+.searchInput:focus {
+  border-color: rgba(122, 53, 53, 0.28);
+  box-shadow: 0 0 0 4px rgba(122, 53, 53, 0.06);
+}
+
+.letterRow {
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+  margin: 18px 0 22px;
+}
+
+.letterButton {
+  min-width: 42px;
+  height: 42px;
+  padding: 0 12px;
+  border-radius: 999px;
+  border: 1px solid rgba(176, 92, 92, 0.16);
+  background: rgba(255, 255, 255, 0.76);
+  color: #633d3d;
+  font-size: 12px;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.letterButton:hover {
+  border-color: rgba(122, 53, 53, 0.3);
+}
+
+.catalogBody {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+  max-height: calc(100vh - 212px);
+  overflow-y: auto;
+  padding-right: 6px;
+}
+
+.catalogBody::-webkit-scrollbar {
+  width: 8px;
+}
+
+.catalogBody::-webkit-scrollbar-thumb {
+  border-radius: 999px;
+  background: rgba(176, 92, 92, 0.2);
+}
+
+.letterSection {
+  scroll-margin-top: 120px;
+}
+
+.letterHeader {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 12px;
+  padding-bottom: 12px;
+  margin-bottom: 14px;
+  border-bottom: 1px solid rgba(176, 92, 92, 0.12);
+}
+
+.letterTitle {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 2rem;
+  font-weight: 600;
+  color: #4e2626;
+}
+
+.letterCount {
+  font-size: 11px;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: #8b6868;
+}
+
+.groupGrid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 14px;
+}
+
+.emptySearchState {
+  padding: 22px;
+  border-radius: 24px;
+  border: 1px dashed rgba(176, 92, 92, 0.24);
+  background: rgba(255, 255, 255, 0.6);
+}
+
+.emptySearchTitle {
+  display: block;
+  margin-bottom: 8px;
+  font-size: 15px;
+  font-weight: 600;
+  color: #583131;
+}
+
+.emptySearchDescription {
+  font-size: 13px;
+  line-height: 1.7;
+  color: #785757;
+}
+
+@media (max-width: 960px) {
+  .catalogBody {
+    max-height: none;
+  }
+}
+
+@media (max-width: 760px) {
+  .header {
+    align-items: flex-start;
+    flex-direction: column;
+  }
+
+  .groupGrid {
+    grid-template-columns: 1fr;
+  }
+}
