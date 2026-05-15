@@ -1,5 +1,5 @@
 'use client'
-
+import { useRouter } from 'next/navigation'
 import { useState, useEffect } from 'react'
 import dynamic from 'next/dynamic'
 import Link from 'next/link'
@@ -16,6 +16,9 @@ const IntroAnimation = dynamic(() => import('./intro-animation'), { ssr: false }
 const auth = createAuthUseCases(djangoAuthAdapter)
 
 export default function HomePage() {
+
+  const router = useRouter()
+
   const [showDashboard, setShowDashboard] = useState(false)
   const [isClient, setIsClient] = useState(false)
   const [isLoggedIn, setIsLoggedIn] = useState(false)
@@ -29,9 +32,26 @@ export default function HomePage() {
 
   useEffect(() => {
     auth.getCurrentUser()
-      .then(() => setIsLoggedIn(true))
-      .catch(() => setIsLoggedIn(false))
-  }, [])
+      .then((user) => {
+        setIsLoggedIn(true)
+
+        if (user.rol === 'cliente') {
+          router.push('/cliente/dashboard')
+        } else if (user.rol === 'empleado') {
+          router.push('/empleado/dashboard')
+        } else if (user.rol === 'administrador') {
+          router.push('/administrador/dashboard')
+        }
+      })
+      .catch((err) => {
+  if (err instanceof Error && err.message.includes('No autenticado')) {
+    setIsLoggedIn(false)
+    return
+  }
+
+  console.error(err)
+})
+  }, [router])
 
   useEffect(() => {
     if (!isClient || !showDashboard) return
@@ -68,12 +88,19 @@ export default function HomePage() {
               <span className="font-[Cormorant_Garamond,serif] text-xl font-light text-[rgba(255,255,255,0.9)] tracking-[0.2em]">
                 Alesli
               </span>
+
               <span className="text-[11px] tracking-[0.08em] opacity-50">
                 &copy; 2026 Alesli Flores. Todos los derechos reservados.
               </span>
+
               <div className="flex gap-6 text-[11px] tracking-[0.08em]">
-                <Link href="/privacidad" className="text-[rgba(255,255,255,0.5)] no-underline">Privacidad</Link>
-                <Link href="/terminos" className="text-[rgba(255,255,255,0.5)] no-underline">Términos</Link>
+                <Link href="/privacidad" className="text-[rgba(255,255,255,0.5)] no-underline">
+                  Privacidad
+                </Link>
+
+                <Link href="/terminos" className="text-[rgba(255,255,255,0.5)] no-underline">
+                  Términos
+                </Link>
               </div>
             </footer>
           </div>

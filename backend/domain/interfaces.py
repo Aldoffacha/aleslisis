@@ -1,16 +1,15 @@
 from abc import ABC, abstractmethod
-from django.contrib.auth.models import User
-
+from backend.domain.entities import UserEntity
 
 class UserRepository(ABC):
     @abstractmethod
-    def authenticate(self, username: str | None, email: str | None, password: str) -> User | None:
+    def authenticate(self, correo: str, password: str) -> UserEntity | None:
         ...
 
     @abstractmethod
-    def create_user(self, username: str, email: str, password: str) -> User:
+    def create_cliente(self, data: dict) -> UserEntity:
         ...
 
     @abstractmethod
-    def get_by_id(self, user_id: int) -> User | None:
+    def get_by_id(self, user_id: int) -> UserEntity | None:
         ...

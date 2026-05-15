@@ -1,8 +1,10 @@
 from dataclasses import dataclass
-
+from typing import Optional
 
 @dataclass
 class UserEntity:
     id: int
-    username: str
-    email: str
+    nombre: str
+    correo: str
+    rol: str  # 'cliente', 'empleado', 'administrador'
+    estado: Optional[str] = None

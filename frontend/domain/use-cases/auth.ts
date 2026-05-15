@@ -3,11 +3,11 @@ import { User } from '@/domain/entities/user'
 
 export function createAuthUseCases(auth: AuthService) {
   return {
-    login: (username: string, password: string): Promise<User> =>
-      auth.login(username, password),
+    login: (correo: string, password: string): Promise<User> =>
+      auth.login(correo, password),
 
-    register: (username: string, email: string, password: string): Promise<User> =>
-      auth.register(username, email, password),
+    register: (form: Record<string, string>): Promise<User> =>
+      auth.register(form),
 
     logout: (): Promise<void> =>
       auth.logout(),

@@ -8,6 +8,18 @@ SECRET_KEY = 'django-insecure-68cr#*g71%durtqf0_$#pwrfp1i*otair4o7(=dab^n(abax$6
 DEBUG = True
 
 ALLOWED_HOSTS = ['*']
+SESSION_ENGINE = 'django.contrib.sessions.backends.db'
+SESSION_COOKIE_AGE = 86400
+SESSION_COOKIE_SAMESITE = 'None'
+SESSION_COOKIE_SECURE = False
+SESSION_COOKIE_HTTPONLY = True
+SESSION_SAVE_EVERY_REQUEST = True
+
+CSRF_COOKIE_SAMESITE = 'Lax'
+CSRF_COOKIE_SAMESITE = 'None'
+CSRF_COOKIE_SECURE = False
+CSRF_COOKIE_HTTPONLY = False  # necesario para que JS lo pueda leer
+SESSION_COOKIE_SAMESITE = 'Lax'
 
 INSTALLED_APPS = [
     'django.contrib.admin',
@@ -61,10 +73,15 @@ TEMPLATES = [
 
 WSGI_APPLICATION = 'backend.wsgi.application'
 
+# ✅ Solo este bloque, el de SQLite lo borramos
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
+        'ENGINE': 'django.db.backends.postgresql',
+        'NAME': 'DBAlesli',
+        'USER': 'postgres',
+        'PASSWORD': 'A12345',
+        'HOST': 'localhost',
+        'PORT': '5433',
     }
 }
 

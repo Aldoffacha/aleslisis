@@ -39,3 +39,8 @@ yarn-error.log*
 # typescript
 *.tsbuildinfo
 frontend/next-env.d.ts
+
+# environment variables / secrets
+.env
+.env.*
+!.env.example
