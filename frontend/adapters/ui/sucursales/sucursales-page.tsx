@@ -14,6 +14,7 @@ const SUCURSALES = [
     zona: 'Entre Av. 6 de Agosto y Av. Arce',
     ciudad: 'La Paz, Bolivia',
     telefono: '+591 77793200',
+    telefono2: '+591 70634636',
     whatsapp: 'https://wa.me/59177793200',
     email: 'leslieferlo@icloud.com',
     horario: 'Lun — Sáb: 9:00 — 19:00',
@@ -59,8 +60,8 @@ export default function SucursalesPage() {
       zoomControl: false,
     })
 
-    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-      attribution: '&copy; OpenStreetMap contributors',
+    L.tileLayer('https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png', {
+      attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors &copy; <a href="https://carto.com/">CARTO</a>',
       maxZoom: 19,
     }).addTo(map)
 
@@ -145,6 +146,7 @@ export default function SucursalesPage() {
                   <span className={styles.storeAddr}>{store.zona}</span>
                   <span className={styles.storeCity}>{store.ciudad}</span>
                   <span className={styles.storePhone}>{store.telefono}</span>
+                  <span className={styles.storePhone}>{store.telefono2}</span>
                   <span className={styles.storeHours}>{store.horario}</span>
                   <div className={styles.storeLinks}>
                     <a href={store.whatsapp} target="_blank" rel="noopener noreferrer" className={styles.storeLink} onClick={(e) => e.stopPropagation()}>

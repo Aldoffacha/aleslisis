@@ -39,7 +39,7 @@ export default function ContactoPage() {
         <div className={styles.content}>
           <div className={styles.header}>
             <span className={styles.eyebrow}>Contacto</span>
-            <h1 className={styles.title}>Hablemos</h1>
+            <h1 className={styles.title}>Contáctanos</h1>
             <p className={styles.description}>
               Estamos aquí para ayudarte a encontrar el detalle perfecto.
               Contáctanos por cualquiera de nuestros canales.
@@ -78,6 +78,12 @@ export default function ContactoPage() {
                 <path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z" />
               </svg>
               <a href="tel:+59177793200" className={styles.contactLink}>+591 77793200</a>
+            </div>
+            <div className={styles.contactItem}>
+              <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="#7A2020" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
+                <path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z" />
+              </svg>
+              <a href="tel:+59170634636" className={styles.contactLink}>+591 70634636</a>
             </div>
             <div className={styles.contactItem}>
               <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="#25D366" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">

@@ -112,47 +112,42 @@ export default function DashboardCliente() {
         {/* Fila 1 — Flores grande + Arreglos */}
         <div className="grid gap-4 mb-4" style={{ gridTemplateColumns: '1.6fr 1fr' }}>
           {/* Flores — card grande */}
-          <Link href="/cliente/tienda#flores" className="group relative overflow-hidden block" style={{ minHeight: '420px', background: '#F5E8E8' }}>
+          <Link href="/cliente/tienda#flores" className="group relative overflow-hidden block" style={{ minHeight: '420px' }}>
+            <img src="/categorias/flores.png" alt="" className="absolute inset-0 w-full h-full object-cover" />
+            <div className="absolute inset-0" style={{ background: 'linear-gradient(to top, rgba(0,0,0,0.55) 0%, rgba(0,0,0,0.15) 60%, transparent 100%)' }} />
             <div className="absolute inset-0 flex flex-col justify-end p-8">
-              <span className="text-[10px] tracking-[0.2em] uppercase text-[#9A6060] mb-2">Colección</span>
-              <h2 style={{ fontFamily: 'Cormorant Garamond, serif', fontSize: '3rem', fontWeight: 300, color: '#7A2020', letterSpacing: '0.1em', lineHeight: 1 }}>
+              <span className="text-[10px] tracking-[0.2em] uppercase text-[rgba(255,255,255,0.7)] mb-2">Colección</span>
+              <h2 style={{ fontFamily: 'Cormorant Garamond, serif', fontSize: '3rem', fontWeight: 300, color: 'white', letterSpacing: '0.1em', lineHeight: 1 }}>
                 Flores
               </h2>
-              <p className="text-xs text-[#9A6060] mt-2 mb-4 font-light">Naturales · Artificiales · Mixtos · Con accesorios</p>
+              <p className="text-xs text-[rgba(255,255,255,0.6)] mt-2 mb-4 font-light">Naturales · Artificiales · Mixtos · Con accesorios</p>
               <div className="flex gap-2 flex-wrap">
                 {['Naturales', 'Artificiales', 'Mixtos', 'Con accesorios'].map(sub => (
-                  <span key={sub} className="px-3 py-1 text-[9px] tracking-[0.1em] uppercase text-[#7A2020]" style={{ border: '0.5px solid rgba(122,32,32,0.3)' }}>
+                  <span key={sub} className="px-3 py-1 text-[9px] tracking-[0.1em] uppercase text-[rgba(255,255,255,0.8)]" style={{ border: '0.5px solid rgba(255,255,255,0.3)' }}>
                     {sub}
                   </span>
                 ))}
               </div>
-            </div>
-            <div
-              className="absolute top-8 right-8 text-[120px] opacity-20 group-hover:opacity-30 transition-opacity duration-500 select-none"
-              style={{ fontFamily: 'serif', lineHeight: 1 }}
-            >
-              
             </div>
           </Link>
 
           {/* Arreglos */}
-          <Link href="/cliente/tienda#bouquets" className="group relative overflow-hidden block" style={{ minHeight: '420px', background: '#EEE0E0' }}>
+          <Link href="/cliente/tienda#bouquets" className="group relative overflow-hidden block" style={{ minHeight: '420px' }}>
+            <img src="/categorias/arreglos.png" alt="" className="absolute inset-0 w-full h-full object-cover" />
+            <div className="absolute inset-0" style={{ background: 'linear-gradient(to top, rgba(0,0,0,0.55) 0%, rgba(0,0,0,0.15) 60%, transparent 100%)' }} />
             <div className="absolute inset-0 flex flex-col justify-end p-8">
-              <span className="text-[10px] tracking-[0.2em] uppercase text-[#9A6060] mb-2">Colección</span>
-              <h2 style={{ fontFamily: 'Cormorant Garamond, serif', fontSize: '2.5rem', fontWeight: 300, color: '#7A2020', letterSpacing: '0.1em', lineHeight: 1 }}>
+              <span className="text-[10px] tracking-[0.2em] uppercase text-[rgba(255,255,255,0.7)] mb-2">Colección</span>
+              <h2 style={{ fontFamily: 'Cormorant Garamond, serif', fontSize: '2.5rem', fontWeight: 300, color: 'white', letterSpacing: '0.1em', lineHeight: 1 }}>
                 Arreglos
               </h2>
-              <p className="text-xs text-[#9A6060] mt-2 mb-4 font-light">Para eventos y ocasiones especiales</p>
+              <p className="text-xs text-[rgba(255,255,255,0.6)] mt-2 mb-4 font-light">Para eventos y ocasiones especiales</p>
               <div className="flex gap-2 flex-wrap">
                 {['Centros de mesa', 'Escaleras', 'Arcos', 'Decoración'].map(sub => (
-                  <span key={sub} className="px-3 py-1 text-[9px] tracking-[0.1em] uppercase text-[#7A2020]" style={{ border: '0.5px solid rgba(122,32,32,0.3)' }}>
+                  <span key={sub} className="px-3 py-1 text-[9px] tracking-[0.1em] uppercase text-[rgba(255,255,255,0.8)]" style={{ border: '0.5px solid rgba(255,255,255,0.3)' }}>
                     {sub}
                   </span>
                 ))}
               </div>
-            </div>
-            <div className="absolute top-8 right-8 text-[90px] opacity-20 group-hover:opacity-30 transition-opacity duration-500 select-none" style={{ lineHeight: 1 }}>
-              
             </div>
           </Link>
         </div>
@@ -160,23 +155,22 @@ export default function DashboardCliente() {
         {/* Fila 2 — Regalos + Hazlo tú mismo */}
         <div className="grid gap-4" style={{ gridTemplateColumns: '1fr 1.4fr' }}>
           {/* Regalos */}
-          <Link href="/cliente/tienda" className="group relative overflow-hidden block" style={{ minHeight: '300px', background: '#F0E4E4' }}>
+          <Link href="/cliente/tienda" className="group relative overflow-hidden block" style={{ minHeight: '300px' }}>
+            <img src="/categorias/regalos.png" alt="" className="absolute inset-0 w-full h-full object-cover" />
+            <div className="absolute inset-0" style={{ background: 'linear-gradient(to top, rgba(0,0,0,0.55) 0%, rgba(0,0,0,0.15) 60%, transparent 100%)' }} />
             <div className="absolute inset-0 flex flex-col justify-end p-8">
-              <span className="text-[10px] tracking-[0.2em] uppercase text-[#9A6060] mb-2">Colección</span>
-              <h2 style={{ fontFamily: 'Cormorant Garamond, serif', fontSize: '2.5rem', fontWeight: 300, color: '#7A2020', letterSpacing: '0.1em', lineHeight: 1 }}>
+              <span className="text-[10px] tracking-[0.2em] uppercase text-[rgba(255,255,255,0.7)] mb-2">Colección</span>
+              <h2 style={{ fontFamily: 'Cormorant Garamond, serif', fontSize: '2.5rem', fontWeight: 300, color: 'white', letterSpacing: '0.1em', lineHeight: 1 }}>
                 Regalos
               </h2>
-              <p className="text-xs text-[#9A6060] mt-2 mb-4 font-light">Graduaciones · Aniversarios · Cumpleaños</p>
+              <p className="text-xs text-[rgba(255,255,255,0.6)] mt-2 mb-4 font-light">Graduaciones · Aniversarios · Cumpleaños</p>
               <div className="flex gap-2 flex-wrap">
                 {['Graduación', 'Aniversario', 'Cumpleaños', 'Corporativos'].map(sub => (
-                  <span key={sub} className="px-3 py-1 text-[9px] tracking-[0.1em] uppercase text-[#7A2020]" style={{ border: '0.5px solid rgba(122,32,32,0.3)' }}>
+                  <span key={sub} className="px-3 py-1 text-[9px] tracking-[0.1em] uppercase text-[rgba(255,255,255,0.8)]" style={{ border: '0.5px solid rgba(255,255,255,0.3)' }}>
                     {sub}
                   </span>
                 ))}
               </div>
-            </div>
-            <div className="absolute top-8 right-8 text-[80px] opacity-20 group-hover:opacity-30 transition-opacity duration-500 select-none" style={{ lineHeight: 1 }}>
-              
             </div>
           </Link>
 

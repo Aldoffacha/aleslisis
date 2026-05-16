@@ -1,6 +1,6 @@
 'use client'
 
-import { useEffect, useState, FormEvent } from 'react'
+import { useEffect, useState, FormEvent, useRef } from 'react'
 import Link from 'next/link'
 import { useRouter } from 'next/navigation'
 import { createAuthUseCases } from '@/domain/use-cases/auth'
@@ -12,6 +12,118 @@ const inputClass = "w-full px-4 py-[13px] border-[0.5px] border-[rgba(180,80,80,
 const labelClass = "block text-[10px] tracking-[0.15em] uppercase text-[#6A4040] mb-2"
 
 const STEPS = ['Personal', 'Contacto', 'Acceso']
+
+const PAISES = [
+  { codigo: '+591', iso: 'BO', nombre: 'Bolivia' },
+  { codigo: '+54', iso: 'AR', nombre: 'Argentina' },
+  { codigo: '+55', iso: 'BR', nombre: 'Brasil' },
+  { codigo: '+56', iso: 'CL', nombre: 'Chile' },
+  { codigo: '+57', iso: 'CO', nombre: 'Colombia' },
+  { codigo: '+51', iso: 'PE', nombre: 'Perú' },
+  { codigo: '+595', iso: 'PY', nombre: 'Paraguay' },
+  { codigo: '+598', iso: 'UY', nombre: 'Uruguay' },
+  { codigo: '+58', iso: 'VE', nombre: 'Venezuela' },
+  { codigo: '+593', iso: 'EC', nombre: 'Ecuador' },
+  { codigo: '+502', iso: 'GT', nombre: 'Guatemala' },
+  { codigo: '+503', iso: 'SV', nombre: 'El Salvador' },
+  { codigo: '+504', iso: 'HN', nombre: 'Honduras' },
+  { codigo: '+505', iso: 'NI', nombre: 'Nicaragua' },
+  { codigo: '+506', iso: 'CR', nombre: 'Costa Rica' },
+  { codigo: '+507', iso: 'PA', nombre: 'Panamá' },
+  { codigo: '+52', iso: 'MX', nombre: 'México' },
+  { codigo: '+1', iso: 'US', nombre: 'EE.UU.' },
+  { codigo: '+34', iso: 'ES', nombre: 'España' },
+  { codigo: '+44', iso: 'GB', nombre: 'Reino Unido' },
+  { codigo: '+49', iso: 'DE', nombre: 'Alemania' },
+  { codigo: '+33', iso: 'FR', nombre: 'Francia' },
+  { codigo: '+39', iso: 'IT', nombre: 'Italia' },
+  { codigo: '+81', iso: 'JP', nombre: 'Japón' },
+  { codigo: '+86', iso: 'CN', nombre: 'China' },
+]
+
+function FlagImg({ iso }: { iso: string }) {
+  return (
+    <img
+      src={`https://flagcdn.com/w20/${iso.toLowerCase()}.png`}
+      width={20}
+      height={14}
+      alt={iso}
+      className="rounded-[2px] object-cover"
+      style={{ minWidth: 20 }}
+    />
+  )
+}
+
+function PhoneSelector({ value, onChange }: { value: string; onChange: (v: string) => void }) {
+  const [open, setOpen] = useState(false)
+  const [search, setSearch] = useState('')
+  const ref = useRef<HTMLDivElement>(null)
+  const selected = PAISES.find(p => p.codigo === value) || PAISES[0]
+  const filtered = PAISES.filter(p =>
+    p.nombre.toLowerCase().includes(search.toLowerCase()) ||
+    p.codigo.includes(search)
+  )
+
+  useEffect(() => {
+    const handler = (e: MouseEvent) => {
+      if (ref.current && !ref.current.contains(e.target as Node)) setOpen(false)
+    }
+    document.addEventListener('mousedown', handler)
+    return () => document.removeEventListener('mousedown', handler)
+  }, [])
+
+  return (
+    <div ref={ref} className="relative" style={{ minWidth: '120px' }}>
+      <button
+        type="button"
+        onClick={() => setOpen(!open)}
+        className="flex items-center gap-2 px-3 py-[13px] border-[0.5px] border-[rgba(180,80,80,0.25)] rounded-sm bg-white text-[#2C1A1A] outline-none w-full"
+        style={{ fontSize: 13 }}
+      >
+        <FlagImg iso={selected.iso} />
+        <span className="text-[#6A4040]">{selected.codigo}</span>
+        <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="#9A6060" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="ml-auto">
+          <polyline points="6 9 12 15 18 9" />
+        </svg>
+      </button>
+
+      {open && (
+        <div
+          className="absolute top-full left-0 mt-1 bg-white border-[0.5px] border-[rgba(180,80,80,0.2)] shadow-lg z-50 overflow-hidden"
+          style={{ width: '220px', maxHeight: '240px' }}
+        >
+          <div className="p-2 border-b border-[rgba(180,80,80,0.1)]">
+            <input
+              type="text"
+              value={search}
+              onChange={e => setSearch(e.target.value)}
+              placeholder="Buscar país..."
+              className="w-full px-2 py-1 text-xs border-[0.5px] border-[rgba(180,80,80,0.2)] outline-none rounded-sm text-[#2C1A1A] font-[DM_Sans,sans-serif]"
+              autoFocus
+            />
+          </div>
+          <div className="overflow-y-auto" style={{ maxHeight: '190px' }}>
+            {filtered.map(p => (
+              <button
+                key={p.iso}
+                type="button"
+                onClick={() => { onChange(p.codigo); setOpen(false); setSearch('') }}
+                className="flex items-center gap-3 w-full px-3 py-2 text-left hover:bg-[#FAF0EE] transition-colors"
+              >
+                <FlagImg iso={p.iso} />
+                <span className="text-xs text-[#2C1A1A] flex-1">{p.nombre}</span>
+                <span className="text-[10px] text-[#9A6060]">{p.codigo}</span>
+              </button>
+            ))}
+            {filtered.length === 0 && (
+              <p className="text-xs text-[#9A6060] text-center py-4">Sin resultados</p>
+            )}
+          </div>
+        </div>
+      )}
+    </div>
+  )
+}
 
 function getPasswordStrength(password: string) {
   let score = 0
@@ -25,10 +137,6 @@ function getPasswordStrength(password: string) {
 const strengthLabel = ['', 'Débil', 'Regular', 'Buena', 'Fuerte']
 const strengthColor = ['', '#E24B4A', '#EF9F27', '#639922', '#0F6E56']
 
-function capitalizeFirst(str: string) {
-  return str.charAt(0).toUpperCase() + str.slice(1)
-}
-
 export default function RegistroPage() {
   const router = useRouter()
   const [step, setStep] = useState(1)
@@ -39,7 +147,8 @@ export default function RegistroPage() {
     ci: '',
     genero: '',
     fecha_de_nacimiento: '',
-    telefono: '',
+    codigo_pais: '+591',
+    numero: '',
     correo: '',
     password: '',
     confirmar_password: '',
@@ -75,8 +184,8 @@ export default function RegistroPage() {
   }
 
   const validateStep2 = () => {
-    if (form.telefono && !/^\+?[0-9]{7,15}$/.test(form.telefono.replace(/\s/g, '')))
-      return 'Teléfono inválido. Ej: +591 76543210'
+    if (form.numero && !/^[0-9]{6,12}$/.test(form.numero.replace(/\s/g, '')))
+      return 'Número inválido, solo dígitos. Ej: 76543210'
     return null
   }
 
@@ -103,7 +212,11 @@ export default function RegistroPage() {
     setIsLoading(true)
     setError(null)
     try {
-      const { confirmar_password: _, ...payload } = form
+      const { confirmar_password: _, codigo_pais, numero, ...rest } = form
+      const payload = {
+        ...rest,
+        telefono: numero ? `${codigo_pais}${numero}` : '',
+      }
       await auth.register(payload)
       router.push('/login?registro=exitoso')
     } catch (err) {
@@ -210,12 +323,24 @@ export default function RegistroPage() {
         {step === 2 && (
           <div>
             <p className="text-[11px] text-[#6A4040] tracking-[0.05em] text-center mb-5">Datos de contacto</p>
-            <div className="mb-2">
+            <div className="mb-6">
               <label className={labelClass}>Teléfono</label>
-              <input name="telefono" type="tel" value={form.telefono} onChange={handleChange} placeholder="+591 76543210" className={inputClass} />
-              <p className="text-[10px] text-[#9A6060] mt-1">Incluye el código de país. Ej: +591 para Bolivia</p>
+              <div className="flex gap-2">
+                <PhoneSelector
+                  value={form.codigo_pais}
+                  onChange={(v) => setForm({ ...form, codigo_pais: v })}
+                />
+                <input
+                  name="numero"
+                  type="tel"
+                  value={form.numero}
+                  onChange={handleChange}
+                  placeholder="76543210"
+                  className={inputClass}
+                />
+              </div>
+              <p className="text-[10px] text-[#9A6060] mt-1">Bolivia está seleccionado por defecto</p>
             </div>
-            <div className="mb-6 mt-4" />
             <button onClick={() => goNext(3, validateStep2)} className="w-full py-4 text-[10px] tracking-[0.2em] uppercase text-white border-none cursor-pointer font-[DM_Sans,sans-serif] mb-3" style={{ background: '#7A2020' }}>
               Continuar
             </button>
@@ -245,7 +370,7 @@ export default function RegistroPage() {
                   ))}
                 </div>
                 <div className="flex justify-between mt-1">
-                  <p className="text-[10px] text-[#9A6060]">Mín. 8 caracteres, mayúscula, número y símbolo</p>
+                  <p className="text-[10px] text-[#9A6060]">Mín. 8 car., mayúscula, número y símbolo</p>
                   {strength > 0 && <p className="text-[10px] font-medium" style={{ color: strengthColor[strength] }}>{strengthLabel[strength]}</p>}
                 </div>
               </div>
