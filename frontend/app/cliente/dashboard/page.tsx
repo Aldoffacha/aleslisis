@@ -112,7 +112,7 @@ export default function DashboardCliente() {
         {/* Fila 1 — Flores grande + Arreglos */}
         <div className="grid gap-4 mb-4" style={{ gridTemplateColumns: '1.6fr 1fr' }}>
           {/* Flores — card grande */}
-          <Link href="/tienda/flores" className="group relative overflow-hidden block" style={{ minHeight: '420px', background: '#F5E8E8' }}>
+          <Link href="/tienda#flores" className="group relative overflow-hidden block" style={{ minHeight: '420px', background: '#F5E8E8' }}>
             <div className="absolute inset-0 flex flex-col justify-end p-8">
               <span className="text-[10px] tracking-[0.2em] uppercase text-[#9A6060] mb-2">Colección</span>
               <h2 style={{ fontFamily: 'Cormorant Garamond, serif', fontSize: '3rem', fontWeight: 300, color: '#7A2020', letterSpacing: '0.1em', lineHeight: 1 }}>
@@ -136,7 +136,7 @@ export default function DashboardCliente() {
           </Link>
 
           {/* Arreglos */}
-          <Link href="/tienda/arreglos" className="group relative overflow-hidden block" style={{ minHeight: '420px', background: '#EEE0E0' }}>
+          <Link href="/tienda#bouquets" className="group relative overflow-hidden block" style={{ minHeight: '420px', background: '#EEE0E0' }}>
             <div className="absolute inset-0 flex flex-col justify-end p-8">
               <span className="text-[10px] tracking-[0.2em] uppercase text-[#9A6060] mb-2">Colección</span>
               <h2 style={{ fontFamily: 'Cormorant Garamond, serif', fontSize: '2.5rem', fontWeight: 300, color: '#7A2020', letterSpacing: '0.1em', lineHeight: 1 }}>
@@ -160,7 +160,7 @@ export default function DashboardCliente() {
         {/* Fila 2 — Regalos + Hazlo tú mismo */}
         <div className="grid gap-4" style={{ gridTemplateColumns: '1fr 1.4fr' }}>
           {/* Regalos */}
-          <Link href="/tienda/regalos" className="group relative overflow-hidden block" style={{ minHeight: '300px', background: '#F0E4E4' }}>
+          <Link href="/tienda" className="group relative overflow-hidden block" style={{ minHeight: '300px', background: '#F0E4E4' }}>
             <div className="absolute inset-0 flex flex-col justify-end p-8">
               <span className="text-[10px] tracking-[0.2em] uppercase text-[#9A6060] mb-2">Colección</span>
               <h2 style={{ fontFamily: 'Cormorant Garamond, serif', fontSize: '2.5rem', fontWeight: 300, color: '#7A2020', letterSpacing: '0.1em', lineHeight: 1 }}>

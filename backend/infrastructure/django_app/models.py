@@ -47,3 +47,35 @@ class Cliente(models.Model):
     class Meta:
         db_table = 'cliente'
         managed = False
+
+
+class CategoriaProducto(models.Model):
+    id_categoria = models.AutoField(primary_key=True)
+    nombre = models.CharField(max_length=50, null=True, blank=True)
+    descripcion = models.TextField(null=True, blank=True)
+    estado = models.CharField(max_length=20, null=True, blank=True)
+
+    class Meta:
+        db_table = 'categoria_producto'
+        managed = False
+
+
+class Producto(models.Model):
+    id_producto = models.AutoField(primary_key=True)
+    nombre = models.CharField(max_length=100)
+    descripcion = models.TextField(null=True, blank=True)
+    precio_unitario = models.DecimalField(max_digits=10, decimal_places=2)
+    cantidad = models.IntegerField(default=0)
+    estado = models.CharField(max_length=20, null=True, blank=True)
+    id_categoria = models.ForeignKey(
+        CategoriaProducto,
+        db_column='id_categoria',
+        null=True,
+        blank=True,
+        on_delete=models.SET_NULL,
+        related_name='productos',
+    )
+
+    class Meta:
+        db_table = 'producto'
+        managed = False

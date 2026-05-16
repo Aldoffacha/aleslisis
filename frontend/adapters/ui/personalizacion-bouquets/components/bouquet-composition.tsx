@@ -12,6 +12,12 @@ interface BouquetCompositionProps {
 }
 
 export function BouquetComposition({ bouquet, placements, hiddenCount }: BouquetCompositionProps) {
+  const gradient = bouquet.composition.gradient ?? {
+    from: 'rgba(255,255,255,0.08)',
+    to: 'rgba(122,53,53,0.34)',
+    angle: 180,
+  }
+
   const {
     canvasRef,
     editablePlacements,
@@ -72,6 +78,14 @@ export function BouquetComposition({ bouquet, placements, hiddenCount }: Bouquet
         <div className={styles.flowersLayer} style={{ clipPath: bouquet.composition.clipPath }}>
           {editablePlacements.map(renderFlowerPlacement)}
         </div>
+
+        <div
+          className={styles.gradientVeil}
+          style={{
+            clipPath: bouquet.composition.clipPath,
+            background: `linear-gradient(${gradient.angle}deg, ${gradient.from}, ${gradient.to})`,
+          }}
+        />
 
         <div className={styles.depthShade} style={{ clipPath: bouquet.composition.clipPath }} />
 

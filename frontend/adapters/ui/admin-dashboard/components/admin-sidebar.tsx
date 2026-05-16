@@ -1,5 +1,6 @@
 'use client'
 
+import { useEffect, useState } from 'react'
 import type { AdminSidebarGroup, DashboardIcon } from '../admin-dashboard.types'
 import styles from './admin-sidebar.module.css'
 
@@ -100,12 +101,50 @@ export function AdminSidebar({
   onClose,
   onLogout,
 }: AdminSidebarProps) {
+  const [expandedItems, setExpandedItems] = useState<Record<string, boolean>>(() => (
+    groups.reduce<Record<string, boolean>>((accumulator, group) => {
+      group.items.forEach((item) => {
+        if (item.children?.length) {
+          accumulator[item.id] = item.children.some((child) => child.viewId === activeItemId)
+        }
+      })
+
+      return accumulator
+    }, {})
+  ))
+
+  useEffect(() => {
+    setExpandedItems((currentState) => {
+      const nextState = { ...currentState }
+      let didChange = false
+
+      groups.forEach((group) => {
+        group.items.forEach((item) => {
+          if (item.children?.some((child) => child.viewId === activeItemId) && !nextState[item.id]) {
+            nextState[item.id] = true
+            didChange = true
+          }
+        })
+      })
+
+      return didChange ? nextState : currentState
+    })
+  }, [groups, activeItemId])
+
   const handleSelect = (viewId: string) => {
     onSelect(viewId)
 
     if (typeof window !== 'undefined' && window.innerWidth < 960) {
       onClose()
     }
+  }
+
+  const isItemActive = (viewId?: string, childViewIds?: string[]) => {
+    if (viewId) {
+      return activeItemId === viewId
+    }
+
+    return childViewIds?.includes(activeItemId) ?? false
   }
 
   return (
@@ -140,23 +179,78 @@ export function AdminSidebar({
               <span className={styles.groupTitle}>{group.title}</span>
 
               <div className={styles.itemList}>
-                {group.items.map((item) => (
-                  <button
-                    key={item.id}
-                    type="button"
-                    className={`${styles.navItem} ${activeItemId === item.viewId ? styles.navItemActive : ''}`}
-                    onClick={() => handleSelect(item.viewId)}
-                    aria-current={activeItemId === item.viewId ? 'page' : undefined}
-                  >
-                    <span className={styles.navBadge}>
-                      <SidebarIcon icon={item.icon} />
-                    </span>
-                    <span className={styles.navCopy}>
-                      <strong className={styles.navLabel}>{item.label}</strong>
-                      <span className={styles.navNote}>{item.note}</span>
-                    </span>
-                  </button>
-                ))}
+                {group.items.map((item) => {
+                  const childViewIds = item.children?.map((child) => child.viewId).filter(Boolean) as string[] | undefined
+                  const hasChildren = Boolean(item.children?.length)
+                  const itemIsActive = isItemActive(item.viewId, childViewIds)
+
+                  if (hasChildren) {
+                    const isExpanded = expandedItems[item.id]
+
+                    return (
+                      <div key={item.id} className={styles.navTree}>
+                        <button
+                          type="button"
+                          className={`${styles.navItem} ${styles.navItemToggle} ${itemIsActive ? styles.navItemActive : ''}`}
+                          onClick={() => setExpandedItems((currentState) => ({
+                            ...currentState,
+                            [item.id]: !currentState[item.id],
+                          }))}
+                          aria-expanded={isExpanded}
+                        >
+                          <span className={styles.navBadge}>
+                            <SidebarIcon icon={item.icon} />
+                          </span>
+                          <span className={styles.navCopy}>
+                            <strong className={styles.navLabel}>{item.label}</strong>
+                            <span className={styles.navNote}>{item.note}</span>
+                          </span>
+                          <span className={`${styles.navChevron} ${isExpanded ? styles.navChevronOpen : ''}`} aria-hidden="true" />
+                        </button>
+
+                        {isExpanded ? (
+                          <div className={styles.subItemList}>
+                            {item.children?.map((child) => (
+                              <button
+                                key={child.id}
+                                type="button"
+                                className={`${styles.navItem} ${styles.navItemChild} ${activeItemId === child.viewId ? styles.navItemActive : ''}`}
+                                onClick={() => child.viewId && handleSelect(child.viewId)}
+                                aria-current={activeItemId === child.viewId ? 'page' : undefined}
+                              >
+                                <span className={styles.navBadge}>
+                                  <SidebarIcon icon={child.icon} />
+                                </span>
+                                <span className={styles.navCopy}>
+                                  <strong className={styles.navLabel}>{child.label}</strong>
+                                  <span className={styles.navNote}>{child.note}</span>
+                                </span>
+                              </button>
+                            ))}
+                          </div>
+                        ) : null}
+                      </div>
+                    )
+                  }
+
+                  return (
+                    <button
+                      key={item.id}
+                      type="button"
+                      className={`${styles.navItem} ${itemIsActive ? styles.navItemActive : ''}`}
+                      onClick={() => item.viewId && handleSelect(item.viewId)}
+                      aria-current={itemIsActive ? 'page' : undefined}
+                    >
+                      <span className={styles.navBadge}>
+                        <SidebarIcon icon={item.icon} />
+                      </span>
+                      <span className={styles.navCopy}>
+                        <strong className={styles.navLabel}>{item.label}</strong>
+                        <span className={styles.navNote}>{item.note}</span>
+                      </span>
+                    </button>
+                  )
+                })}
               </div>
             </section>
           ))}

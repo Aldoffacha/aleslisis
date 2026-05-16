@@ -145,6 +145,11 @@
   gap: 8px;
 }
 
+.navTree {
+  display: grid;
+  gap: 8px;
+}
+
 .navItem {
   display: flex;
   align-items: flex-start;
@@ -158,6 +163,30 @@
   text-align: left;
   cursor: pointer;
   transition: transform 0.2s ease, border-color 0.2s ease, background 0.2s ease, box-shadow 0.2s ease;
+}
+
+.navItemToggle {
+  align-items: center;
+}
+
+.subItemList {
+  display: grid;
+  gap: 8px;
+  padding-left: 16px;
+}
+
+.navItemChild {
+  position: relative;
+}
+
+.navItemChild::before {
+  content: '';
+  position: absolute;
+  left: -10px;
+  top: 12px;
+  bottom: 12px;
+  width: 1px;
+  background: rgba(176, 92, 92, 0.18);
 }
 
 .navItem:hover {
@@ -197,6 +226,20 @@
 .navCopy {
   display: grid;
   gap: 4px;
+}
+
+.navChevron {
+  width: 10px;
+  height: 10px;
+  margin-left: auto;
+  border-right: 1.5px solid currentColor;
+  border-bottom: 1.5px solid currentColor;
+  transform: rotate(45deg);
+  transition: transform 0.2s ease;
+}
+
+.navChevronOpen {
+  transform: rotate(225deg);
 }
 
 .navLabel {

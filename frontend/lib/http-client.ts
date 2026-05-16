@@ -16,6 +16,7 @@ interface HttpOptions {
   method?: string
   body?: unknown
   headers?: Record<string, string>
+  apiPrefix?: string
 }
 
 function getCsrfToken(): string {
@@ -36,29 +37,46 @@ export async function httpRequest<T>(
   endpoint: string,
   { method = 'GET', body, headers = {} }: HttpOptions = {}
 ): Promise<T> {
+  return apiRequest<T>(endpoint, { method, body, headers, apiPrefix: '/api/auth' })
+}
+
+export async function apiRequest<T>(
+  endpoint: string,
+  { method = 'GET', body, headers = {}, apiPrefix = '/api/auth' }: HttpOptions = {}
+): Promise<T> {
   const apiBase = resolveApiBase()
   const isWrite = ['POST', 'PUT', 'PATCH', 'DELETE'].includes(method.toUpperCase())
+  const isFormData = typeof FormData !== 'undefined' && body instanceof FormData
 
   if (isWrite) {
     await ensureCsrfToken()
   }
 
-  const res = await fetch(`${apiBase}/api/auth${endpoint}`, {
+  const res = await fetch(`${apiBase}${apiPrefix}${endpoint}`, {
     method,
     headers: {
-      'Content-Type': 'application/json',
+      ...(isFormData ? {} : { 'Content-Type': 'application/json' }),
       ...(isWrite ? { 'X-CSRFToken': getCsrfToken() } : {}),
       ...headers,
     },
     credentials: 'include',
-    body: body ? JSON.stringify(body) : undefined,
+    body: body ? (isFormData ? body as FormData : JSON.stringify(body)) : undefined,
   })
 
-  const data = await res.json()
+  const contentType = res.headers.get('content-type') ?? ''
+  const data = contentType.includes('application/json')
+    ? await res.json()
+    : await res.text()
 
   if (!res.ok) {
-    throw new Error(data.error || data.detail || 'Error en la solicitud')
+    if (typeof data === 'object' && data) {
+      throw new Error((data as { error?: string, detail?: string }).error || (data as { error?: string, detail?: string }).detail || 'Error en la solicitud')
+    }
+
+    throw new Error('Error en la solicitud')
   }
 
   return data as T
 }
+
+export { resolveApiBase }

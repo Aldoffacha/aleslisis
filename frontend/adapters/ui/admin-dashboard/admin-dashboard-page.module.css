@@ -102,6 +102,11 @@
   overflow: hidden;
 }
 
+.workspaceSurface {
+  min-height: 0;
+  overflow: hidden;
+}
+
 .primaryCanvas,
 .moduleCard {
   position: relative;

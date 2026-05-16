@@ -1,11 +1,14 @@
 export interface BouquetOption {
   id: string
+  productId: number
   title: string
   subtitle: string
   description: string
   badge: string
   imageSrc: string
   accentColor: string
+  price: string
+  stock: number
   composition: BouquetRenderConfig
 }
 
@@ -25,9 +28,22 @@ export interface BouquetDragBounds {
 }
 
 export interface BouquetRenderConfig {
-  slots: BouquetPlacementSlot[]
+  slots?: BouquetPlacementSlot[]
   clipPath: string
   dragBounds: BouquetDragBounds
+  gradient?: BouquetGradientConfig
+  points?: BouquetMaskPoint[]
+}
+
+export interface BouquetGradientConfig {
+  from: string
+  to: string
+  angle: number
+}
+
+export interface BouquetMaskPoint {
+  x: number
+  y: number
 }
 
 export interface FlowerRenderConfig {
@@ -40,12 +56,15 @@ export interface FlowerRenderConfig {
 
 export interface FlowerCatalogItem {
   id: string
+  productId: number
   name: string
   category: 'Flor focal' | 'Relleno' | 'Follaje'
   tone: string
   accentColor: string
   note: string
   imageSrc: string
+  price: string
+  stock: number
   render: FlowerRenderConfig
 }
 

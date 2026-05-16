@@ -2,13 +2,14 @@
 
 import { useEffect, useState } from 'react'
 import { useRouter } from 'next/navigation'
+import { catalogoAdapter } from '@/adapters/api/catalogo-adapter'
 import Navbar from '@/adapters/ui/navbar'
 import { djangoAuthAdapter } from '@/adapters/api/auth-adapter'
 import { createAuthUseCases } from '@/domain/use-cases/auth'
-import { bouquetOptions, flowerCatalog } from './personalizacion-bouquets.data'
 import { BouquetPreview } from './components/bouquet-preview'
 import { BouquetTypeSelector } from './components/bouquet-type-selector'
 import { FlowerCatalogPanel } from './components/flower-catalog-panel'
+import { mapCatalogoPublicoToPersonalizacion } from './personalizacion-bouquets.catalog'
 import { groupFlowersByInitial, mapSelectedFlowers, normalizeBouquetSearch } from './personalizacion-bouquets.utils'
 import styles from './personalizacion-bouquets-page.module.css'
 
@@ -16,10 +17,14 @@ const auth = createAuthUseCases(djangoAuthAdapter)
 
 export default function PersonalizacionBouquetsPage() {
   const router = useRouter()
-  const [selectedBouquetId, setSelectedBouquetId] = useState(bouquetOptions[0].id)
+  const [bouquetOptions, setBouquetOptions] = useState<ReturnType<typeof mapCatalogoPublicoToPersonalizacion>['bouquets']>([])
+  const [flowerCatalog, setFlowerCatalog] = useState<ReturnType<typeof mapCatalogoPublicoToPersonalizacion>['flowers']>([])
+  const [selectedBouquetId, setSelectedBouquetId] = useState('')
   const [searchValue, setSearchValue] = useState('')
   const [selectedFlowers, setSelectedFlowers] = useState<Record<string, number>>({})
   const [isLoggedIn, setIsLoggedIn] = useState(false)
+  const [isCatalogLoading, setIsCatalogLoading] = useState(true)
+  const [catalogError, setCatalogError] = useState<string | null>(null)
 
   useEffect(() => {
     let isMounted = true
@@ -43,7 +48,57 @@ export default function PersonalizacionBouquetsPage() {
     }
   }, [])
 
-  const selectedBouquet = bouquetOptions.find((option) => option.id === selectedBouquetId) ?? bouquetOptions[0]
+  useEffect(() => {
+    let isMounted = true
+
+    setIsCatalogLoading(true)
+    setCatalogError(null)
+
+    catalogoAdapter.fetchPublicPersonalizacion()
+      .then((response) => {
+        if (!isMounted) {
+          return
+        }
+
+        const mappedCatalog = mapCatalogoPublicoToPersonalizacion(response)
+        setBouquetOptions(mappedCatalog.bouquets)
+        setFlowerCatalog(mappedCatalog.flowers)
+        setSelectedBouquetId((currentBouquetId) => currentBouquetId || mappedCatalog.bouquets[0]?.id || '')
+        setIsCatalogLoading(false)
+      })
+      .catch((error) => {
+        if (!isMounted) {
+          return
+        }
+
+        setCatalogError(error instanceof Error ? error.message : 'No se pudo cargar el catalogo real.')
+        setBouquetOptions([])
+        setFlowerCatalog([])
+        setSelectedBouquetId('')
+        setIsCatalogLoading(false)
+      })
+
+    return () => {
+      isMounted = false
+    }
+  }, [])
+
+  useEffect(() => {
+    if (!bouquetOptions.length) {
+      if (selectedBouquetId) {
+        setSelectedBouquetId('')
+      }
+      return
+    }
+
+    const selectedExists = bouquetOptions.some((option) => option.id === selectedBouquetId)
+
+    if (!selectedExists) {
+      setSelectedBouquetId(bouquetOptions[0].id)
+    }
+  }, [bouquetOptions, selectedBouquetId])
+
+  const selectedBouquet = bouquetOptions.find((option) => option.id === selectedBouquetId) ?? bouquetOptions[0] ?? null
   const normalizedSearch = normalizeBouquetSearch(searchValue)
   const filteredFlowers = flowerCatalog.filter((flower) => {
     if (!normalizedSearch) {
@@ -92,6 +147,14 @@ export default function PersonalizacionBouquetsPage() {
     router.push('/login')
   }
 
+  const statsCaptionBouquets = bouquetOptions.length > 0
+    ? 'Bouquets cargados desde la base de datos'
+    : 'Aun no hay bouquets activos en catalogo'
+
+  const statsCaptionFlowers = flowerCatalog.length > 0
+    ? 'Flores activas listas para personalizar'
+    : 'Aun no hay flores activas en catalogo'
+
   return (
     <div className={styles.pageShell}>
       <Navbar isLoggedIn={isLoggedIn} cartCount={0} onLogout={handleLogout} />
@@ -111,12 +174,12 @@ export default function PersonalizacionBouquetsPage() {
             <article className={styles.statCard}>
               <span className={styles.statLabel}>Bouquets base</span>
               <strong className={styles.statValue}>{bouquetOptions.length}</strong>
-              <span className={styles.statCaption}>Dos envolturas listas para empezar</span>
+              <span className={styles.statCaption}>{statsCaptionBouquets}</span>
             </article>
             <article className={styles.statCard}>
               <span className={styles.statLabel}>Catalogo floral</span>
               <strong className={styles.statValue}>{flowerCatalog.length}</strong>
-              <span className={styles.statCaption}>Busqueda por nombre y orden alfabetico</span>
+              <span className={styles.statCaption}>{statsCaptionFlowers}</span>
             </article>
             <article className={styles.statCard}>
               <span className={styles.statLabel}>Tu seleccion</span>
@@ -128,20 +191,44 @@ export default function PersonalizacionBouquetsPage() {
 
         <section className={styles.workspace}>
           <div className={styles.previewColumn}>
-            <BouquetTypeSelector
-              options={bouquetOptions}
-              selectedBouquetId={selectedBouquet.id}
-              onSelectBouquet={setSelectedBouquetId}
-            />
+            {isCatalogLoading ? (
+              <section className={styles.heroPanel}>
+                <div className={styles.heroCopy}>
+                  <span className={styles.eyebrow}>Catalogo real</span>
+                  <h2 className={styles.title}>Cargando bouquets y flores</h2>
+                  <p className={styles.description}>Estamos trayendo la personalizacion desde el backend para eliminar los datos mock de la tienda.</p>
+                </div>
+              </section>
+            ) : null}
 
-            <BouquetPreview
-              bouquet={selectedBouquet}
-              selectedFlowers={selectedFlowerItems}
-              totalSelectedFlowers={totalSelectedFlowers}
-              onAddFlower={handleAddFlower}
-              onRemoveFlower={handleRemoveFlower}
-              onClearSelection={handleClearSelection}
-            />
+            {!isCatalogLoading && catalogError ? (
+              <section className={styles.heroPanel}>
+                <div className={styles.heroCopy}>
+                  <span className={styles.eyebrow}>Catalogo no disponible</span>
+                  <h2 className={styles.title}>No se pudo cargar la personalizacion</h2>
+                  <p className={styles.description}>{catalogError}</p>
+                </div>
+              </section>
+            ) : null}
+
+            {!isCatalogLoading && !catalogError && selectedBouquet ? (
+              <>
+                <BouquetTypeSelector
+                  options={bouquetOptions}
+                  selectedBouquetId={selectedBouquet.id}
+                  onSelectBouquet={setSelectedBouquetId}
+                />
+
+                <BouquetPreview
+                  bouquet={selectedBouquet}
+                  selectedFlowers={selectedFlowerItems}
+                  totalSelectedFlowers={totalSelectedFlowers}
+                  onAddFlower={handleAddFlower}
+                  onRemoveFlower={handleRemoveFlower}
+                  onClearSelection={handleClearSelection}
+                />
+              </>
+            ) : null}
           </div>
 
           <div className={styles.catalogColumn}>

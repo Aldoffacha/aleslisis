@@ -21,6 +21,9 @@ def _hash_password(password: str) -> str:
 def _check_password(password: str, hashed: str) -> bool:
     return bcrypt.checkpw(password.encode(), hashed.encode())
 
+def _is_active_state(value: str | None) -> bool:
+    return (value or '').strip().lower() == 'activo'
+
 def _get_rol(usuario: Usuario) -> str:
     try:
         usuario.administrador
@@ -42,6 +45,8 @@ class DjangoUserRepository(UserRepository):
 
         try:
             usuario = Usuario.objects.get(correo=correo)
+            if not _is_active_state(usuario.estado):
+                return None
             if not _check_password(password, usuario.contrasena):
                 return None
             return UserEntity(

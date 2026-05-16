@@ -93,6 +93,15 @@
   mix-blend-mode: multiply;
 }
 
+.gradientVeil {
+  position: absolute;
+  inset: 0;
+  z-index: 3;
+  pointer-events: none;
+  opacity: 0.42;
+  mix-blend-mode: multiply;
+}
+
 .editorToolbar {
   width: 100%;
   max-width: 520px;

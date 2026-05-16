@@ -21,8 +21,9 @@ export interface AdminSidebarItem {
   id: string
   label: string
   icon: DashboardIcon
-  viewId: string
+  viewId?: string
   note: string
+  children?: AdminSidebarItem[]
 }
 
 export interface AdminSidebarGroup {

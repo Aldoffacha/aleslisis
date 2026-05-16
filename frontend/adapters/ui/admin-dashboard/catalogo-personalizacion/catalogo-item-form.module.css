@@ -1,0 +1,139 @@
+.formShell {
+  display: grid;
+  gap: 16px;
+  padding: 20px;
+  border-radius: 28px;
+  background: rgba(255, 255, 255, 0.76);
+  border: 1px solid rgba(176, 92, 92, 0.12);
+  box-shadow: 0 20px 42px rgba(122, 53, 53, 0.08);
+}
+
+.formHeader {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+.eyebrow {
+  display: block;
+  margin-bottom: 6px;
+  font-size: 10px;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: #946b6b;
+}
+
+.title {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 2rem;
+  font-weight: 500;
+  color: #4f2828;
+}
+
+.formGrid,
+.renderGrid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 14px;
+}
+
+.renderGrid {
+  grid-template-columns: repeat(5, minmax(0, 1fr));
+}
+
+.field,
+.fieldFull,
+.uploadField {
+  display: grid;
+  gap: 8px;
+}
+
+.field span,
+.uploadField span {
+  font-size: 10px;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: #8f6666;
+}
+
+.field input,
+.field select,
+.field textarea,
+.uploadField input {
+  min-height: 46px;
+  padding: 0 14px;
+  border-radius: 15px;
+  border: 1px solid rgba(176, 92, 92, 0.14);
+  background: rgba(255, 255, 255, 0.88);
+  color: #4f2828;
+}
+
+.field textarea {
+  min-height: 120px;
+  padding: 14px;
+  resize: vertical;
+}
+
+.fieldFull {
+  grid-column: 1 / -1;
+}
+
+.fileRow {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+
+.checkboxField {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 12px;
+  color: #6f4c4c;
+}
+
+.formActions {
+  display: flex;
+  justify-content: flex-end;
+}
+
+.primaryButton,
+.secondaryButton {
+  min-height: 46px;
+  padding: 0 18px;
+  border-radius: 999px;
+  border: 1px solid rgba(176, 92, 92, 0.16);
+  cursor: pointer;
+}
+
+.primaryButton {
+  background: linear-gradient(145deg, rgba(176, 92, 92, 0.96), rgba(122, 53, 53, 0.92));
+  color: #fff7f4;
+  font-size: 11px;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+}
+
+.secondaryButton {
+  background: rgba(250, 246, 240, 0.92);
+  color: #6b4040;
+  font-size: 10px;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+}
+
+@media (max-width: 1120px) {
+  .renderGrid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+@media (max-width: 760px) {
+  .formGrid,
+  .renderGrid {
+    grid-template-columns: 1fr;
+  }
+}

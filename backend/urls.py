@@ -1,3 +1,5 @@
+from django.conf import settings
+from django.conf.urls.static import static
 from django.contrib import admin
 from django.urls import path, include
 from django.http import HttpResponseRedirect, HttpResponse
@@ -18,4 +20,9 @@ urlpatterns = [
     path('', root_view),
     path('admin/', admin.site.urls),
     path('api/auth/', include('backend.infrastructure.django_app.urls')),
+  path('api/catalogo/', include('backend.infrastructure.catalogo.urls')),
+  path('api/usuarios/', include('backend.infrastructure.usuarios_admin.urls')),
 ]
+
+if settings.DEBUG:
+  urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

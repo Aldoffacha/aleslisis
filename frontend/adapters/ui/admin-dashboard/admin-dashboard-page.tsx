@@ -10,6 +10,9 @@ import {
   adminDefaultViewId,
   adminSidebarGroups,
 } from './admin-dashboard.data'
+import { CatalogoPersonalizacionView } from './catalogo-personalizacion/catalogo-personalizacion-view'
+import { UsuariosEmpleadosView } from './usuarios-admin/usuarios-empleados-view'
+import { UsuariosGeneralView } from './usuarios-admin/usuarios-general-view'
 import { AdminSidebar } from './components/admin-sidebar'
 import styles from './admin-dashboard-page.module.css'
 
@@ -101,6 +104,21 @@ export default function AdminDashboardPage() {
   }
 
   const activeView = adminDashboardViews.find((view) => view.id === activeViewId) ?? adminDashboardViews[0]
+  const customView = (() => {
+    if (activeView.id === 'catalogo-personalizacion') {
+      return <CatalogoPersonalizacionView />
+    }
+
+    if (activeView.id === 'usuarios-general') {
+      return <UsuariosGeneralView />
+    }
+
+    if (activeView.id === 'usuarios-empleados') {
+      return <UsuariosEmpleadosView />
+    }
+
+    return null
+  })()
 
   if (isLoading || !user) {
     return (
@@ -147,36 +165,42 @@ export default function AdminDashboardPage() {
               </div>
             </header>
 
-            <section className={styles.workspaceCanvas} aria-label={`Panel del modulo ${activeView.label}`}>
-              <div className={styles.primaryCanvas}>
-                <div className={styles.primaryGlow} />
-                <div className={styles.primaryFrame} />
-                <div className={styles.primaryDock}>
-                  <span className={styles.blankChip} />
-                  <span className={styles.blankChip} />
-                  <span className={`${styles.blankChip} ${styles.blankChipWide}`} />
-                </div>
-              </div>
-
-              <section className={styles.cardDeck}>
-                {activeView.cards.map((card, index) => (
-                  <article
-                    key={card.id}
-                    className={`${styles.moduleCard} ${toneClassMap[card.tone]}`}
-                    aria-label={card.title}
-                  >
-                    <span className={styles.cardAccent} />
-
-                    <div className={styles.cardCanvas}>
-                      <div className={`${styles.canvasOrb} ${index % 2 === 0 ? styles.canvasOrbLarge : styles.canvasOrbSmall}`} />
-                      <div className={styles.canvasShelf} />
-                      <div className={styles.canvasBar} />
-                      <div className={`${styles.canvasBar} ${styles.canvasBarShort}`} />
-                    </div>
-                  </article>
-                ))}
+            {customView ? (
+              <section className={styles.workspaceSurface} aria-label={`Panel del modulo ${activeView.label}`}>
+                {customView}
               </section>
-            </section>
+            ) : (
+              <section className={styles.workspaceCanvas} aria-label={`Panel del modulo ${activeView.label}`}>
+                <div className={styles.primaryCanvas}>
+                  <div className={styles.primaryGlow} />
+                  <div className={styles.primaryFrame} />
+                  <div className={styles.primaryDock}>
+                    <span className={styles.blankChip} />
+                    <span className={styles.blankChip} />
+                    <span className={`${styles.blankChip} ${styles.blankChipWide}`} />
+                  </div>
+                </div>
+
+                <section className={styles.cardDeck}>
+                  {activeView.cards.map((card, index) => (
+                    <article
+                      key={card.id}
+                      className={`${styles.moduleCard} ${toneClassMap[card.tone]}`}
+                      aria-label={card.title}
+                    >
+                      <span className={styles.cardAccent} />
+
+                      <div className={styles.cardCanvas}>
+                        <div className={`${styles.canvasOrb} ${index % 2 === 0 ? styles.canvasOrbLarge : styles.canvasOrbSmall}`} />
+                        <div className={styles.canvasShelf} />
+                        <div className={styles.canvasBar} />
+                        <div className={`${styles.canvasBar} ${styles.canvasBarShort}`} />
+                      </div>
+                    </article>
+                  ))}
+                </section>
+              </section>
+            )}
           </div>
         </main>
       </div>
