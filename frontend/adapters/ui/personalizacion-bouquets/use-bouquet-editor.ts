@@ -30,6 +30,15 @@ interface UseBouquetEditorArgs {
   dragBounds: BouquetDragBounds
 }
 
+function resolveEditorBounds(dragBounds: BouquetDragBounds): BouquetDragBounds {
+  return {
+    minX: Math.min(-10, dragBounds.minX - 18),
+    maxX: Math.max(110, dragBounds.maxX + 18),
+    minBottom: Math.min(-12, dragBounds.minBottom - 18),
+    maxBottom: Math.max(104, dragBounds.maxBottom + 18),
+  }
+}
+
 function clamp(value: number, minimum: number, maximum: number): number {
   return Math.min(Math.max(value, minimum), maximum)
 }
@@ -39,6 +48,7 @@ export function useBouquetEditor({ bouquetId, placements, dragBounds }: UseBouqu
   const interactionRef = useRef<InteractionState | null>(null)
   const [selectedKey, setSelectedKey] = useState<string | null>(null)
   const [overrides, setOverrides] = useState<Record<string, BouquetFlowerTransform>>({})
+  const editorBounds = useMemo(() => resolveEditorBounds(dragBounds), [dragBounds])
 
   const placementMap = useMemo(() => (
     placements.reduce<Record<string, BouquetFlowerPlacement>>((accumulator, placement) => {
@@ -60,8 +70,8 @@ export function useBouquetEditor({ bouquetId, placements, dragBounds }: UseBouqu
         accumulator[placement.key] = currentOverride
           ? {
               ...currentOverride,
-              x: clamp(currentOverride.x, dragBounds.minX, dragBounds.maxX),
-              bottom: clamp(currentOverride.bottom, dragBounds.minBottom, dragBounds.maxBottom),
+              x: clamp(currentOverride.x, editorBounds.minX, editorBounds.maxX),
+              bottom: clamp(currentOverride.bottom, editorBounds.minBottom, editorBounds.maxBottom),
             }
           : {
               x: placement.x,
@@ -77,7 +87,7 @@ export function useBouquetEditor({ bouquetId, placements, dragBounds }: UseBouqu
     })
 
     setSelectedKey((currentSelectedKey) => (currentSelectedKey && placementMap[currentSelectedKey] ? currentSelectedKey : null))
-  }, [placements, placementMap, dragBounds])
+  }, [placements, placementMap, editorBounds])
 
   useEffect(() => {
     const handlePointerMove = (event: PointerEvent) => {
@@ -98,8 +108,8 @@ export function useBouquetEditor({ bouquetId, placements, dragBounds }: UseBouqu
           ...currentOverrides,
           [interaction.key]: {
             ...currentOverrides[interaction.key],
-            x: clamp(interaction.initialX + deltaXPercent, dragBounds.minX, dragBounds.maxX),
-            bottom: clamp(interaction.initialBottom + deltaBottomPercent, dragBounds.minBottom, dragBounds.maxBottom),
+            x: clamp(interaction.initialX + deltaXPercent, editorBounds.minX, editorBounds.maxX),
+            bottom: clamp(interaction.initialBottom + deltaBottomPercent, editorBounds.minBottom, editorBounds.maxBottom),
           },
         }))
       }
@@ -132,7 +142,7 @@ export function useBouquetEditor({ bouquetId, placements, dragBounds }: UseBouqu
       window.removeEventListener('pointerup', finishInteraction)
       window.removeEventListener('pointercancel', finishInteraction)
     }
-  }, [dragBounds])
+  }, [editorBounds])
 
   const editablePlacements = useMemo<EditableBouquetFlowerPlacement[]>(() => (
     placements.map((placement) => {

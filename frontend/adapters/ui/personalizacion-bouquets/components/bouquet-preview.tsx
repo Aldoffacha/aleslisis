@@ -41,19 +41,22 @@ export function BouquetPreview({
       </div>
 
       <div className={styles.previewLayout}>
-        <div className={styles.visualStage}>
-          <div className={styles.visualGlow} />
+        <div className={styles.visualColumn}>
           <div className={styles.metaBadge} style={{ borderColor: `${bouquet.accentColor}33` }}>
             <span className={styles.metaLabel}>Base activa</span>
             <strong className={styles.metaValue} style={{ color: bouquet.accentColor }}>
               {bouquet.title}
             </strong>
           </div>
-          <BouquetComposition
-            bouquet={bouquet}
-            placements={composition.placements}
-            hiddenCount={composition.hiddenCount}
-          />
+
+          <div className={styles.visualStage}>
+            <div className={styles.visualGlow} />
+            <BouquetComposition
+              bouquet={bouquet}
+              placements={composition.placements}
+              hiddenCount={composition.hiddenCount}
+            />
+          </div>
         </div>
 
         <div className={styles.summaryPanel}>

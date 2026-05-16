@@ -19,6 +19,63 @@ interface HttpOptions {
   apiPrefix?: string
 }
 
+function humanizeErrorKey(key: string): string {
+  if (key === 'non_field_errors') {
+    return 'general'
+  }
+
+  return key.replace(/_/g, ' ')
+}
+
+function collectErrorMessages(value: unknown): string[] {
+  if (typeof value === 'string') {
+    return [value]
+  }
+
+  if (Array.isArray(value)) {
+    return value.flatMap((item) => collectErrorMessages(item))
+  }
+
+  if (value && typeof value === 'object') {
+    return Object.values(value).flatMap((item) => collectErrorMessages(item))
+  }
+
+  return []
+}
+
+function extractApiErrorMessage(data: unknown): string | null {
+  if (!data || typeof data !== 'object') {
+    return null
+  }
+
+  const record = data as Record<string, unknown>
+
+  if (typeof record.error === 'string' && record.error.trim()) {
+    return record.error
+  }
+
+  if (typeof record.detail === 'string' && record.detail.trim()) {
+    return record.detail
+  }
+
+  const fieldMessages = Object.entries(record)
+    .flatMap(([key, value]) => {
+      const messages = collectErrorMessages(value)
+      if (!messages.length) {
+        return []
+      }
+
+      return `${humanizeErrorKey(key)}: ${messages.join(', ')}`
+    })
+    .filter(Boolean)
+
+  if (!fieldMessages.length) {
+    return null
+  }
+
+  return fieldMessages.join(' | ')
+}
+
 function getCsrfToken(): string {
   const match = document.cookie.match(/csrftoken=([^;]+)/)
   return match ? match[1] : ''
@@ -70,7 +127,7 @@ export async function apiRequest<T>(
 
   if (!res.ok) {
     if (typeof data === 'object' && data) {
-      throw new Error((data as { error?: string, detail?: string }).error || (data as { error?: string, detail?: string }).detail || 'Error en la solicitud')
+      throw new Error(extractApiErrorMessage(data) || 'Error en la solicitud')
     }
 
     throw new Error('Error en la solicitud')

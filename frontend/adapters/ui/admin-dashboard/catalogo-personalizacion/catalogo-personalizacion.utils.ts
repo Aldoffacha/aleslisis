@@ -69,6 +69,11 @@ function toNumber(value: string, fallback: number): number {
   return Number.isFinite(parsedValue) ? parsedValue : fallback
 }
 
+function normalizeDecimalInput(value: string, fallback = '0'): string {
+  const normalizedValue = value.trim().replace(/,/g, '.')
+  return normalizedValue || fallback
+}
+
 export function pointsToClipPath(points: CatalogMaskPoint[]): string {
   const safePoints = points.length >= 3 ? points : DEFAULT_POINTS
   const polygonPoints = safePoints.map((point) => `${point.x}% ${point.y}%`).join(', ')
@@ -192,7 +197,7 @@ export function formStateToPayload(formState: CatalogFormState): CatalogItemMuta
     tipoVisual: formState.tipoVisual,
     nombre: formState.nombre.trim(),
     descripcion: formState.descripcion.trim(),
-    precioUnitario: formState.precioUnitario || '0',
+    precioUnitario: normalizeDecimalInput(formState.precioUnitario),
     cantidad: Math.max(0, Math.round(toNumber(formState.cantidad, 0))),
     estado: formState.estado || 'activo',
     categoriaId: formState.categoriaId ? Number(formState.categoriaId) : null,

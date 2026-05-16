@@ -26,8 +26,32 @@ def _admin_guard(request):
     return None
 
 
+def _normalize_decimal_string(value):
+    if not isinstance(value, str):
+        return value
+
+    normalized_value = value.strip().replace(',', '.')
+    return normalized_value
+
+
+def _extract_request_payload(request):
+    if not hasattr(request.data, 'keys'):
+        return dict(request.data)
+
+    payload = {}
+
+    for key in request.data.keys():
+        if key in request.FILES:
+            payload[key] = request.FILES.get(key)
+            continue
+
+        payload[key] = request.data.get(key)
+
+    return payload
+
+
 def _normalize_payload(request):
-    payload = request.data.copy()
+    payload = _extract_request_payload(request)
 
     for key in ('render_config', 'composition_config'):
         value = payload.get(key)
@@ -39,6 +63,9 @@ def _normalize_payload(request):
 
     if payload.get('id_categoria') in ('', 'null', None):
         payload['id_categoria'] = None
+
+    if 'precio_unitario' in payload:
+        payload['precio_unitario'] = _normalize_decimal_string(payload.get('precio_unitario'))
 
     remove_image = payload.get('remove_image')
     if isinstance(remove_image, str):

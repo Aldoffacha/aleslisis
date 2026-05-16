@@ -1,7 +1,7 @@
 'use client'
 
 import Image from 'next/image'
-import type { BouquetFlowerPlacement, BouquetOption } from '../personalizacion-bouquets.types'
+import type { BouquetFlowerPlacement, BouquetMaskPoint, BouquetOption } from '../personalizacion-bouquets.types'
 import { useBouquetEditor } from '../use-bouquet-editor'
 import styles from './bouquet-composition.module.css'
 
@@ -11,12 +11,34 @@ interface BouquetCompositionProps {
   hiddenCount: number
 }
 
+function buildSoftMaskImage(points?: BouquetMaskPoint[]): string | null {
+  if (!points?.length) {
+    return null
+  }
+
+  const polygonPoints = points.map((point) => `${point.x},${point.y}`).join(' ')
+  const maskSvg = `
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" preserveAspectRatio="none">
+      <defs>
+        <filter id="soft-edge" x="-20%" y="-20%" width="140%" height="140%">
+          <feGaussianBlur stdDeviation="2.2" />
+        </filter>
+      </defs>
+      <rect width="100" height="100" fill="black" />
+      <polygon points="${polygonPoints}" fill="white" filter="url(#soft-edge)" />
+    </svg>
+  `
+
+  return `url("data:image/svg+xml;utf8,${encodeURIComponent(maskSvg)}")`
+}
+
 export function BouquetComposition({ bouquet, placements, hiddenCount }: BouquetCompositionProps) {
   const gradient = bouquet.composition.gradient ?? {
     from: 'rgba(255,255,255,0.08)',
     to: 'rgba(122,53,53,0.34)',
     angle: 180,
   }
+  const flowerMaskImage = buildSoftMaskImage(bouquet.composition.points)
 
   const {
     canvasRef,
@@ -75,7 +97,19 @@ export function BouquetComposition({ bouquet, placements, hiddenCount }: Bouquet
           className={styles.bouquetImage}
         />
 
-        <div className={styles.flowersLayer} style={{ clipPath: bouquet.composition.clipPath }}>
+        <div
+          className={styles.flowersLayer}
+          style={flowerMaskImage ? {
+            WebkitMaskImage: flowerMaskImage,
+            maskImage: flowerMaskImage,
+            WebkitMaskRepeat: 'no-repeat',
+            maskRepeat: 'no-repeat',
+            WebkitMaskSize: '100% 100%',
+            maskSize: '100% 100%',
+            WebkitMaskPosition: 'center',
+            maskPosition: 'center',
+          } : { clipPath: bouquet.composition.clipPath }}
+        >
           {editablePlacements.map(renderFlowerPlacement)}
         </div>
 

@@ -54,6 +54,12 @@
   gap: 24px;
 }
 
+.visualColumn {
+  min-width: 0;
+  display: grid;
+  gap: 14px;
+}
+
 .visualStage {
   position: relative;
   min-height: 560px;
@@ -78,18 +84,15 @@
 }
 
 .metaBadge {
-  position: absolute;
-  top: 18px;
-  left: 18px;
-  z-index: 10;
   display: inline-flex;
   flex-direction: column;
   gap: 4px;
   padding: 12px 14px;
   border-radius: 18px;
   border: 1px solid rgba(176, 92, 92, 0.12);
-  background: rgba(255, 255, 255, 0.68);
-  backdrop-filter: blur(8px);
+  background: rgba(255, 255, 255, 0.86);
+  backdrop-filter: blur(14px);
+  box-shadow: 0 14px 28px rgba(122, 53, 53, 0.08);
 }
 
 .metaLabel {
