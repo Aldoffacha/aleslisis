@@ -103,8 +103,9 @@ export default function RegistroPage() {
     setIsLoading(true)
     setError(null)
     try {
-      await auth.register(form)
-      router.push('/')
+      const { confirmar_password: _, ...payload } = form
+      await auth.register(payload)
+      router.push('/login?registro=exitoso')
     } catch (err) {
       setError(err instanceof Error ? err.message : 'Error al registrarse')
     } finally {

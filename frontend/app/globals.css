@@ -64,7 +64,8 @@ body {
   justify-content: center;
 }
 
-.nav-links a {
+.nav-links a,
+.nav-links .nav-link-text {
   font-size: 13px;
   font-weight: 400;
   letter-spacing: 0.12em;
@@ -74,7 +75,22 @@ body {
   transition: color 0.2s;
 }
 
-.nav-links a:hover {
+.nav-links a:hover,
+.nav-links .nav-link-text:hover {
+  color: var(--rose-deep);
+}
+
+.nav-links a, .nav-links .nav-link-text {
+  font-size: 13px;
+  font-weight: 400;
+  letter-spacing: 0.12em;
+  color: #5A3333;
+  text-decoration: none;
+  text-transform: uppercase;
+  transition: color 0.2s;
+}
+
+.nav-links a:hover, .nav-links .nav-link-text:hover {
   color: var(--rose-deep);
 }
 

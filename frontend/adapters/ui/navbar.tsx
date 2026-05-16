@@ -25,18 +25,34 @@ export default function Navbar({ cartCount = 0, isLoggedIn = false, onLogout }: 
           onMouseEnter={() => setTiendaOpen(true)}
           onMouseLeave={() => setTiendaOpen(false)}
         >
-          <span className="cursor-pointer flex items-center gap-1">
+          {/* Same element type and className as sibling links so font/size/color match exactly */}
+          <span
+            className="nav-link-text cursor-pointer inline-flex items-center gap-[3px]"
+            style={{ lineHeight: 'inherit' }}
+          >
             Tienda
-            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
+            {/* Arrow: strokeWidth and size match the rest of the icon set; translateY centres it optically */}
+            <svg
+              width="9"
+              height="9"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              strokeWidth="2.2"
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              style={{ display: 'block', flexShrink: 0 }}
+            >
               <polyline points="6 9 12 15 18 9" />
             </svg>
           </span>
+
           {tiendaOpen && (
             <div className="absolute top-full left-0 pt-2 z-50">
               <div className="bg-white border-[0.5px] border-[rgba(180,80,80,0.2)] shadow-sm min-w-[180px]">
-                <Link href="/cliente/tienda/flores" className="block px-5 py-3 text-xs tracking-[0.08em] text-[#5A3333] hover:bg-[#FAF0EE] transition-colors">Flores</Link>
-                <Link href="/cliente/tienda/arreglos" className="block px-5 py-3 text-xs tracking-[0.08em] text-[#5A3333] hover:bg-[#FAF0EE] transition-colors">Arreglos</Link>
-                <Link href="/cliente/tienda/regalos" className="block px-5 py-3 text-xs tracking-[0.08em] text-[#5A3333] hover:bg-[#FAF0EE] transition-colors">Regalos</Link>
+                <Link href="/cliente/tienda/flores"        className="block px-5 py-3 text-xs tracking-[0.08em] text-[#5A3333] hover:bg-[#FAF0EE] transition-colors">Flores</Link>
+                <Link href="/cliente/tienda/arreglos"      className="block px-5 py-3 text-xs tracking-[0.08em] text-[#5A3333] hover:bg-[#FAF0EE] transition-colors">Arreglos</Link>
+                <Link href="/cliente/tienda/regalos"       className="block px-5 py-3 text-xs tracking-[0.08em] text-[#5A3333] hover:bg-[#FAF0EE] transition-colors">Regalos</Link>
                 <div className="border-t border-[rgba(180,80,80,0.1)] mx-3" />
                 <Link href="/cliente/tienda/hazlo-tu-mismo" className="block px-5 py-3 text-xs tracking-[0.08em] text-[#7A2020] hover:bg-[#FAF0EE] transition-colors font-medium">Hazlo tú mismo</Link>
               </div>
