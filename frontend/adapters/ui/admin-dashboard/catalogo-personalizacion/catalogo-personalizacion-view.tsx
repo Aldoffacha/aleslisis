@@ -20,6 +20,8 @@ const editorModes: Array<{ id: CatalogEditorMode, label: string, note: string }>
   { id: 'vista', label: 'Solo vista', note: 'Revision del catalogo activo e inactivo' },
 ]
 
+const PAGE_SIZE = 8
+
 function isItemActive(item: CatalogPublicItem): boolean {
   return item.estado.trim().toLowerCase() === 'activo'
 }
@@ -34,6 +36,7 @@ export function CatalogoPersonalizacionView() {
   const [isSaving, setIsSaving] = useState(false)
   const [feedback, setFeedback] = useState<string | null>(null)
   const [errorMessage, setErrorMessage] = useState<string | null>(null)
+  const [page, setPage] = useState(1)
 
   const loadCatalog = async () => {
     setIsLoading(true)
@@ -64,10 +67,15 @@ export function CatalogoPersonalizacionView() {
       ? flowerItems
       : items
 
+  const totalPages = Math.max(1, Math.ceil(visibleItems.length / PAGE_SIZE))
+  const currentPage = Math.min(page, totalPages)
+  const paginatedItems = visibleItems.slice((currentPage - 1) * PAGE_SIZE, currentPage * PAGE_SIZE)
+
   const handleModeChange = (nextMode: CatalogEditorMode) => {
     setMode(nextMode)
     setFeedback(null)
     setErrorMessage(null)
+    setPage(1)
 
     if (nextMode !== 'vista') {
       setEditingId(null)
@@ -176,6 +184,7 @@ export function CatalogoPersonalizacionView() {
       setEditingId(savedItem.productId)
       setFormState(catalogItemToFormState(savedItem))
       setFeedback(editingId ? 'Cambios guardados en el catalogo real.' : 'Nuevo registro creado en la base de datos.')
+      setPage(1)
     } catch (error) {
       setErrorMessage(error instanceof Error ? error.message : 'No se pudo guardar el registro.')
     } finally {
@@ -204,13 +213,12 @@ export function CatalogoPersonalizacionView() {
 
   return (
     <section className={styles.shell}>
-      <header className={styles.header}>
+      <div className={styles.header}>
         <div className={styles.headerCopy}>
           <span className={styles.eyebrow}>Catalogo y stock</span>
           <h2 className={styles.title}>Personalizacion Bouquets</h2>
           <p className={styles.description}>
-            Gestiona bouquets y flores desde la base de datos real, dibuja la mascara interna del bouquet,
-            sube la imagen oficial y deja listo el catalogo que consume la tienda y Hazlo tu mismo.
+            Gestiona bouquets y flores desde la base de datos real.
           </p>
         </div>
 
@@ -228,7 +236,7 @@ export function CatalogoPersonalizacionView() {
             <strong className={styles.metricValue}>{activeCount}</strong>
           </article>
         </div>
-      </header>
+      </div>
 
       <div className={styles.modeRow}>
         {editorModes.map((editorMode) => (
@@ -249,7 +257,7 @@ export function CatalogoPersonalizacionView() {
 
       {mode === 'vista' ? (
         <div className={styles.galleryGrid}>
-          {visibleItems.map((item) => (
+          {paginatedItems.map((item) => (
             <article key={item.productId} className={styles.galleryCard}>
               <div className={styles.galleryPreview}>
                 {item.imageSrc ? <img src={item.imageSrc} alt={item.nombre} /> : <span>Sin imagen</span>}
@@ -270,6 +278,27 @@ export function CatalogoPersonalizacionView() {
               </div>
             </article>
           ))}
+          {visibleItems.length > PAGE_SIZE ? (
+            <div className={styles.paginationRow} style={{ gridColumn: '1 / -1' }}>
+              <button
+                type="button"
+                className={styles.paginationButton}
+                onClick={() => setPage((p) => p - 1)}
+                disabled={currentPage <= 1}
+              >
+                Anterior
+              </button>
+              <span className={styles.pageInfo}>{currentPage} / {totalPages}</span>
+              <button
+                type="button"
+                className={styles.paginationButton}
+                onClick={() => setPage((p) => p + 1)}
+                disabled={currentPage >= totalPages}
+              >
+                Siguiente
+              </button>
+            </div>
+          ) : null}
         </div>
       ) : (
         <div className={styles.workspace}>
@@ -286,42 +315,65 @@ export function CatalogoPersonalizacionView() {
 
             {isLoading ? (
               <div className={styles.emptyListState}>Cargando catalogo real...</div>
-            ) : visibleItems.length === 0 ? (
+            ) : paginatedItems.length === 0 ? (
               <div className={styles.emptyListState}>
                 No hay registros en esta seccion. Usa el formulario para crear el primero.
               </div>
             ) : (
-              <div className={styles.itemList}>
-                {visibleItems.map((item) => (
-                  <article
-                    key={item.productId}
-                    className={`${styles.itemCard} ${editingId === item.productId ? styles.itemCardActive : ''}`}
-                  >
-                    <div className={styles.itemCopy}>
-                      <div className={styles.itemHeading}>
-                        <strong>{item.nombre}</strong>
-                        <span className={`${styles.stateBadge} ${isItemActive(item) ? styles.stateBadgeActive : styles.stateBadgeInactive}`}>
-                          {item.estado}
-                        </span>
+              <>
+                <div className={styles.itemList}>
+                  {paginatedItems.map((item) => (
+                    <article
+                      key={item.productId}
+                      className={`${styles.itemCard} ${editingId === item.productId ? styles.itemCardActive : ''}`}
+                    >
+                      <div className={styles.itemCopy}>
+                        <div className={styles.itemHeading}>
+                          <strong>{item.nombre}</strong>
+                          <span className={`${styles.stateBadge} ${isItemActive(item) ? styles.stateBadgeActive : styles.stateBadgeInactive}`}>
+                            {item.estado}
+                          </span>
+                        </div>
+                        <p>{item.descripcion || 'Sin descripcion registrada.'}</p>
+                        <div className={styles.itemMeta}>
+                          <span>Stock {item.cantidad}</span>
+                          <span>Bs. {item.precioUnitario}</span>
+                          <span>{item.imageSrc ? 'Con imagen' : 'Sin imagen'}</span>
+                        </div>
                       </div>
-                      <p>{item.descripcion || 'Sin descripcion registrada.'}</p>
-                      <div className={styles.itemMeta}>
-                        <span>Stock {item.cantidad}</span>
-                        <span>Bs. {item.precioUnitario}</span>
-                        <span>{item.imageSrc ? 'Con imagen' : 'Sin imagen'}</span>
+                      <div className={styles.itemActions}>
+                        <button type="button" className={styles.secondaryAction} onClick={() => handleEdit(item)}>
+                          Editar
+                        </button>
+                        <button type="button" className={styles.secondaryAction} onClick={() => void handleToggleItemState(item)} disabled={isSaving}>
+                          {isItemActive(item) ? 'Ocultar' : 'Activar'}
+                        </button>
                       </div>
-                    </div>
-                    <div className={styles.itemActions}>
-                      <button type="button" className={styles.secondaryAction} onClick={() => handleEdit(item)}>
-                        Editar
-                      </button>
-                      <button type="button" className={styles.secondaryAction} onClick={() => void handleToggleItemState(item)} disabled={isSaving}>
-                        {isItemActive(item) ? 'Ocultar' : 'Activar'}
-                      </button>
-                    </div>
-                  </article>
-                ))}
-              </div>
+                    </article>
+                  ))}
+                </div>
+                {visibleItems.length > PAGE_SIZE ? (
+                  <div className={styles.paginationRow}>
+                    <button
+                      type="button"
+                      className={styles.paginationButton}
+                      onClick={() => setPage((p) => p - 1)}
+                      disabled={currentPage <= 1}
+                    >
+                      Anterior
+                    </button>
+                    <span className={styles.pageInfo}>{currentPage} / {totalPages}</span>
+                    <button
+                      type="button"
+                      className={styles.paginationButton}
+                      onClick={() => setPage((p) => p + 1)}
+                      disabled={currentPage >= totalPages}
+                    >
+                      Siguiente
+                    </button>
+                  </div>
+                ) : null}
+              </>
             )}
           </section>
 

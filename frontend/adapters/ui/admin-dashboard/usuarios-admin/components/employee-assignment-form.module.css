@@ -1,132 +1,171 @@
 .formShell {
-  display: grid;
-  gap: 16px;
-  padding: 20px;
-  border-radius: 28px;
-  background: rgba(255, 255, 255, 0.76);
-  border: 1px solid rgba(176, 92, 92, 0.12);
-  box-shadow: 0 20px 42px rgba(122, 53, 53, 0.08);
+  background: #fff;
+  border: 1px solid #e8ddd5;
+  border-radius: 8px;
 }
 
-.formHeader,
-.sectionHeader,
-.actionRow {
+.formHeader {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  gap: 12px;
-  flex-wrap: wrap;
+  padding: 16px 20px;
+  border-bottom: 1px solid #e8ddd5;
 }
 
 .eyebrow {
   display: block;
-  margin-bottom: 6px;
-  font-size: 10px;
-  letter-spacing: 0.2em;
+  font-size: 9px;
+  letter-spacing: 0.16em;
   text-transform: uppercase;
   color: #946b6b;
+  margin-bottom: 4px;
 }
 
 .title {
   font-family: 'Cormorant Garamond', serif;
-  font-size: 2rem;
+  font-size: 1.2rem;
   font-weight: 500;
   color: #4f2828;
+  margin: 0;
 }
 
-.summaryCard,
-.section,
-.emptyState {
-  padding: 16px;
-  border-radius: 22px;
-  background: linear-gradient(145deg, rgba(250, 246, 240, 0.9), rgba(255, 255, 255, 0.78));
-  border: 1px solid rgba(176, 92, 92, 0.1);
+.formBody {
+  padding: 20px;
 }
 
 .summaryCard {
   display: grid;
-  grid-template-columns: repeat(3, minmax(0, 1fr));
+  grid-template-columns: repeat(3, 1fr);
   gap: 12px;
+  padding: 12px;
+  border: 1px solid #e8ddd5;
+  border-radius: 6px;
+  background: #faf6f0;
+  margin-bottom: 16px;
 }
 
 .summaryLabel {
   display: block;
-  margin-bottom: 6px;
-  font-size: 10px;
-  letter-spacing: 0.16em;
+  font-size: 9px;
+  letter-spacing: 0.14em;
   text-transform: uppercase;
   color: #8f6666;
+  margin-bottom: 4px;
 }
 
-.summaryCard strong,
-.sectionHeader strong {
-  font-size: 14px;
+.summaryCard strong {
+  font-size: 13px;
   color: #4f2828;
 }
 
-.section {
-  display: grid;
-  gap: 12px;
-}
-
-.sectionHeader span,
-.emptyState {
-  font-size: 12px;
-  line-height: 1.7;
-  color: #7a5555;
+.sectionLabel {
+  display: block;
+  font-size: 10px;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  color: #6a4040;
+  margin-bottom: 8px;
 }
 
 .grid {
   display: grid;
-  grid-template-columns: repeat(2, minmax(0, 1fr));
-  gap: 14px;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
 }
 
 .field {
-  display: grid;
-  gap: 8px;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
 }
 
-.field span {
+.fieldLabel {
   font-size: 10px;
-  letter-spacing: 0.16em;
+  letter-spacing: 0.12em;
   text-transform: uppercase;
   color: #8f6666;
 }
 
-.field input,
-.field select {
-  min-height: 46px;
-  padding: 0 14px;
-  border-radius: 15px;
-  border: 1px solid rgba(176, 92, 92, 0.14);
-  background: rgba(255, 255, 255, 0.88);
-  color: #4f2828;
+.fieldInput {
+  padding: 10px 12px;
+  border: 1px solid #e0d3cb;
+  border-radius: 6px;
+  font-size: 13px;
+  color: #2c1a1a;
+  background: #fff;
+  font-family: inherit;
+  outline: none;
 }
 
-.primaryButton,
-.secondaryButton {
-  min-height: 42px;
-  padding: 0 16px;
-  border-radius: 999px;
-  border: 1px solid rgba(176, 92, 92, 0.14);
-  cursor: pointer;
+.fieldInput:focus {
+  border-color: #7a3535;
+}
+
+.fieldSelect {
+  padding: 10px 12px;
+  border: 1px solid #e0d3cb;
+  border-radius: 6px;
+  font-size: 13px;
+  color: #2c1a1a;
+  background: #fff;
+  font-family: inherit;
+  outline: none;
+}
+
+.actionRow {
+  padding: 16px 20px;
+  border-top: 1px solid #e8ddd5;
 }
 
 .primaryButton {
-  background: linear-gradient(145deg, rgba(176, 92, 92, 0.96), rgba(122, 53, 53, 0.92));
-  color: #fff7f4;
-  font-size: 11px;
-  letter-spacing: 0.18em;
+  padding: 10px 24px;
+  border: none;
+  background: #7a2020;
+  color: #fff;
+  font-size: 10px;
+  letter-spacing: 0.16em;
   text-transform: uppercase;
+  cursor: pointer;
+  border-radius: 6px;
+  font-family: inherit;
+  transition: background 0.15s;
+}
+
+.primaryButton:hover {
+  background: #5a1818;
+}
+
+.primaryButton:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
 }
 
 .secondaryButton {
-  background: rgba(250, 246, 240, 0.92);
-  color: #6b4040;
+  padding: 8px 16px;
+  border: 1px solid #dccbc3;
+  background: #fff;
+  color: #6d4747;
   font-size: 10px;
   letter-spacing: 0.14em;
   text-transform: uppercase;
+  cursor: pointer;
+  border-radius: 6px;
+  font-family: inherit;
+}
+
+.secondaryButton:hover {
+  background: #f5ede8;
+}
+
+.emptyState {
+  padding: 24px;
+  text-align: center;
+  border: 1px dashed #e8ddd5;
+  border-radius: 6px;
+  color: #946b6b;
+  font-size: 13px;
+  background: #faf6f0;
+  margin: 20px;
 }
 
 @media (max-width: 900px) {

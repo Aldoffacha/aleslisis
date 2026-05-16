@@ -1,125 +1,110 @@
 .shell {
-  min-height: 0;
-  display: grid;
-  gap: 18px;
-  padding-right: 18px;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  padding: 20px 24px;
   overflow: auto;
-  animation: riseIn 0.35s ease;
 }
 
 .hero {
-  display: grid;
-  grid-template-columns: minmax(0, 1.3fr) minmax(280px, 0.9fr);
-  gap: 18px;
-  padding: 22px;
-  border-radius: 30px;
-  background: linear-gradient(145deg, rgba(255, 255, 255, 0.78), rgba(249, 232, 232, 0.72));
-  border: 1px solid rgba(176, 92, 92, 0.12);
-  box-shadow: 0 24px 44px rgba(122, 53, 53, 0.08);
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 20px;
+  flex-wrap: wrap;
 }
 
 .heroCopy {
-  display: grid;
-  gap: 10px;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  flex: 1;
+  min-width: 200px;
 }
 
 .eyebrow {
-  font-size: 10px;
-  letter-spacing: 0.22em;
+  font-size: 9px;
+  letter-spacing: 0.2em;
   text-transform: uppercase;
   color: #946b6b;
 }
 
 .title {
   font-family: 'Cormorant Garamond', serif;
-  font-size: clamp(2.2rem, 4vw, 3.2rem);
+  font-size: clamp(1.6rem, 3vw, 2.4rem);
   font-weight: 500;
   color: #4f2828;
+  margin: 0;
 }
 
 .description {
-  font-size: 14px;
-  line-height: 1.8;
+  font-size: 13px;
+  line-height: 1.7;
   color: #6d4747;
+  max-width: 500px;
 }
 
 .metricsGrid {
-  display: grid;
-  grid-template-columns: repeat(3, minmax(0, 1fr));
+  display: flex;
   gap: 12px;
+  flex-wrap: wrap;
 }
 
 .metricCard {
-  display: grid;
-  gap: 8px;
-  padding: 16px;
-  border-radius: 20px;
-  background: rgba(255, 255, 255, 0.58);
-  border: 1px solid rgba(176, 92, 92, 0.1);
+  padding: 12px 16px;
+  border: 1px solid #e8ddd5;
+  border-radius: 6px;
+  background: #fff;
+  min-width: 100px;
 }
 
 .metricLabel {
-  font-size: 10px;
-  letter-spacing: 0.16em;
+  display: block;
+  font-size: 9px;
+  letter-spacing: 0.14em;
   text-transform: uppercase;
-  color: #8f6666;
+  color: #946b6b;
+  margin-bottom: 4px;
 }
 
 .metricValue {
   font-family: 'Cormorant Garamond', serif;
-  font-size: 2rem;
+  font-size: 1.6rem;
   color: #7a3535;
 }
 
 .feedbackSuccess,
 .feedbackError {
-  padding: 14px 16px;
-  border-radius: 18px;
-  font-size: 13px;
-  line-height: 1.7;
+  padding: 10px 14px;
+  border-radius: 6px;
+  font-size: 12px;
 }
 
 .feedbackSuccess {
-  background: rgba(74, 103, 65, 0.12);
-  border: 1px solid rgba(74, 103, 65, 0.18);
+  background: #e8f0e4;
+  border: 1px solid #c4d6bc;
   color: #385133;
 }
 
 .feedbackError {
-  background: rgba(122, 53, 53, 0.1);
-  border: 1px solid rgba(122, 53, 53, 0.16);
+  background: #f0e4e4;
+  border: 1px solid #dcc4c4;
   color: #6d3232;
 }
 
 .workspace {
-  min-height: 0;
   display: grid;
-  grid-template-columns: minmax(320px, 0.86fr) minmax(0, 1.14fr);
+  grid-template-columns: minmax(300px, 0.8fr) minmax(0, 1.2fr);
   gap: 16px;
-}
-
-@keyframes riseIn {
-  from {
-    opacity: 0;
-    transform: translateY(14px);
-  }
-
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
+  align-items: start;
 }
 
 @media (max-width: 1120px) {
-  .hero,
-  .workspace,
-  .metricsGrid {
-    grid-template-columns: 1fr;
+  .hero {
+    flex-direction: column;
   }
-}
 
-@media (max-width: 760px) {
-  .shell {
-    padding-right: 0;
+  .workspace {
+    grid-template-columns: 1fr;
   }
 }

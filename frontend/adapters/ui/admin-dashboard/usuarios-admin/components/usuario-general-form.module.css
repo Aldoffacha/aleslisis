@@ -1,146 +1,194 @@
 .formShell {
-  display: grid;
-  gap: 16px;
-  padding: 20px;
-  border-radius: 28px;
-  background: rgba(255, 255, 255, 0.76);
-  border: 1px solid rgba(176, 92, 92, 0.12);
-  box-shadow: 0 20px 42px rgba(122, 53, 53, 0.08);
+  background: #fff;
+  border: 1px solid #e8ddd5;
+  border-radius: 8px;
 }
 
-.formHeader,
-.sectionHeader,
-.actionRow {
+.formHeader {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  gap: 12px;
-  flex-wrap: wrap;
+  padding: 16px 20px;
+  border-bottom: 1px solid #e8ddd5;
 }
 
 .eyebrow {
   display: block;
-  margin-bottom: 6px;
-  font-size: 10px;
-  letter-spacing: 0.2em;
+  font-size: 9px;
+  letter-spacing: 0.16em;
   text-transform: uppercase;
   color: #946b6b;
+  margin-bottom: 4px;
 }
 
 .title {
   font-family: 'Cormorant Garamond', serif;
-  font-size: 2rem;
+  font-size: 1.4rem;
   font-weight: 500;
   color: #4f2828;
+  margin: 0;
+}
+
+.formBody {
+  padding: 20px;
 }
 
 .section {
-  display: grid;
-  gap: 12px;
-  padding: 16px;
-  border-radius: 22px;
-  background: linear-gradient(145deg, rgba(250, 246, 240, 0.9), rgba(255, 255, 255, 0.78));
-  border: 1px solid rgba(176, 92, 92, 0.1);
+  margin-bottom: 20px;
 }
 
-.sectionHeader strong {
-  font-size: 14px;
-  color: #4f2828;
-}
-
-.sectionHeader span {
-  font-size: 12px;
-  line-height: 1.7;
-  color: #7a5555;
+.sectionLabel {
+  display: block;
+  font-size: 10px;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  color: #6a4040;
+  margin-bottom: 8px;
 }
 
 .roleRow {
   display: flex;
+  gap: 8px;
   flex-wrap: wrap;
-  gap: 10px;
-}
-
-.roleButton,
-.primaryButton,
-.secondaryButton {
-  min-height: 42px;
-  padding: 0 16px;
-  border-radius: 999px;
-  border: 1px solid rgba(176, 92, 92, 0.14);
-  cursor: pointer;
 }
 
 .roleButton {
-  background: rgba(255, 255, 255, 0.76);
-  color: #6b4040;
+  padding: 8px 18px;
+  border: 1px solid #dccbc3;
+  background: #fff;
+  color: #6d4747;
   font-size: 11px;
-  letter-spacing: 0.14em;
-  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  cursor: pointer;
+  border-radius: 6px;
+  font-family: inherit;
+  transition: all 0.15s;
+}
+
+.roleButton:hover {
+  border-color: #7a3535;
 }
 
 .roleButtonActive {
-  background: rgba(176, 92, 92, 0.14);
-  color: #7a3535;
-  box-shadow: 0 12px 24px rgba(176, 92, 92, 0.08);
+  background: #7a2020;
+  color: #fff;
+  border-color: #7a2020;
 }
 
 .grid {
   display: grid;
-  grid-template-columns: repeat(2, minmax(0, 1fr));
-  gap: 14px;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
 }
 
-.field,
-.fieldFull {
-  display: grid;
-  gap: 8px;
-}
-
-.field span,
-.fieldFull span {
-  font-size: 10px;
-  letter-spacing: 0.16em;
-  text-transform: uppercase;
-  color: #8f6666;
-}
-
-.field input,
-.field select,
-.field textarea,
-.fieldFull textarea {
-  min-height: 46px;
-  padding: 0 14px;
-  border-radius: 15px;
-  border: 1px solid rgba(176, 92, 92, 0.14);
-  background: rgba(255, 255, 255, 0.88);
-  color: #4f2828;
-}
-
-.field textarea,
-.fieldFull textarea {
-  min-height: 120px;
-  padding: 14px;
-  resize: vertical;
+.field {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
 }
 
 .fieldFull {
   grid-column: 1 / -1;
 }
 
-.primaryButton {
-  background: linear-gradient(145deg, rgba(176, 92, 92, 0.96), rgba(122, 53, 53, 0.92));
-  color: #fff7f4;
-  font-size: 11px;
-  letter-spacing: 0.18em;
+.fieldLabel {
+  font-size: 10px;
+  letter-spacing: 0.12em;
   text-transform: uppercase;
+  color: #8f6666;
+}
+
+.fieldInput {
+  padding: 10px 12px;
+  border: 1px solid #e0d3cb;
+  border-radius: 6px;
+  font-size: 13px;
+  color: #2c1a1a;
+  background: #fff;
+  font-family: inherit;
+  outline: none;
+  transition: border-color 0.15s;
+}
+
+.fieldInput:focus {
+  border-color: #7a3535;
+}
+
+.fieldSelect {
+  padding: 10px 12px;
+  border: 1px solid #e0d3cb;
+  border-radius: 6px;
+  font-size: 13px;
+  color: #2c1a1a;
+  background: #fff;
+  font-family: inherit;
+  outline: none;
+}
+
+.fieldTextarea {
+  padding: 10px 12px;
+  border: 1px solid #e0d3cb;
+  border-radius: 6px;
+  font-size: 13px;
+  color: #2c1a1a;
+  background: #fff;
+  font-family: inherit;
+  outline: none;
+  resize: vertical;
+  min-height: 80px;
+}
+
+.actionRow {
+  padding: 16px 20px;
+  border-top: 1px solid #e8ddd5;
+  display: flex;
+  gap: 10px;
+}
+
+.primaryButton {
+  padding: 10px 24px;
+  border: none;
+  background: #7a2020;
+  color: #fff;
+  font-size: 10px;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  cursor: pointer;
+  border-radius: 6px;
+  font-family: inherit;
+  transition: background 0.15s;
+}
+
+.primaryButton:hover {
+  background: #5a1818;
+}
+
+.primaryButton:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
 }
 
 .secondaryButton {
-  background: rgba(250, 246, 240, 0.92);
-  color: #6b4040;
+  padding: 10px 24px;
+  border: 1px solid #dccbc3;
+  background: #fff;
+  color: #6d4747;
   font-size: 10px;
-  letter-spacing: 0.14em;
+  letter-spacing: 0.16em;
   text-transform: uppercase;
+  cursor: pointer;
+  border-radius: 6px;
+  font-family: inherit;
+}
+
+.secondaryButton:hover {
+  background: #f5ede8;
+}
+
+.sectionDivider {
+  height: 1px;
+  background: #e8ddd5;
+  margin: 16px 0;
 }
 
 @media (max-width: 760px) {

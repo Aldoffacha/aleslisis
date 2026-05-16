@@ -14,6 +14,7 @@ interface UsuariosResultsPanelProps {
   onSelectUser: (user: AdminUserItem) => void
   onToggleState: (user: AdminUserItem) => void
   onPageChange: (page: number) => void
+  currentUserId?: number
 }
 
 function getStateLabel(state: string): string {
@@ -46,6 +47,7 @@ export function UsuariosResultsPanel({
   onSelectUser,
   onToggleState,
   onPageChange,
+  currentUserId,
 }: UsuariosResultsPanelProps) {
   return (
     <section className={styles.panel}>
@@ -70,6 +72,7 @@ export function UsuariosResultsPanel({
             const isSelected = selectedUserId === user.id
             const isActive = user.estado.trim().toLowerCase() === 'activo'
             const displayName = user.nombreCompleto || user.nombre || 'Usuario sin nombre'
+            const isSelf = currentUserId !== undefined && user.id === currentUserId
 
             return (
               <article
@@ -95,6 +98,7 @@ export function UsuariosResultsPanel({
                         </div>
 
                         <div className={styles.badgeCluster}>
+                          {isSelf ? <span className={styles.selfBadge}>Tu cuenta</span> : null}
                           {isSelected ? <span className={styles.selectedBadge}>Seleccionado</span> : null}
                           <span className={`${styles.stateBadge} ${isActive ? styles.stateBadgeActive : styles.stateBadgeInactive}`}>
                             {getStateLabel(user.estado)}
@@ -114,7 +118,7 @@ export function UsuariosResultsPanel({
                 <div className={styles.actionRow}>
                   <button
                     type="button"
-                    className={`${styles.iconButton} ${styles.iconButtonPrimary}`}
+                    className={styles.iconButtonPrimary}
                     onClick={() => onSelectUser(user)}
                     aria-label={`Editar a ${displayName}`}
                     title="Editar"
@@ -126,11 +130,11 @@ export function UsuariosResultsPanel({
                   </button>
                   <button
                     type="button"
-                    className={`${styles.iconButton} ${isActive ? styles.iconButtonDanger : styles.iconButtonSuccess}`}
+                    className={`${isActive ? styles.iconButtonDanger : styles.iconButtonSuccess}`}
                     onClick={() => onToggleState(user)}
-                    disabled={isMutating}
+                    disabled={isMutating || isSelf}
                     aria-label={isActive ? `Desactivar a ${displayName}` : `Activar a ${displayName}`}
-                    title={isActive ? 'Desactivar' : 'Activar'}
+                    title={isSelf ? 'No puedes desactivarte a ti mismo' : (isActive ? 'Desactivar' : 'Activar')}
                   >
                     <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
                       <path d="M12 3v8" />
@@ -153,6 +157,7 @@ export function UsuariosResultsPanel({
         >
           Anterior
         </button>
+        <span className={styles.pageInfo}>{pagination.page} / {Math.max(pagination.totalPages, 1)}</span>
         <button
           type="button"
           className={styles.paginationButton}

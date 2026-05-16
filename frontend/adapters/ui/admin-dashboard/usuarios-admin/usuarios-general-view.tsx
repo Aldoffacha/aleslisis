@@ -18,6 +18,10 @@ import {
   type UserFilterState,
 } from './usuarios-admin.utils'
 
+interface UsuariosGeneralViewProps {
+  currentUserId?: number
+}
+
 const emptyResponse: AdminUserListResponse = {
   items: [],
   pagination: {
@@ -44,7 +48,7 @@ function getErrorMessage(error: unknown): string {
   return 'No se pudo completar la operacion con datos reales.'
 }
 
-export function UsuariosGeneralView() {
+export function UsuariosGeneralView({ currentUserId }: UsuariosGeneralViewProps) {
   const [filters, setFilters] = useState<UserFilterState>(defaultFilterState)
   const [draftQuery, setDraftQuery] = useState('')
   const [data, setData] = useState<AdminUserListResponse>(emptyResponse)
@@ -185,12 +189,12 @@ export function UsuariosGeneralView() {
 
   return (
     <div className={styles.shell}>
-      <section className={styles.hero}>
+      <div className={styles.hero}>
         <div className={styles.heroCopy}>
           <span className={styles.eyebrow}>Usuarios y roles / gestion real</span>
           <h2 className={styles.title}>Usuarios en general</h2>
           <p className={styles.description}>
-            Administra usuarios base, clientes, empleados y administradores con datos reales, sin tarjetas inventadas ni contadores simulados.
+            Administra usuarios base, clientes, empleados y administradores con datos reales.
           </p>
         </div>
 
@@ -208,7 +212,7 @@ export function UsuariosGeneralView() {
             <strong className={styles.metricValue}>{currentRoles}</strong>
           </article>
         </div>
-      </section>
+      </div>
 
       <UsuariosToolbar
         title="Control de usuarios"
@@ -243,6 +247,7 @@ export function UsuariosGeneralView() {
           onSelectUser={handleSelectUser}
           onToggleState={handleToggleState}
           onPageChange={(page) => setFilters((currentState) => ({ ...currentState, page }))}
+          currentUserId={currentUserId}
         />
 
         <UsuarioGeneralForm

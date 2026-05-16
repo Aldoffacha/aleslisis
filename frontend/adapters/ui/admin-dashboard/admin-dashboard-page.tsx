@@ -18,13 +18,6 @@ import styles from './admin-dashboard-page.module.css'
 
 const auth = createAuthUseCases(djangoAuthAdapter)
 
-const toneClassMap = {
-  vino: styles.toneVino,
-  oro: styles.toneOro,
-  hoja: styles.toneHoja,
-  grafito: styles.toneGrafito,
-}
-
 function resolveDashboardPath(role: string) {
   if (role === 'administrador') {
     return '/administrador/dashboard'
@@ -71,8 +64,6 @@ export default function AdminDashboardPage() {
   useEffect(() => {
     let isMounted = true
 
-    window.dispatchEvent(new Event('alesli-rose-background-start'))
-
     auth.getCurrentUser()
       .then((currentUser) => {
         if (!isMounted) {
@@ -110,7 +101,7 @@ export default function AdminDashboardPage() {
     }
 
     if (activeView.id === 'usuarios-general') {
-      return <UsuariosGeneralView />
+      return <UsuariosGeneralView currentUserId={user?.id} />
     }
 
     if (activeView.id === 'usuarios-empleados') {
@@ -123,11 +114,9 @@ export default function AdminDashboardPage() {
   if (isLoading || !user) {
     return (
       <div className={styles.pageShell}>
-        <div className={styles.pageFrame}>
-          <div className={styles.loadingCard}>
-            <span className={styles.loadingEyebrow}>Cargando consola administrativa</span>
-            <strong className={styles.loadingTitle}>Preparando metricas, modulos y actividad del negocio...</strong>
-          </div>
+        <div className={styles.loadingCard}>
+          <span className={styles.loadingEyebrow}>Cargando consola administrativa</span>
+          <strong className={styles.loadingTitle}>Preparando modulos...</strong>
         </div>
       </div>
     )
@@ -148,7 +137,7 @@ export default function AdminDashboardPage() {
         />
 
         <main className={`${styles.mainColumn} ${isSidebarOpen ? styles.mainColumnShifted : ''}`}>
-          <div className={`${styles.viewport} ${toneClassMap[activeView.accent]}`}>
+          <div className={styles.viewport}>
             <header className={styles.topBar}>
               <button
                 type="button"
@@ -156,13 +145,9 @@ export default function AdminDashboardPage() {
                 onClick={() => setIsSidebarOpen((currentValue) => !currentValue)}
                 aria-label={isSidebarOpen ? 'Ocultar menu lateral' : 'Mostrar menu lateral'}
               >
-                Menu
+                {isSidebarOpen ? 'Cerrar' : 'Menu'}
               </button>
-
-              <div className={styles.topBarRail}>
-                <span className={styles.topBarDot} />
-                <span className={styles.topBarLine} />
-              </div>
+              <span style={{ fontSize: 12, color: '#946b6b', letterSpacing: '0.1em' }}>{activeView.label}</span>
             </header>
 
             {customView ? (
@@ -171,34 +156,26 @@ export default function AdminDashboardPage() {
               </section>
             ) : (
               <section className={styles.workspaceCanvas} aria-label={`Panel del modulo ${activeView.label}`}>
-                <div className={styles.primaryCanvas}>
-                  <div className={styles.primaryGlow} />
-                  <div className={styles.primaryFrame} />
-                  <div className={styles.primaryDock}>
-                    <span className={styles.blankChip} />
-                    <span className={styles.blankChip} />
-                    <span className={`${styles.blankChip} ${styles.blankChipWide}`} />
-                  </div>
+                <div className={styles.sectionHeader}>
+                  <span className={styles.sectionEyebrow}>{activeView.eyebrow}</span>
+                  <h2 className={styles.sectionTitle}>{activeView.title}</h2>
+                  <p className={styles.sectionDescription}>{activeView.description}</p>
                 </div>
 
-                <section className={styles.cardDeck}>
-                  {activeView.cards.map((card, index) => (
-                    <article
-                      key={card.id}
-                      className={`${styles.moduleCard} ${toneClassMap[card.tone]}`}
-                      aria-label={card.title}
-                    >
-                      <span className={styles.cardAccent} />
-
-                      <div className={styles.cardCanvas}>
-                        <div className={`${styles.canvasOrb} ${index % 2 === 0 ? styles.canvasOrbLarge : styles.canvasOrbSmall}`} />
-                        <div className={styles.canvasShelf} />
-                        <div className={styles.canvasBar} />
-                        <div className={`${styles.canvasBar} ${styles.canvasBarShort}`} />
+                <div className={styles.cardGrid}>
+                  {activeView.cards.map((card) => (
+                    <article key={card.id} className={styles.moduleCard}>
+                      <h3 className={styles.cardTitle}>{card.title}</h3>
+                      <p className={styles.cardDescription}>{card.description}</p>
+                      <span className={styles.cardNote}>{card.note}</span>
+                      <div className={styles.cardTags}>
+                        {card.tags.map((tag) => (
+                          <span key={tag} className={styles.cardTag}>{tag}</span>
+                        ))}
                       </div>
                     </article>
                   ))}
-                </section>
+                </div>
               </section>
             )}
           </div>

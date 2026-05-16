@@ -1,9 +1,7 @@
 .pageShell {
   min-height: 100vh;
   font-family: 'DM Sans', sans-serif;
-  background:
-    radial-gradient(circle at top left, rgba(212, 132, 122, 0.18), rgba(212, 132, 122, 0) 24%),
-    linear-gradient(180deg, rgba(249, 232, 232, 0.82), rgba(250, 246, 240, 0.98));
+  background: #faf6f0;
 }
 
 .pageFrame {
@@ -15,267 +13,148 @@
 .mainColumn {
   min-height: 100vh;
   display: flex;
-  padding: 18px 0 18px 0;
+  flex-direction: column;
+  padding: 0;
   transition: padding-left 0.25s ease;
 }
 
 .mainColumnShifted {
-  padding-left: 304px;
+  padding-left: 280px;
 }
 
 .viewport {
-  min-height: calc(100vh - 36px);
-  width: 100%;
-  display: grid;
-  grid-template-rows: auto minmax(0, 1fr);
-  gap: 16px;
-  padding: 18px 0 18px 18px;
-  border-radius: 32px 0 0 32px;
-  background: rgba(250, 246, 240, 0.8);
-  border: 1px solid rgba(176, 92, 92, 0.12);
-  border-right: none;
-  box-shadow: 0 24px 56px rgba(122, 53, 53, 0.08);
-  overflow: hidden;
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  background: #fff;
 }
 
 .topBar {
   display: flex;
   align-items: center;
-  gap: 14px;
-  min-height: 78px;
-  padding: 14px 18px;
-  border-radius: 24px 0 0 24px;
-  background: rgba(255, 255, 255, 0.68);
-  border: 1px solid rgba(176, 92, 92, 0.1);
+  gap: 12px;
+  padding: 16px 24px;
+  border-bottom: 1px solid #e8ddd5;
+  background: #faf6f0;
 }
 
 .menuButton {
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  min-width: 104px;
-  min-height: 48px;
-  padding: 0 16px;
-  border-radius: 16px;
-  border: 1px solid rgba(176, 92, 92, 0.12);
-  background: rgba(255, 255, 255, 0.82);
+  min-width: 90px;
+  height: 36px;
+  padding: 0 14px;
+  border: 1px solid #dccbc3;
+  background: #fff;
   color: #7a3535;
   font-size: 10px;
   letter-spacing: 0.18em;
   text-transform: uppercase;
   cursor: pointer;
+  border-radius: 6px;
 }
 
-.topBarRail {
-  flex: 1;
-  min-width: 0;
-  min-height: 48px;
-  display: flex;
-  align-items: center;
-  gap: 12px;
-  padding: 0 14px;
-  border-radius: 18px;
-  background: linear-gradient(135deg, rgba(255, 255, 255, 0.5), rgba(249, 232, 232, 0.34));
-  border: 1px solid rgba(176, 92, 92, 0.08);
-}
-
-.topBarDot {
-  width: 12px;
-  height: 12px;
-  border-radius: 999px;
-  background: var(--accent-color);
-  opacity: 0.62;
-}
-
-.topBarLine {
-  flex: 1;
-  height: 10px;
-  border-radius: 999px;
-  background: linear-gradient(90deg, rgba(255, 255, 255, 0.64), rgba(255, 255, 255, 0));
-}
-
-.workspaceCanvas {
-  min-height: 0;
-  display: grid;
-  grid-template-rows: minmax(240px, 34vh) minmax(0, 1fr);
-  gap: 16px;
-  overflow: hidden;
+.menuButton:hover {
+  background: #f5ede8;
 }
 
 .workspaceSurface {
-  min-height: 0;
-  overflow: hidden;
-}
-
-.primaryCanvas,
-.moduleCard {
-  position: relative;
-  overflow: hidden;
-  border-radius: 28px 0 0 28px;
-  background: rgba(255, 255, 255, 0.7);
-  border: 1px solid var(--surface-border);
-}
-
-.primaryCanvas {
-  min-height: 240px;
-}
-
-.primaryGlow {
-  position: absolute;
-  inset: auto auto -54px -54px;
-  width: 220px;
-  height: 220px;
-  border-radius: 50%;
-  background: radial-gradient(circle, var(--accent-soft) 0%, rgba(255, 255, 255, 0) 72%);
-}
-
-.primaryFrame {
-  position: absolute;
-  inset: 28px 30px 28px 28px;
-  border-radius: 26px;
-  border: 1px dashed rgba(176, 92, 92, 0.16);
-  background: linear-gradient(135deg, rgba(255, 255, 255, 0.44), rgba(249, 232, 232, 0.12));
-}
-
-.primaryDock {
-  position: absolute;
-  left: 28px;
-  right: 32px;
-  bottom: 28px;
-  display: flex;
-  flex-wrap: wrap;
-  gap: 12px;
-}
-
-.blankChip {
-  display: inline-flex;
-  min-width: 108px;
-  height: 42px;
-  border-radius: 999px;
-  background: linear-gradient(135deg, var(--accent-soft), rgba(255, 255, 255, 0.54));
-  border: 1px solid rgba(176, 92, 92, 0.08);
-}
-
-.blankChipWide {
-  min-width: 182px;
-}
-
-.cardDeck {
-  min-height: 0;
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-  gap: 16px;
-  align-content: start;
+  flex: 1;
   overflow: auto;
 }
 
-.cardDeck::-webkit-scrollbar {
-  width: 8px;
+.workspaceCanvas {
+  display: flex;
+  flex-direction: column;
+  gap: 0;
 }
 
-.cardDeck::-webkit-scrollbar-thumb {
-  border-radius: 999px;
-  background: rgba(176, 92, 92, 0.18);
+.sectionHeader {
+  padding: 32px 24px 20px;
+  border-bottom: 1px solid #e8ddd5;
+}
+
+.sectionEyebrow {
+  font-size: 10px;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  color: #946b6b;
+  display: block;
+  margin-bottom: 8px;
+}
+
+.sectionTitle {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 2rem;
+  font-weight: 500;
+  color: #4f2828;
+  margin: 0;
+}
+
+.sectionDescription {
+  font-size: 13px;
+  line-height: 1.7;
+  color: #6d4747;
+  margin-top: 8px;
+  max-width: 600px;
+}
+
+.cardGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 12px;
+  padding: 20px 24px;
 }
 
 .moduleCard {
-  min-height: 220px;
-  padding: 18px;
-  display: grid;
-  gap: 16px;
+  padding: 20px;
+  border: 1px solid #e8ddd5;
+  border-radius: 8px;
+  background: #faf6f0;
 }
 
-.cardAccent {
-  width: 76px;
-  height: 6px;
-  border-radius: 999px;
-  background: var(--accent-color);
-  opacity: 0.42;
+.cardTitle {
+  font-size: 14px;
+  font-weight: 600;
+  color: #4f2828;
+  margin-bottom: 6px;
 }
 
-.cardCanvas {
-  position: relative;
-  min-height: 0;
-  border-radius: 22px;
-  background: linear-gradient(135deg, var(--accent-soft), rgba(255, 255, 255, 0.34));
-  border: 1px dashed rgba(176, 92, 92, 0.12);
+.cardDescription {
+  font-size: 12px;
+  line-height: 1.6;
+  color: #6d4747;
 }
 
-.canvasOrb {
-  position: absolute;
-  top: 18px;
-  right: 18px;
-  border-radius: 50%;
-  background: radial-gradient(circle, rgba(255, 255, 255, 0.84), var(--accent-soft));
+.cardNote {
+  display: block;
+  font-size: 10px;
+  letter-spacing: 0.1em;
+  color: #946b6b;
+  margin-top: 10px;
 }
 
-.canvasOrbLarge {
-  width: 88px;
-  height: 88px;
+.cardTags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin-top: 12px;
 }
 
-.canvasOrbSmall {
-  width: 62px;
-  height: 62px;
-}
-
-.canvasShelf {
-  position: absolute;
-  left: 20px;
-  right: 20px;
-  bottom: 20px;
-  height: 72px;
-  border-radius: 18px;
-  background: rgba(255, 255, 255, 0.5);
-}
-
-.canvasBar {
-  position: absolute;
-  left: 20px;
-  top: 22px;
-  width: 44%;
-  height: 14px;
-  border-radius: 999px;
-  background: rgba(255, 255, 255, 0.7);
-}
-
-.canvasBarShort {
-  top: 46px;
-  width: 28%;
-  opacity: 0.82;
-}
-
-.toneVino {
-  --accent-color: #7a3535;
-  --accent-soft: rgba(176, 92, 92, 0.14);
-  --surface-border: rgba(176, 92, 92, 0.14);
-}
-
-.toneOro {
-  --accent-color: #9b7650;
-  --accent-soft: rgba(201, 169, 110, 0.16);
-  --surface-border: rgba(201, 169, 110, 0.18);
-}
-
-.toneHoja {
-  --accent-color: #4a6741;
-  --accent-soft: rgba(74, 103, 65, 0.14);
-  --surface-border: rgba(74, 103, 65, 0.16);
-}
-
-.toneGrafito {
-  --accent-color: #6b5a5a;
-  --accent-soft: rgba(107, 90, 90, 0.12);
-  --surface-border: rgba(107, 90, 90, 0.16);
+.cardTag {
+  font-size: 9px;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  padding: 4px 10px;
+  border: 1px solid #e8ddd5;
+  border-radius: 4px;
+  color: #6d4747;
+  background: #fff;
 }
 
 .loadingCard {
-  margin: 18px 0 18px 18px;
-  padding: 34px;
-  border-radius: 32px 0 0 32px;
-  background: rgba(250, 246, 240, 0.92);
-  border: 1px solid rgba(176, 92, 92, 0.14);
-  box-shadow: 0 24px 60px rgba(122, 53, 53, 0.08);
+  padding: 40px 24px;
 }
 
 .loadingEyebrow {
@@ -289,7 +168,7 @@
 
 .loadingTitle {
   font-family: 'Cormorant Garamond', serif;
-  font-size: 2rem;
+  font-size: 1.6rem;
   font-weight: 500;
   color: #4f2828;
 }
@@ -298,31 +177,5 @@
   .mainColumn,
   .mainColumnShifted {
     padding-left: 0;
-  }
-
-  .viewport {
-    min-height: 100vh;
-    padding: 84px 0 16px 16px;
-    border-radius: 28px 0 0 28px;
-  }
-
-  .topBar {
-    position: fixed;
-    top: 16px;
-    left: 16px;
-    right: 0;
-    z-index: 20;
-  }
-
-  .workspaceCanvas {
-    grid-template-rows: minmax(180px, 26vh) minmax(0, 1fr);
-  }
-
-  .cardDeck {
-    grid-template-columns: 1fr;
-  }
-
-  .loadingCard {
-    margin: 16px 0 16px 16px;
   }
 }
