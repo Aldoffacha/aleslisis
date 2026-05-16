@@ -1,56 +1,25 @@
 'use client'
 
-// Mini rose for social grid items
-const MiniRose = ({ color = '#D4847A', x = 50, y = 50, size = 40 }: { color?: string; x?: number; y?: number; size?: number }) => (
-  <g transform={`translate(${x}, ${y})`}>
-    <ellipse cx="0" cy="0" rx={size * 0.45} ry={size * 0.36} fill={color} opacity="0.4" transform="rotate(0)"/>
-    <ellipse cx="0" cy="0" rx={size * 0.45} ry={size * 0.36} fill={color} opacity="0.4" transform="rotate(60)"/>
-    <ellipse cx="0" cy="0" rx={size * 0.45} ry={size * 0.36} fill={color} opacity="0.4" transform="rotate(120)"/>
-    <ellipse cx="0" cy="0" rx={size * 0.32} ry={size * 0.26} fill={color} opacity="0.65" transform="rotate(30)"/>
-    <ellipse cx="0" cy="0" rx={size * 0.32} ry={size * 0.26} fill={color} opacity="0.65" transform="rotate(90)"/>
-    <circle cx="0" cy="0" r={size * 0.18} fill={color}/>
-    <circle cx="0" cy="0" r={size * 0.1} fill="#7A3535" opacity="0.5"/>
-  </g>
-)
-
 const socialItems = [
   {
     bg: '#F9E8E8',
     label: 'Rosa roja',
-    roses: [
-      { color: '#C4706A', x: 50, y: 50, size: 45 },
-      { color: '#D4847A', x: 25, y: 70, size: 30 },
-      { color: '#B05C5C', x: 75, y: 30, size: 28 },
-    ]
+    img: '/creaciones/rosa-roja.png',
   },
   {
     bg: '#F5EEE8',
     label: 'Ramo especial',
-    roses: [
-      { color: '#D4A070', x: 50, y: 45, size: 38 },
-      { color: '#C49060', x: 30, y: 65, size: 28 },
-      { color: '#E4B080', x: 70, y: 60, size: 25 },
-      { color: '#D4A070', x: 50, y: 75, size: 20 },
-    ]
+    img: '/creaciones/ramo-especial.png',
   },
   {
     bg: '#EEF2EE',
     label: 'Arreglo de boda',
-    roses: [
-      { color: '#E8C0C0', x: 50, y: 48, size: 42 },
-      { color: '#D4A0A0', x: 28, y: 65, size: 30 },
-      { color: '#F0D0D0', x: 72, y: 35, size: 26 },
-      { color: '#E0B0B0', x: 68, y: 68, size: 22 },
-    ]
+    img: '/creaciones/arreglo-de-boda.png',
   },
   {
     bg: '#F2EEF5',
     label: 'Caja de rosas',
-    roses: [
-      { color: '#B070C4', x: 50, y: 50, size: 40 },
-      { color: '#C080D4', x: 30, y: 35, size: 26 },
-      { color: '#9A60B0', x: 70, y: 62, size: 28 },
-    ]
+    img: '/creaciones/caja-de-rosas.png',
   },
 ]
 
@@ -63,13 +32,7 @@ export default function SocialSection() {
       <div className="social-grid">
         {socialItems.map((item, idx) => (
           <div key={idx} className="social-item" style={{ background: item.bg }}>
-            <svg width="100%" height="100%" viewBox="0 0 100 100" preserveAspectRatio="xMidYMid slice">
-              {/* Leaf */}
-              <path d={`M${item.roses[0].x} ${item.roses[0].y + 20} Q${item.roses[0].x - 20} ${item.roses[0].y + 30} ${item.roses[0].x - 25} ${item.roses[0].y + 45} Q${item.roses[0].x - 10} ${item.roses[0].y + 32} ${item.roses[0].x} ${item.roses[0].y + 18}`} fill="#4A6741" opacity="0.4"/>
-              {item.roses.map((rose, ri) => (
-                <MiniRose key={ri} {...rose} />
-              ))}
-            </svg>
+            <img src={item.img} alt={item.label} className="w-full h-full object-contain p-2" />
             <div className="social-overlay">
               <span style={{
                 color: 'white',
