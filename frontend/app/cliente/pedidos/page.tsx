@@ -49,7 +49,7 @@ export default function PedidosPage() {
 							Volver al dashboard
 						</Link>
 						<Link
-							href="/tienda/hazlo-tu-mismo"
+							href="/cliente/tienda/hazlo-tu-mismo"
 							className="px-6 py-3 text-[10px] uppercase tracking-[0.2em] text-[#7A2020]"
 							style={{ border: '0.5px solid rgba(122,32,32,0.35)' }}
 						>

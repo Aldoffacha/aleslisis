@@ -16,7 +16,7 @@ const categorias = [
     titulo: 'Flores',
     descripcion: 'Naturales, artificiales y mixtos',
     subcategorias: ['Naturales', 'Artificiales', 'Mixtos', 'Con accesorios'],
-    href: '/tienda/flores',
+    href: '/cliente/tienda/flores',
     size: 'large',
     emoji: '🌹',
   },
@@ -25,7 +25,7 @@ const categorias = [
     titulo: 'Arreglos',
     descripcion: 'Para eventos y ocasiones especiales',
     subcategorias: ['Centros de mesa', 'Escaleras florales', 'Arcos', 'Decoración'],
-    href: '/tienda/arreglos',
+    href: '/cliente/tienda/arreglos',
     size: 'medium',
     emoji: '💐',
   },
@@ -34,7 +34,7 @@ const categorias = [
     titulo: 'Regalos',
     descripcion: 'Graduaciones, aniversarios y más',
     subcategorias: ['Graduación', 'Aniversario', 'Cumpleaños', 'Corporativos'],
-    href: '/tienda/regalos',
+    href: '/cliente/tienda/regalos',
     size: 'medium',
     emoji: '🎁',
   },
@@ -87,14 +87,14 @@ export default function DashboardCliente() {
         </p>
         <div className="flex gap-4 mt-8">
           <Link
-            href="/tienda"
+            href="/cliente/tienda"
             className="px-8 py-3 text-[10px] tracking-[0.2em] uppercase text-white font-[DM_Sans,sans-serif]"
             style={{ background: '#7A2020' }}
           >
             Ver todo
           </Link>
           <Link
-            href="/tienda/hazlo-tu-mismo"
+            href="/cliente/tienda/hazlo-tu-mismo"
             className="px-8 py-3 text-[10px] tracking-[0.2em] uppercase text-[#7A2020] font-[DM_Sans,sans-serif]"
             style={{ border: '0.5px solid rgba(122,32,32,0.4)' }}
           >
@@ -112,7 +112,7 @@ export default function DashboardCliente() {
         {/* Fila 1 — Flores grande + Arreglos */}
         <div className="grid gap-4 mb-4" style={{ gridTemplateColumns: '1.6fr 1fr' }}>
           {/* Flores — card grande */}
-          <Link href="/tienda#flores" className="group relative overflow-hidden block" style={{ minHeight: '420px', background: '#F5E8E8' }}>
+          <Link href="/cliente/tienda#flores" className="group relative overflow-hidden block" style={{ minHeight: '420px', background: '#F5E8E8' }}>
             <div className="absolute inset-0 flex flex-col justify-end p-8">
               <span className="text-[10px] tracking-[0.2em] uppercase text-[#9A6060] mb-2">Colección</span>
               <h2 style={{ fontFamily: 'Cormorant Garamond, serif', fontSize: '3rem', fontWeight: 300, color: '#7A2020', letterSpacing: '0.1em', lineHeight: 1 }}>
@@ -136,7 +136,7 @@ export default function DashboardCliente() {
           </Link>
 
           {/* Arreglos */}
-          <Link href="/tienda#bouquets" className="group relative overflow-hidden block" style={{ minHeight: '420px', background: '#EEE0E0' }}>
+          <Link href="/cliente/tienda#bouquets" className="group relative overflow-hidden block" style={{ minHeight: '420px', background: '#EEE0E0' }}>
             <div className="absolute inset-0 flex flex-col justify-end p-8">
               <span className="text-[10px] tracking-[0.2em] uppercase text-[#9A6060] mb-2">Colección</span>
               <h2 style={{ fontFamily: 'Cormorant Garamond, serif', fontSize: '2.5rem', fontWeight: 300, color: '#7A2020', letterSpacing: '0.1em', lineHeight: 1 }}>
@@ -160,7 +160,7 @@ export default function DashboardCliente() {
         {/* Fila 2 — Regalos + Hazlo tú mismo */}
         <div className="grid gap-4" style={{ gridTemplateColumns: '1fr 1.4fr' }}>
           {/* Regalos */}
-          <Link href="/tienda" className="group relative overflow-hidden block" style={{ minHeight: '300px', background: '#F0E4E4' }}>
+          <Link href="/cliente/tienda" className="group relative overflow-hidden block" style={{ minHeight: '300px', background: '#F0E4E4' }}>
             <div className="absolute inset-0 flex flex-col justify-end p-8">
               <span className="text-[10px] tracking-[0.2em] uppercase text-[#9A6060] mb-2">Colección</span>
               <h2 style={{ fontFamily: 'Cormorant Garamond, serif', fontSize: '2.5rem', fontWeight: 300, color: '#7A2020', letterSpacing: '0.1em', lineHeight: 1 }}>
@@ -181,7 +181,7 @@ export default function DashboardCliente() {
           </Link>
 
           {/* Hazlo tú mismo */}
-          <Link href="/tienda/hazlo-tu-mismo" className="group relative overflow-hidden flex flex-col items-center justify-center text-center p-8" style={{ minHeight: '300px', background: '#2C1A1A' }}>
+          <Link href="/cliente/tienda/hazlo-tu-mismo" className="group relative overflow-hidden flex flex-col items-center justify-center text-center p-8" style={{ minHeight: '300px', background: '#2C1A1A' }}>
             <span className="text-[10px] tracking-[0.25em] uppercase text-[rgba(255,255,255,0.4)] mb-3">Experiencia única</span>
             <h2 style={{ fontFamily: 'Cormorant Garamond, serif', fontSize: '2.8rem', fontWeight: 300, color: 'rgba(255,255,255,0.9)', letterSpacing: '0.1em', lineHeight: 1 }}>
               Hazlo tú mismo

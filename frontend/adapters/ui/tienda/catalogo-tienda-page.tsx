@@ -77,7 +77,7 @@ export default function CatalogoTiendaPage() {
               edita u oculta desde el dashboard, aqui se refleja sin volver a usar datos hardcodeados.
             </p>
             <div className={styles.ctaRow}>
-              <Link href="/tienda/hazlo-tu-mismo" className={styles.primaryLink}>Ir a Hazlo tu mismo</Link>
+              <Link href="/cliente/tienda/hazlo-tu-mismo" className={styles.primaryLink}>Ir a Hazlo tu mismo</Link>
               <Link href="#flores" className={styles.secondaryLink}>Ver flores</Link>
             </div>
           </div>
