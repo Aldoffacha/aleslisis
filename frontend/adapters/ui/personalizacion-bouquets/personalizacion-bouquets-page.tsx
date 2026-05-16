@@ -1,6 +1,7 @@
 'use client'
 
 import { useEffect, useState } from 'react'
+import { useRouter } from 'next/navigation'
 import Navbar from '@/adapters/ui/navbar'
 import { djangoAuthAdapter } from '@/adapters/api/auth-adapter'
 import { createAuthUseCases } from '@/domain/use-cases/auth'
@@ -14,6 +15,7 @@ import styles from './personalizacion-bouquets-page.module.css'
 const auth = createAuthUseCases(djangoAuthAdapter)
 
 export default function PersonalizacionBouquetsPage() {
+  const router = useRouter()
   const [selectedBouquetId, setSelectedBouquetId] = useState(bouquetOptions[0].id)
   const [searchValue, setSearchValue] = useState('')
   const [selectedFlowers, setSelectedFlowers] = useState<Record<string, number>>({})
@@ -85,9 +87,14 @@ export default function PersonalizacionBouquetsPage() {
     setSelectedFlowers({})
   }
 
+  const handleLogout = async () => {
+    await auth.logout()
+    router.push('/login')
+  }
+
   return (
     <div className={styles.pageShell}>
-      <Navbar isLoggedIn={isLoggedIn} cartCount={0} />
+      <Navbar isLoggedIn={isLoggedIn} cartCount={0} onLogout={handleLogout} />
 
       <main className={styles.pageContent}>
         <section className={styles.heroPanel}>

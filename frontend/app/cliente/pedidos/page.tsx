@@ -1,10 +1,24 @@
+'use client'
+
+import { useRouter } from 'next/navigation'
 import Link from 'next/link'
 import Navbar from '@/adapters/ui/navbar'
+import { createAuthUseCases } from '@/domain/use-cases/auth'
+import { djangoAuthAdapter } from '@/adapters/api/auth-adapter'
+
+const auth = createAuthUseCases(djangoAuthAdapter)
 
 export default function PedidosPage() {
+	const router = useRouter()
+
+	const handleLogout = async () => {
+		await auth.logout()
+		router.push('/login')
+	}
+
 	return (
 		<div className="min-h-screen font-[DM_Sans,sans-serif]">
-			<Navbar isLoggedIn={true} cartCount={0} />
+			<Navbar isLoggedIn={true} cartCount={0} onLogout={handleLogout} />
 
 			<main className="px-6 pb-16 pt-28 md:px-12 lg:px-20">
 				<section className="mx-auto max-w-4xl rounded-[32px] border border-[rgba(180,80,80,0.16)] bg-[rgba(250,246,240,0.9)] p-10 shadow-[0_24px_60px_rgba(122,53,53,0.08)] backdrop-blur">

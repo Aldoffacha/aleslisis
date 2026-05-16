@@ -50,13 +50,18 @@ export default function DashboardCliente() {
       .catch(() => router.push('/login'))
   }, [])
 
+  const handleLogout = async () => {
+    await auth.logout()
+    router.push('/login')
+  }
+
   useEffect(() => {
     window.dispatchEvent(new Event('alesli-rose-background-start'))
   }, [])
 
   return (
     <div className="min-h-screen font-[DM_Sans,sans-serif]">
-      <Navbar isLoggedIn={true} cartCount={0} />
+      <Navbar isLoggedIn={true} cartCount={0} onLogout={handleLogout} />
 
       {/* Hero bienvenida */}
       <section

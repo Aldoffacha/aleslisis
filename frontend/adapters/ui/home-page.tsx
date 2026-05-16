@@ -53,6 +53,11 @@ export default function HomePage() {
 })
   }, [router])
 
+  const handleLogout = async () => {
+    await auth.logout()
+    router.push('/login')
+  }
+
   useEffect(() => {
     if (!isClient || !showDashboard) return
     window.dispatchEvent(new Event('alesli-rose-background-start'))
@@ -75,7 +80,7 @@ export default function HomePage() {
 
       {showDashboard && (
         <>
-          <Navbar cartCount={0} isLoggedIn={isLoggedIn} />
+          <Navbar cartCount={0} isLoggedIn={isLoggedIn} onLogout={handleLogout} />
 
           <div className="main-content">
             <main className="pt-0">

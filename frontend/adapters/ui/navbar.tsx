@@ -6,9 +6,10 @@ import { useState } from 'react'
 interface NavbarProps {
   cartCount?: number
   isLoggedIn?: boolean
+  onLogout?: () => void
 }
 
-export default function Navbar({ cartCount = 0, isLoggedIn = false }: NavbarProps) {
+export default function Navbar({ cartCount = 0, isLoggedIn = false, onLogout }: NavbarProps) {
   const userHref = isLoggedIn ? '/perfil' : '/login'
   const cartHref = isLoggedIn ? '/carrito' : '/login'
   const [tiendaOpen, setTiendaOpen] = useState(false)
@@ -53,6 +54,15 @@ export default function Navbar({ cartCount = 0, isLoggedIn = false }: NavbarProp
             <path d="M4 20c0-4 3.6-7 8-7s8 3 8 7" />
           </svg>
         </a>
+        {isLoggedIn && (
+          <button type="button" className="nav-icon-btn" aria-label="Cerrar sesion" onClick={onLogout}>
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.4" strokeLinecap="round" strokeLinejoin="round">
+              <path d="M9 21H5a2 2 0 01-2-2V5a2 2 0 012-2h4" />
+              <polyline points="16 17 21 12 16 7" />
+              <line x1="21" y1="12" x2="9" y2="12" />
+            </svg>
+          </button>
+        )}
         <a href={cartHref} className="nav-icon-btn cart-badge" aria-label="Carrito">
           <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.4" strokeLinecap="round" strokeLinejoin="round">
             <path d="M6 2L3 6v14a2 2 0 002 2h14a2 2 0 002-2V6l-3-4z" />

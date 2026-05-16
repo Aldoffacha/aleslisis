@@ -91,8 +91,8 @@ export const flowerCatalog: FlowerCatalogItem[] = [
     note: 'Cabeza ancha para bouquets alegres y con mucha presencia.',
     imageSrc: '/flores/girasol.webp',
     render: {
-      widthPercent: 22,
-      maxWidth: 164,
+      widthPercent: 31,
+      maxWidth: 230,
       bottomOffset: 4,
       rotateJitter: 4,
       priority: 1,
@@ -107,8 +107,8 @@ export const flowerCatalog: FlowerCatalogItem[] = [
     note: 'Flor central refinada para contrastes intensos y bouquets romanticos.',
     imageSrc: '/flores/RosaRoja.webp',
     render: {
-      widthPercent: 17,
-      maxWidth: 128,
+      widthPercent: 55,
+      maxWidth: 413,
       bottomOffset: 2,
       rotateJitter: 7,
       priority: 2,
