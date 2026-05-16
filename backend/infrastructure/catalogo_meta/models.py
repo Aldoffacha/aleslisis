@@ -14,7 +14,6 @@ class ProductoVisualMeta(models.Model):
     accent_color = models.CharField(max_length=20, default='#7A3535')
     tone = models.CharField(max_length=120, blank=True)
     category_label = models.CharField(max_length=40, blank=True)
-    image = models.FileField(upload_to='catalogo/', blank=True, null=True)
     render_config = models.JSONField(default=dict, blank=True)
     composition_config = models.JSONField(default=dict, blank=True)
     estado = models.CharField(max_length=20, default='activo')

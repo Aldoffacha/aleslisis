@@ -1,6 +1,6 @@
 'use client'
 
-import { useEffect, useState } from 'react'
+import { useEffect, useMemo, useState } from 'react'
 import { useRouter } from 'next/navigation'
 import { catalogoAdapter } from '@/adapters/api/catalogo-adapter'
 import Navbar from '@/adapters/ui/navbar'
@@ -9,6 +9,7 @@ import { createAuthUseCases } from '@/domain/use-cases/auth'
 import { BouquetPreview } from './components/bouquet-preview'
 import { BouquetTypeSelector } from './components/bouquet-type-selector'
 import { FlowerCatalogPanel } from './components/flower-catalog-panel'
+import { BouquetQuotePanel, buildBouquetQuoteSummary } from './cotizacion'
 import { mapCatalogoPublicoToPersonalizacion } from './personalizacion-bouquets.catalog'
 import { groupFlowersByInitial, mapSelectedFlowers, normalizeBouquetSearch } from './personalizacion-bouquets.utils'
 import styles from './personalizacion-bouquets-page.module.css'
@@ -113,6 +114,13 @@ export default function PersonalizacionBouquetsPage() {
   const visibleLetters = Object.keys(groupedFlowers)
   const selectedFlowerItems = mapSelectedFlowers(flowerCatalog, selectedFlowers)
   const totalSelectedFlowers = selectedFlowerItems.reduce((accumulator, flower) => accumulator + flower.quantity, 0)
+  const quoteSummary = useMemo(() => {
+    if (!selectedBouquet) {
+      return null
+    }
+
+    return buildBouquetQuoteSummary(selectedBouquet, selectedFlowerItems)
+  }, [selectedBouquet, selectedFlowerItems])
 
   const handleAddFlower = (flowerId: string) => {
     setSelectedFlowers((currentSelection) => ({
@@ -227,6 +235,8 @@ export default function PersonalizacionBouquetsPage() {
                   onRemoveFlower={handleRemoveFlower}
                   onClearSelection={handleClearSelection}
                 />
+
+                {quoteSummary ? <BouquetQuotePanel summary={quoteSummary} /> : null}
               </>
             ) : null}
           </div>

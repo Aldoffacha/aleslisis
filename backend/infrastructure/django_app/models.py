@@ -66,6 +66,7 @@ class Producto(models.Model):
     descripcion = models.TextField(null=True, blank=True)
     precio_unitario = models.DecimalField(max_digits=10, decimal_places=2)
     cantidad = models.IntegerField(default=0)
+    image = models.FileField(upload_to='productos/', max_length=255, null=True, blank=True)
     estado = models.CharField(max_length=20, null=True, blank=True)
     id_categoria = models.ForeignKey(
         CategoriaProducto,

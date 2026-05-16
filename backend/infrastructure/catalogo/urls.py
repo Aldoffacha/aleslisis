@@ -1,4 +1,4 @@
-from django.urls import path
+from django.urls import include, path
 
 from backend.infrastructure.catalogo import views
 
@@ -7,4 +7,5 @@ urlpatterns = [
     path('admin/resumen/', views.admin_catalog_summary_view, name='catalogo-admin-resumen'),
     path('admin/items/', views.admin_catalog_create_view, name='catalogo-admin-create'),
     path('admin/items/<int:producto_id>/', views.admin_catalog_detail_view, name='catalogo-admin-detail'),
+    path('admin/inventario/', include('backend.infrastructure.inventario_admin.urls')),
 ]

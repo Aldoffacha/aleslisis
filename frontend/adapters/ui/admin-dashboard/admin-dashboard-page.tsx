@@ -11,6 +11,7 @@ import {
   adminSidebarGroups,
 } from './admin-dashboard.data'
 import { CatalogoPersonalizacionView } from './catalogo-personalizacion/catalogo-personalizacion-view'
+import { InventarioView } from './inventario-admin/inventario-view'
 import { UsuariosEmpleadosView } from './usuarios-admin/usuarios-empleados-view'
 import { UsuariosGeneralView } from './usuarios-admin/usuarios-general-view'
 import { AdminSidebar } from './components/admin-sidebar'
@@ -98,6 +99,10 @@ export default function AdminDashboardPage() {
   const customView = (() => {
     if (activeView.id === 'catalogo-personalizacion') {
       return <CatalogoPersonalizacionView />
+    }
+
+    if (activeView.id === 'catalogo-inventario') {
+      return <InventarioView />
     }
 
     if (activeView.id === 'usuarios-general') {

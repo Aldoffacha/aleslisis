@@ -22,6 +22,7 @@ INSTALLED_APPS = [
     'corsheaders',
     'backend.infrastructure.django_app',
     'backend.infrastructure.catalogo_meta',
+    'backend.infrastructure.inventario_meta',
 ]
 
 MIDDLEWARE = [

@@ -175,9 +175,9 @@ def normalize_composition_config(raw_config: Any) -> dict[str, Any]:
     return config
 
 
-def _build_media_url(request, meta: ProductoVisualMeta) -> str:
-    if meta.image:
-        return request.build_absolute_uri(meta.image.url)
+def _build_media_url(request, producto: Producto) -> str:
+    if producto.image:
+        return request.build_absolute_uri(producto.image.url)
     return ''
 
 
@@ -202,7 +202,7 @@ def _serialize_catalog_item(request, producto: Producto, meta: ProductoVisualMet
         'accentColor': meta.accent_color or DEFAULT_ACCENT_COLOR,
         'tone': meta.tone,
         'categoryLabel': meta.category_label,
-        'imageSrc': _build_media_url(request, meta),
+        'imageSrc': _build_media_url(request, producto),
         'renderConfig': render_config,
         'compositionConfig': composition_config,
         'updatedAt': meta.updated_at.isoformat(),
@@ -286,6 +286,7 @@ def create_catalog_item(validated_data: dict[str, Any]):
         descripcion=validated_data.get('descripcion', ''),
         precio_unitario=validated_data['precio_unitario'],
         cantidad=validated_data['cantidad'],
+        image=validated_data.get('image'),
         estado=validated_data.get('estado') or 'activo',
         id_categoria=_resolve_categoria(validated_data.get('id_categoria')),
     )
@@ -294,7 +295,6 @@ def create_catalog_item(validated_data: dict[str, Any]):
         producto_id=producto.id_producto,
         tipo_visual=validated_data['tipo_visual'],
         slug=_unique_slug(validated_data['nombre']),
-        image=validated_data.get('image'),
         **_meta_defaults(validated_data),
     )
 
@@ -328,6 +328,12 @@ def update_catalog_item(producto: Producto, meta: ProductoVisualMeta, validated_
         meta.estado = validated_data.get('estado') or 'activo'
     if 'id_categoria' in validated_data:
         producto.id_categoria = _resolve_categoria(validated_data.get('id_categoria'))
+    if validated_data.get('remove_image'):
+        if producto.image:
+            producto.image.delete(save=False)
+        producto.image = None
+    if validated_data.get('image') is not None:
+        producto.image = validated_data.get('image')
 
     if 'tipo_visual' in validated_data:
         meta.tipo_visual = validated_data['tipo_visual']
@@ -345,11 +351,6 @@ def update_catalog_item(producto: Producto, meta: ProductoVisualMeta, validated_
         meta.render_config = normalize_render_config(validated_data.get('render_config'))
     if 'composition_config' in validated_data:
         meta.composition_config = normalize_composition_config(validated_data.get('composition_config'))
-    if validated_data.get('remove_image'):
-        meta.image.delete(save=False)
-        meta.image = None
-    if validated_data.get('image') is not None:
-        meta.image = validated_data.get('image')
 
     producto.save()
     meta.save()

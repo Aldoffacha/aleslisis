@@ -1,0 +1,133 @@
+.shell {
+  min-height: 0;
+  display: grid;
+  gap: 18px;
+  padding-right: 18px;
+  overflow: auto;
+  animation: riseIn 0.35s ease;
+}
+
+.hero {
+  display: grid;
+  grid-template-columns: minmax(0, 1.2fr) minmax(300px, 0.8fr);
+  gap: 18px;
+  padding: 22px;
+  border-radius: 30px;
+  background: linear-gradient(145deg, rgba(255, 255, 255, 0.82), rgba(245, 231, 222, 0.76));
+  border: 1px solid rgba(176, 92, 92, 0.12);
+  box-shadow: 0 24px 44px rgba(122, 53, 53, 0.08);
+}
+
+.heroCopy {
+  display: grid;
+  gap: 10px;
+}
+
+.eyebrow {
+  font-size: 10px;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  color: #946b6b;
+}
+
+.title {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: clamp(2rem, 4vw, 3rem);
+  font-weight: 500;
+  color: #4f2828;
+}
+
+.description {
+  max-width: 640px;
+  font-size: 14px;
+  line-height: 1.8;
+  color: #6d4747;
+}
+
+.metricsGrid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 12px;
+}
+
+.metricCard {
+  display: grid;
+  gap: 8px;
+  padding: 16px;
+  border-radius: 20px;
+  background: rgba(255, 255, 255, 0.66);
+  border: 1px solid rgba(176, 92, 92, 0.1);
+}
+
+.metricLabel {
+  font-size: 10px;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: #8f6666;
+}
+
+.metricValue {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 2rem;
+  color: #7a3535;
+}
+
+.feedbackSuccess,
+.feedbackError {
+  padding: 14px 16px;
+  border-radius: 18px;
+  font-size: 13px;
+  line-height: 1.7;
+}
+
+.feedbackSuccess {
+  background: rgba(74, 103, 65, 0.12);
+  border: 1px solid rgba(74, 103, 65, 0.18);
+  color: #385133;
+}
+
+.feedbackError {
+  background: rgba(122, 53, 53, 0.1);
+  border: 1px solid rgba(122, 53, 53, 0.16);
+  color: #6d3232;
+}
+
+.workspace {
+  min-height: 0;
+  display: grid;
+  grid-template-columns: minmax(320px, 0.8fr) minmax(0, 1.2fr);
+  gap: 16px;
+}
+
+.column {
+  min-height: 0;
+  display: grid;
+  gap: 16px;
+  align-content: start;
+}
+
+@keyframes riseIn {
+  from {
+    opacity: 0;
+    transform: translateY(14px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@media (max-width: 1180px) {
+  .hero,
+  .workspace,
+  .metricsGrid {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 760px) {
+  .shell {
+    padding-right: 0;
+  }
+}

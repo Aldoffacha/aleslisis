@@ -57,6 +57,13 @@ export const adminSidebarGroups: AdminSidebarGroup[] = [
         note: 'CATEGORIA_PRODUCTO, PRODUCTO y configuracion visual real',
         children: [
           {
+            id: 'nav-catalogo-inventario',
+            label: 'Inventario',
+            icon: 'box',
+            viewId: 'catalogo-inventario',
+            note: 'Categorias, productos, imagenes y stock reales para arreglos florales',
+          },
+          {
             id: 'nav-catalogo-personalizacion',
             label: 'Personalizacion Bouquets',
             icon: 'sparkles',
@@ -232,6 +239,17 @@ export const adminDashboardViews: AdminDashboardView[] = [
     description: 'Gestion real de bouquets, flores, mascaras internas y stock desde el panel del administrador.',
     emptyState: 'Esta vista se conecta al backend y deja de usar datos mock en la tienda.',
     accent: 'hoja',
+    cards: [],
+  },
+  {
+    id: 'catalogo-inventario',
+    icon: 'box',
+    label: 'Inventario',
+    eyebrow: 'Catalogo conectado',
+    title: 'Inventario',
+    description: 'Gestion real de categorias y productos de inventario para arreglos florales.',
+    emptyState: 'Esta vista se conecta a la base de datos y solo muestra categorias y productos reales.',
+    accent: 'oro',
     cards: [],
   },
   {

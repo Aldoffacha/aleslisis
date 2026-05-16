@@ -1,0 +1,256 @@
+.panel {
+  display: grid;
+  gap: 18px;
+  padding: 24px;
+  border-radius: 30px;
+  background: linear-gradient(155deg, rgba(255, 250, 247, 0.96), rgba(248, 236, 234, 0.86));
+  border: 1px solid rgba(176, 92, 92, 0.14);
+  box-shadow: 0 24px 60px rgba(122, 53, 53, 0.08);
+}
+
+.header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+}
+
+.headerCopy {
+  display: grid;
+  gap: 8px;
+}
+
+.eyebrow {
+  font-size: 10px;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  color: #9a6f6f;
+}
+
+.title {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 2rem;
+  font-weight: 500;
+  color: #4f2828;
+}
+
+.description {
+  font-size: 13px;
+  line-height: 1.8;
+  color: #795757;
+}
+
+.downloadButton {
+  min-height: 46px;
+  padding: 0 18px;
+  border: none;
+  border-radius: 999px;
+  background: linear-gradient(145deg, rgba(122, 53, 53, 0.96), rgba(176, 92, 92, 0.9));
+  color: #fff8f4;
+  font-size: 11px;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  cursor: pointer;
+}
+
+.downloadButton:disabled {
+  opacity: 0.6;
+  cursor: wait;
+}
+
+.metricsGrid {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 12px;
+}
+
+.metricCard,
+.totalCard {
+  padding: 16px;
+  border-radius: 24px;
+  background: rgba(255, 255, 255, 0.82);
+  border: 1px solid rgba(176, 92, 92, 0.1);
+  display: grid;
+  gap: 6px;
+}
+
+.totalCard {
+  background: linear-gradient(160deg, rgba(122, 53, 53, 0.96), rgba(86, 37, 37, 0.96));
+  color: #fff8f4;
+}
+
+.metricLabel {
+  font-size: 10px;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: #916a6a;
+}
+
+.totalCard .metricLabel {
+  color: rgba(255, 248, 244, 0.72);
+}
+
+.metricValue {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 2rem;
+  color: #4f2828;
+}
+
+.totalCard .metricValue {
+  color: #fff8f4;
+}
+
+.metricCaption {
+  font-size: 12px;
+  line-height: 1.6;
+  color: #7a5a5a;
+}
+
+.totalCard .metricCaption {
+  color: rgba(255, 248, 244, 0.8);
+}
+
+.itemsPanel {
+  display: grid;
+  gap: 12px;
+}
+
+.itemsHeader {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+.itemsTitle {
+  font-size: 13px;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: #8c6464;
+}
+
+.itemsHint {
+  font-size: 12px;
+  color: #7c5c5c;
+}
+
+.itemList {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  list-style: none;
+}
+
+.itemRow {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  gap: 14px;
+  align-items: center;
+  padding: 14px 16px;
+  border-radius: 20px;
+  background: rgba(255, 255, 255, 0.84);
+  border: 1px solid rgba(176, 92, 92, 0.1);
+}
+
+.itemPrimary {
+  border-color: rgba(176, 92, 92, 0.16);
+  background: linear-gradient(145deg, rgba(255, 249, 246, 0.98), rgba(251, 239, 237, 0.9));
+}
+
+.itemInfo {
+  display: flex;
+  gap: 12px;
+  align-items: flex-start;
+}
+
+.itemDot {
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  margin-top: 6px;
+  box-shadow: 0 0 0 5px rgba(255, 255, 255, 0.92);
+  flex-shrink: 0;
+}
+
+.itemText {
+  display: grid;
+  gap: 4px;
+}
+
+.itemTitle {
+  font-size: 15px;
+  color: #4f2b2b;
+}
+
+.itemDetail {
+  font-size: 12px;
+  line-height: 1.6;
+  color: #7c5c5c;
+}
+
+.itemPricing {
+  display: grid;
+  justify-items: end;
+  gap: 4px;
+}
+
+.itemQuantity {
+  font-size: 11px;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: #8c6464;
+}
+
+.itemSubtotal {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 1.55rem;
+  color: #4f2828;
+}
+
+.itemUnitPrice {
+  font-size: 12px;
+  color: #7b5a5a;
+}
+
+.noteBox {
+  padding: 16px 18px;
+  border-radius: 20px;
+  background: rgba(122, 53, 53, 0.06);
+  border: 1px dashed rgba(176, 92, 92, 0.16);
+  font-size: 13px;
+  line-height: 1.8;
+  color: #6f4f4f;
+}
+
+.errorMessage {
+  padding: 12px 14px;
+  border-radius: 16px;
+  background: rgba(122, 53, 53, 0.1);
+  color: #6d3232;
+  font-size: 12px;
+  line-height: 1.7;
+}
+
+@media (max-width: 960px) {
+  .metricsGrid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+@media (max-width: 640px) {
+  .header,
+  .itemsHeader,
+  .itemRow {
+    grid-template-columns: 1fr;
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .metricsGrid {
+    grid-template-columns: 1fr;
+  }
+
+  .itemPricing {
+    justify-items: start;
+  }
+}
