@@ -4,17 +4,6 @@ from backend.domain.entities import UserEntity
 from backend.infrastructure.django_app.models import Usuario, Cliente, Empleado, Administrador
 
 
-ADMIN_MOCK_EMAIL = 'admin@gmail.com'
-ADMIN_MOCK_PASSWORD = 'admin'
-ADMIN_MOCK_USER = UserEntity(
-    id=0,
-    nombre='Administrador Alesli',
-    correo=ADMIN_MOCK_EMAIL,
-    rol='administrador',
-    estado='activo',
-)
-
-
 def _hash_password(password: str) -> str:
     return bcrypt.hashpw(password.encode(), bcrypt.gensalt()).decode()
 
@@ -40,9 +29,6 @@ def _get_rol(usuario: Usuario) -> str:
 
 class DjangoUserRepository(UserRepository):
     def authenticate(self, correo: str, password: str) -> UserEntity | None:
-        if correo.lower() == ADMIN_MOCK_EMAIL and password == ADMIN_MOCK_PASSWORD:
-            return ADMIN_MOCK_USER
-
         try:
             usuario = Usuario.objects.get(correo=correo)
             if not _is_active_state(usuario.estado):
@@ -86,9 +72,6 @@ class DjangoUserRepository(UserRepository):
             resolved_user_id = int(user_id)
         except (TypeError, ValueError):
             resolved_user_id = user_id
-
-        if resolved_user_id == ADMIN_MOCK_USER.id:
-            return ADMIN_MOCK_USER
 
         try:
             usuario = Usuario.objects.get(id_usuario=resolved_user_id)
