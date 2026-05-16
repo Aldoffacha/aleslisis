@@ -1,6 +1,6 @@
 'use client'
 
-import { useState, FormEvent } from 'react'
+import { useEffect, useState, FormEvent } from 'react'
 import Link from 'next/link'
 import { useRouter } from 'next/navigation'
 import { createAuthUseCases } from '@/domain/use-cases/auth'
@@ -8,36 +8,85 @@ import { djangoAuthAdapter } from '@/adapters/api/auth-adapter'
 
 const auth = createAuthUseCases(djangoAuthAdapter)
 
+function resolveDashboardPath(role: string) {
+  if (role === 'administrador') {
+    return '/administrador/dashboard'
+  }
+
+  if (role === 'empleado') {
+    return '/empleado/dashboard'
+  }
+
+  return '/cliente/dashboard'
+}
+
 export default function LoginPage() {
   const router = useRouter()
-  const [username, setUsername] = useState('')
+
+  const [correo, setCorreo] = useState('')
   const [password, setPassword] = useState('')
   const [isLoading, setIsLoading] = useState(false)
   const [error, setError] = useState<string | null>(null)
 
+  useEffect(() => {
+    window.dispatchEvent(new Event('alesli-rose-background-start'))
+
+    let isMounted = true
+
+    auth.getCurrentUser()
+      .then((user) => {
+        if (isMounted) {
+          router.replace(resolveDashboardPath(user.rol))
+        }
+      })
+      .catch(() => {
+        return
+      })
+
+    return () => {
+      isMounted = false
+    }
+  }, [])
+
   const handleSubmit = async (e: FormEvent) => {
     e.preventDefault()
+
     setIsLoading(true)
     setError(null)
+
     try {
-      await auth.login(username, password)
-      router.push('/')
+      const user = await auth.login(correo, password)
+      router.push(resolveDashboardPath(user.rol))
     } catch (err) {
-      setError(err instanceof Error ? err.message : 'Error al iniciar sesión')
+      setError(
+        err instanceof Error
+          ? err.message
+          : 'Error al iniciar sesión'
+      )
     } finally {
       setIsLoading(false)
     }
   }
 
   return (
-    <div className="min-h-screen bg-[var(--cream)] flex items-center justify-center font-[DM_Sans,sans-serif]">
+    <div className="min-h-screen flex items-center justify-center font-[DM_Sans,sans-serif]">
       <Link
         href="/"
         className="absolute top-8 left-8 text-xs tracking-[0.15em] uppercase text-[#5A3333] no-underline flex items-center gap-2"
       >
-        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
+        <svg
+          width="16"
+          height="16"
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          strokeWidth="1.5"
+          strokeLinecap="round"
+          strokeLinejoin="round"
+        >
           <polyline points="15 18 9 12 15 6" />
         </svg>
+
         Alesli
       </Link>
 
@@ -46,6 +95,7 @@ export default function LoginPage() {
           <div className="font-[Cormorant_Garamond,serif] text-4xl font-light text-[var(--rose-dark)] tracking-[0.2em] mb-2">
             Alesli
           </div>
+
           <p className="text-sm text-[#8A5555] tracking-[0.05em] font-light">
             Inicia sesión para continuar
           </p>
@@ -60,14 +110,15 @@ export default function LoginPage() {
         <form onSubmit={handleSubmit}>
           <div className="mb-5">
             <label className="block text-xs tracking-[0.15em] uppercase text-[#6A4040] mb-2">
-              Usuario
+              Correo
             </label>
+
             <input
-              type="text"
-              value={username}
-              onChange={e => setUsername(e.target.value)}
+              type="email"
+              value={correo}
+              onChange={(e) => setCorreo(e.target.value)}
               required
-              placeholder="tu_usuario"
+              placeholder="correo@ejemplo.com"
               className="w-full px-4 py-[14px] border-[0.5px] border-[rgba(180,80,80,0.25)] rounded-sm text-sm bg-white text-[#2C1A1A] outline-none transition-[border-color] duration-200 font-[DM_Sans,sans-serif]"
             />
           </div>
@@ -76,10 +127,11 @@ export default function LoginPage() {
             <label className="block text-xs tracking-[0.15em] uppercase text-[#6A4040] mb-2">
               Contraseña
             </label>
+
             <input
               type="password"
               value={password}
-              onChange={e => setPassword(e.target.value)}
+              onChange={(e) => setPassword(e.target.value)}
               required
               placeholder="••••••••"
               className="w-full px-4 py-[14px] border-[0.5px] border-[rgba(180,80,80,0.25)] rounded-sm text-sm bg-white text-[#2C1A1A] outline-none font-[DM_Sans,sans-serif]"
@@ -90,16 +142,25 @@ export default function LoginPage() {
             type="submit"
             disabled={isLoading}
             className="w-full py-4 text-xs tracking-[0.2em] uppercase text-white border-none cursor-pointer font-[DM_Sans,sans-serif] font-normal transition-all duration-200 disabled:cursor-wait"
-            style={{ background: isLoading ? '#C4706A' : 'var(--rose-dark)' }}
+            style={{
+              background: isLoading
+                ? '#C4706A'
+                : 'var(--rose-dark)',
+            }}
           >
-            {isLoading ? 'Ingresando...' : 'Iniciar sesión'}
+            {isLoading
+              ? 'Ingresando...'
+              : 'Iniciar sesión'}
           </button>
         </form>
 
         <div className="text-center mt-6">
           <span className="text-sm text-[#8A5555]">
             ¿No tienes cuenta?{' '}
-            <Link href="/registro" className="text-[var(--rose-deep)] no-underline">
+            <Link
+              href="/registro"
+              className="text-[var(--rose-deep)] no-underline"
+            >
               Regístrate
             </Link>
           </span>

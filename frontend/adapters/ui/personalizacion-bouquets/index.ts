@@ -1,0 +1,1 @@
+export { default as PersonalizacionBouquetsPage } from './personalizacion-bouquets-page'

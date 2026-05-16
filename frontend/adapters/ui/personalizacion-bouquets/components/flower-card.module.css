@@ -1,0 +1,128 @@
+.card {
+  --flower-accent: #d4847a;
+  display: grid;
+  grid-template-columns: 68px minmax(0, 1fr);
+  gap: 14px;
+  padding: 16px;
+  border-radius: 22px;
+  background: rgba(255, 255, 255, 0.72);
+  border: 1px solid rgba(176, 92, 92, 0.1);
+  transition: transform 0.2s ease, border-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+.card:hover {
+  transform: translateY(-2px);
+  border-color: rgba(176, 92, 92, 0.24);
+  box-shadow: 0 18px 30px rgba(122, 53, 53, 0.08);
+}
+
+.cardActive {
+  border-color: rgba(122, 53, 53, 0.26);
+  box-shadow: 0 18px 30px rgba(122, 53, 53, 0.12);
+}
+
+.visual {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 108px;
+}
+
+.imageFrame {
+  position: relative;
+  width: 72px;
+  height: 96px;
+  border-radius: 20px;
+  background: radial-gradient(circle at top, rgba(255, 255, 255, 0.95), rgba(250, 246, 240, 0.8));
+  box-shadow: inset 0 0 0 1px rgba(122, 53, 53, 0.08);
+  overflow: hidden;
+}
+
+.flowerImage {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  transform: scale(1.08);
+}
+
+.content {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.category {
+  font-size: 10px;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: #8c6a6a;
+}
+
+.name {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 1.5rem;
+  font-weight: 600;
+  color: #522f2f;
+  line-height: 1;
+}
+
+.tone,
+.note {
+  font-size: 12px;
+  line-height: 1.6;
+  color: #765858;
+}
+
+.addButton,
+.stepperButton {
+  border: none;
+  cursor: pointer;
+}
+
+.addButton {
+  grid-column: 1 / -1;
+  justify-self: flex-start;
+  padding: 10px 14px;
+  border-radius: 999px;
+  background: rgba(122, 53, 53, 0.1);
+  color: var(--rose-dark);
+  font-size: 11px;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+}
+
+.stepper {
+  grid-column: 1 / -1;
+  justify-self: flex-start;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 6px;
+  border-radius: 999px;
+  background: rgba(250, 246, 240, 0.9);
+  border: 1px solid rgba(176, 92, 92, 0.12);
+}
+
+.stepperButton {
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
+  background: rgba(122, 53, 53, 0.1);
+  color: var(--rose-dark);
+  font-size: 18px;
+}
+
+.stepperValue {
+  min-width: 18px;
+  text-align: center;
+  font-size: 13px;
+  font-weight: 600;
+  color: #553434;
+}
+
+@media (max-width: 560px) {
+  .card {
+    grid-template-columns: 56px minmax(0, 1fr);
+  }
+}

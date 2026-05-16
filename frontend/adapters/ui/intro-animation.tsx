@@ -288,6 +288,7 @@ export default function IntroAnimation({ onComplete }: IntroProps) {
         audio.currentTime = 0
         audio.play().catch(() => {})
       }
+      window.dispatchEvent(new Event('alesli-rose-background-start'))
     }, 1800 + last + 200)
 
     add(() => setSlideOut(true),                  1800 + last + 3400)
@@ -423,8 +424,8 @@ export default function IntroAnimation({ onComplete }: IntroProps) {
 
       {!started && (
         <button
-          onClick={handleStart}
-          onTouchStart={handleStart}
+          type="button"
+          onPointerDown={handleStart}
           className="intro-click-area"
           aria-label="Abrir"
         />

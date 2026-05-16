@@ -1,0 +1,245 @@
+.backdrop {
+  position: fixed;
+  inset: 0;
+  border: none;
+  background: rgba(122, 53, 53, 0.18);
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.25s ease;
+  z-index: 34;
+}
+
+.backdropVisible {
+  opacity: 0;
+  pointer-events: none;
+}
+
+.sidebar {
+  position: fixed;
+  top: 0;
+  left: 0;
+  bottom: 0;
+  width: 304px;
+  padding: 18px;
+  border-radius: 0 28px 28px 0;
+  background:
+    radial-gradient(circle at top left, rgba(212, 132, 122, 0.18), rgba(212, 132, 122, 0) 28%),
+    linear-gradient(180deg, rgba(250, 246, 240, 0.97), rgba(249, 232, 232, 0.94));
+  border-right: 1px solid rgba(176, 92, 92, 0.14);
+  box-shadow: 20px 0 48px rgba(122, 53, 53, 0.08);
+  color: #4f2828;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  transform: translateX(-106%);
+  transition: transform 0.25s ease;
+  z-index: 35;
+  overflow: hidden;
+}
+
+.sidebarOpen {
+  transform: translateX(0);
+}
+
+.brandBlock {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+.brandName {
+  display: block;
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 2.25rem;
+  letter-spacing: 0.06em;
+  color: #7a3535;
+}
+
+.brandRole {
+  display: block;
+  margin-top: 4px;
+  font-size: 11px;
+  letter-spacing: 0.26em;
+  text-transform: uppercase;
+  color: rgba(122, 53, 53, 0.58);
+}
+
+.closeButton {
+  width: 42px;
+  height: 42px;
+  border-radius: 50%;
+  border: 1px solid rgba(176, 92, 92, 0.16);
+  background: rgba(255, 255, 255, 0.72);
+  color: #7a3535;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.closeIcon {
+  font-size: 24px;
+  line-height: 1;
+}
+
+.profileCard {
+  padding: 16px 17px;
+  border-radius: 22px;
+  background: rgba(255, 255, 255, 0.72);
+  border: 1px solid rgba(176, 92, 92, 0.14);
+}
+
+.profileEyebrow {
+  display: block;
+  margin-bottom: 8px;
+  font-size: 10px;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: rgba(122, 53, 53, 0.56);
+}
+
+.profileName {
+  display: block;
+  margin-bottom: 4px;
+  font-size: 1rem;
+  color: #4f2828;
+}
+
+.profileEmail {
+  font-size: 13px;
+  color: rgba(79, 40, 40, 0.76);
+}
+
+.groupStack {
+  display: grid;
+  gap: 12px;
+  flex: 1;
+  overflow-y: auto;
+  padding-right: 4px;
+}
+
+.groupStack::-webkit-scrollbar {
+  width: 6px;
+}
+
+.groupStack::-webkit-scrollbar-thumb {
+  border-radius: 999px;
+  background: rgba(176, 92, 92, 0.24);
+}
+
+.groupSection {
+  display: grid;
+  gap: 10px;
+}
+
+.groupTitle {
+  font-size: 10px;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  color: rgba(122, 53, 53, 0.48);
+}
+
+.itemList {
+  display: grid;
+  gap: 8px;
+}
+
+.navItem {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+  width: 100%;
+  padding: 12px 13px;
+  border-radius: 18px;
+  border: 1px solid rgba(176, 92, 92, 0.08);
+  background: rgba(255, 255, 255, 0.52);
+  color: inherit;
+  text-align: left;
+  cursor: pointer;
+  transition: transform 0.2s ease, border-color 0.2s ease, background 0.2s ease, box-shadow 0.2s ease;
+}
+
+.navItem:hover {
+  transform: translateY(-1px);
+  border-color: rgba(176, 92, 92, 0.18);
+  background: rgba(255, 255, 255, 0.78);
+}
+
+.navItemActive {
+  background: linear-gradient(135deg, rgba(176, 92, 92, 0.14), rgba(212, 132, 122, 0.08));
+  border-color: rgba(176, 92, 92, 0.24);
+  box-shadow: 0 12px 24px rgba(176, 92, 92, 0.08);
+}
+
+.navBadge {
+  min-width: 40px;
+  width: 40px;
+  height: 40px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 14px;
+  background: linear-gradient(145deg, rgba(176, 92, 92, 0.18), rgba(201, 169, 110, 0.18));
+  color: #7a3535;
+  flex-shrink: 0;
+}
+
+.navBadge svg {
+  width: 19px;
+  height: 19px;
+  stroke: currentColor;
+  stroke-width: 1.7;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+.navCopy {
+  display: grid;
+  gap: 4px;
+}
+
+.navLabel {
+  font-size: 13px;
+  color: #4f2828;
+}
+
+.navNote {
+  font-size: 12px;
+  line-height: 1.55;
+  color: rgba(79, 40, 40, 0.64);
+}
+
+.logoutButton {
+  margin-top: auto;
+  padding: 14px 16px;
+  border-radius: 18px;
+  border: 1px solid rgba(201, 169, 110, 0.22);
+  background: linear-gradient(145deg, rgba(176, 92, 92, 0.96), rgba(122, 53, 53, 0.92));
+  color: #fff7f4;
+  font-size: 11px;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  cursor: pointer;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.logoutButton:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 16px 24px rgba(122, 53, 53, 0.14);
+}
+
+@media (max-width: 959px) {
+  .backdropVisible {
+    opacity: 1;
+    pointer-events: auto;
+  }
+
+  .sidebar {
+    width: min(90vw, 320px);
+  }
+
+  .groupStack {
+    max-height: calc(100vh - 250px);
+  }
+}

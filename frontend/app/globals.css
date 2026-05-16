@@ -26,7 +26,7 @@ body {
 }
 
 body {
-  background-color: var(--cream);
+  background-color: transparent;
   font-family: 'DM Sans', sans-serif;
   color: #2C1A1A;
 }
@@ -144,21 +144,10 @@ body {
   overflow: hidden;
 }
 
-.hero-panel-1 {
-  background: linear-gradient(135deg, #FDF0F0 0%, #F5E0E0 60%, #EDD0D0 100%);
-}
-
-.hero-panel-2 {
-  background: linear-gradient(135deg, #F8F2EC 0%, #F0E4D4 60%, #E8D4BC 100%);
-}
-
-.hero-panel-3 {
-  background: linear-gradient(135deg, #F0F5F0 0%, #E0EBE0 60%, #D0DDD0 100%);
-}
-
-.hero-panel-4 {
-  background: linear-gradient(135deg, #F5F0F8 0%, #E8DFF0 60%, #DDD0E8 100%);
-}
+.hero-panel-1 { background: linear-gradient(135deg, rgba(253,240,240,0.55) 0%, rgba(245,224,224,0.45) 100%); }
+.hero-panel-2 { background: linear-gradient(135deg, rgba(248,242,236,0.55) 0%, rgba(232,212,188,0.45) 100%); }
+.hero-panel-3 { background: linear-gradient(135deg, rgba(240,245,240,0.55) 0%, rgba(208,221,208,0.45) 100%); }
+.hero-panel-4 { background: linear-gradient(135deg, rgba(245,240,248,0.55) 0%, rgba(221,208,232,0.45) 100%); }
 
 .panel-content {
   text-align: center;
@@ -278,7 +267,7 @@ body {
 
 /* ===== SOCIAL SECTION ===== */
 .social-section {
-  background: var(--petal);
+  background: rgba(253, 240, 240, 0.5);
   padding: 80px 48px;
   text-align: center;
   border-top: 0.5px solid rgba(180,80,80,0.1);
@@ -466,7 +455,8 @@ body {
   inset: 0;
   background: transparent;
   border: none;
-  cursor: default;
+  cursor: pointer;
+  touch-action: manipulation;
   z-index: 1000;
 }
 

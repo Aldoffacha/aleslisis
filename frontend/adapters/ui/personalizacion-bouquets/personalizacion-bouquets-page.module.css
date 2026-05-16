@@ -1,0 +1,135 @@
+.pageShell {
+  min-height: 100vh;
+  padding: 96px 24px 48px;
+}
+
+.pageContent {
+  width: min(1440px, 100%);
+  margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+}
+
+.heroPanel {
+  display: grid;
+  grid-template-columns: minmax(0, 1.25fr) minmax(320px, 0.95fr);
+  gap: 24px;
+  padding: 32px;
+  border-radius: 32px;
+  background: linear-gradient(145deg, rgba(250, 246, 240, 0.92), rgba(249, 232, 232, 0.72));
+  border: 1px solid rgba(176, 92, 92, 0.14);
+  box-shadow: 0 28px 70px rgba(122, 53, 53, 0.1);
+  backdrop-filter: blur(18px);
+}
+
+.heroCopy {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.eyebrow {
+  font-size: 11px;
+  letter-spacing: 0.24em;
+  text-transform: uppercase;
+  color: var(--rose-medium);
+}
+
+.title {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: clamp(3rem, 5vw, 4.8rem);
+  font-weight: 400;
+  line-height: 0.95;
+  letter-spacing: 0.03em;
+  color: #4c2323;
+}
+
+.description {
+  max-width: 720px;
+  font-size: 15px;
+  line-height: 1.8;
+  color: #6d4747;
+}
+
+.statsGrid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 14px;
+  align-content: end;
+}
+
+.statCard {
+  padding: 18px;
+  border-radius: 24px;
+  background: rgba(255, 255, 255, 0.56);
+  border: 1px solid rgba(176, 92, 92, 0.12);
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.statLabel {
+  font-size: 10px;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: #8f6666;
+}
+
+.statValue {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 2rem;
+  font-weight: 500;
+  color: var(--rose-dark);
+}
+
+.statCaption {
+  font-size: 12px;
+  line-height: 1.6;
+  color: #7d5858;
+}
+
+.workspace {
+  display: grid;
+  grid-template-columns: minmax(0, 1.1fr) minmax(340px, 0.9fr);
+  gap: 24px;
+  align-items: start;
+}
+
+.previewColumn {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+  position: sticky;
+  top: 88px;
+}
+
+.catalogColumn {
+  min-width: 0;
+}
+
+@media (max-width: 1120px) {
+  .heroPanel,
+  .workspace {
+    grid-template-columns: 1fr;
+  }
+
+  .previewColumn {
+    position: static;
+  }
+}
+
+@media (max-width: 760px) {
+  .pageShell {
+    padding: 84px 16px 32px;
+  }
+
+  .heroPanel {
+    padding: 24px;
+    border-radius: 24px;
+  }
+
+  .statsGrid {
+    grid-template-columns: 1fr;
+  }
+}
